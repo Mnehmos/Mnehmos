@@ -36,8 +36,9 @@ Building tools that let AI agents interact with complex stateful systems—wheth
 | Product | Platform | Description |
 |---------|----------|-------------|
 | [**mnehmos.quest-keeper.game**](https://github.com/Mnehmos/mnehmos.quest-keeper.game) | Desktop (Tauri) | AI Dungeon Master + 3D battlemap + 7-layer context (~5K tokens) |
-| [**mnehmos.quest-keeper.website**](https://questkeeperai.com) | Web | Landing page and documentation |
+| [**mnehmos.long-hall.game**](https://github.com/Mnehmos/mnehmos.long-hall.game) | Web | Procedural roguelike with ironman saves & cloud leaderboards |
 | [**mnehmos.portal-chess.game**](https://github.com/Mnehmos/mnehmos.portal-chess.game) | Web | Multiplayer chess with portal teleportation mechanics |
+| [**mnehmos.invoicer.app**](https://github.com/Mnehmos/mnehmos.invoicer.app) | Web | Local-storage invoice generator with PDF export |
 
 ---
 
@@ -77,6 +78,7 @@ The LLM proposes. The engine validates. State comes from the database, not hallu
 - [mnehmos.index-foundry.mcp](https://github.com/Mnehmos/mnehmos.index-foundry.mcp) — RAG pipeline factory
 
 **Live Demos**
+- [The Long Hall](https://mnehmos.github.io/mnehmos.long-hall.game/) — Roguelike dungeon crawler
 - [Quest Keeper AI](https://questkeeperai.com) — AI D&D assistant
 - [Prompt Engineering Guide](https://mnehmos.github.io/mnehmos.prompts.research/) — 182 techniques
 
