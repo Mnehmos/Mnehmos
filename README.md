@@ -1,5 +1,7 @@
 # Mnehmos
 
+🌐 **Live Site**: [mnehmos.github.io/Mnehmos](https://mnehmos.github.io/Mnehmos/)
+
 **MCP Infrastructure Developer** · **Multi-Agent Systems** · **AI-Powered Games**
 
 Building tools that let AI agents interact with complex stateful systems—whether that's a computer desktop, a distributed workflow, or a D&D campaign.
@@ -14,31 +16,31 @@ Building tools that let AI agents interact with complex stateful systems—wheth
 
 ### MCP Servers
 
-| Project | Tools | Description |
-| ------- | ----- | ----------- |
-| [**mnehmos.ooda.mcp**](https://github.com/Mnehmos/mnehmos.ooda.mcp) | 62 | Full computer control—filesystem, shell, screen, keyboard, mouse, clipboard |
-| [**mnehmos.synch.mcp**](https://github.com/Mnehmos/mnehmos.synch.mcp) | 19 | Persistent memory bank, context handoffs, locks for agent coordination |
-| [**mnehmos.trace.mcp**](https://github.com/Mnehmos/mnehmos.trace.mcp) | 11 | Schema validation between MCP producers and consumers |
-| [**mnehmos.index-foundry.mcp**](https://github.com/Mnehmos/mnehmos.index-foundry.mcp) | 40+ | Deterministic RAG pipeline → deployed chatbots in minutes |
-| [**mnehmos.arxiv.mcp**](https://github.com/Mnehmos/mnehmos.arxiv.mcp) | 4 | Academic paper search with PDF extraction and caching |
-| [**mnehmos.rpg.mcp**](https://github.com/Mnehmos/mnehmos.rpg.mcp) | 145 | Full D&D 5e backend—combat, spells, quests, 1100+ creature presets |
-| [**mnehmos.chatrpg.game**](https://github.com/Mnehmos/mnehmos.chatrpg.game) | 30+ | Lightweight D&D 5e server for web deployment |
+| Project                                                                               | Tools | Description                                                                 |
+| ------------------------------------------------------------------------------------- | ----- | --------------------------------------------------------------------------- |
+| [**mnehmos.ooda.mcp**](https://github.com/Mnehmos/mnehmos.ooda.mcp)                   | 62    | Full computer control—filesystem, shell, screen, keyboard, mouse, clipboard |
+| [**mnehmos.synch.mcp**](https://github.com/Mnehmos/mnehmos.synch.mcp)                 | 19    | Persistent memory bank, context handoffs, locks for agent coordination      |
+| [**mnehmos.trace.mcp**](https://github.com/Mnehmos/mnehmos.trace.mcp)                 | 11    | Schema validation between MCP producers and consumers                       |
+| [**mnehmos.index-foundry.mcp**](https://github.com/Mnehmos/mnehmos.index-foundry.mcp) | 40+   | Deterministic RAG pipeline → deployed chatbots in minutes                   |
+| [**mnehmos.arxiv.mcp**](https://github.com/Mnehmos/mnehmos.arxiv.mcp)                 | 4     | Academic paper search with PDF extraction and caching                       |
+| [**mnehmos.rpg.mcp**](https://github.com/Mnehmos/mnehmos.rpg.mcp)                     | 145   | Full D&D 5e backend—combat, spells, quests, 1100+ creature presets          |
+| [**mnehmos.chatrpg.game**](https://github.com/Mnehmos/mnehmos.chatrpg.game)           | 30+   | Lightweight D&D 5e server for web deployment                                |
 
 ### Frameworks & Research
 
-| Project | Description |
-| ------- | ----------- |
+| Project                                                                                       | Description                                                                 |
+| --------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------- |
 | [**mnehmos.multi-agent.framework**](https://github.com/Mnehmos/mnehmos.multi-agent.framework) | 528⭐ · Production-ready multi-agent coordination (SPARC + Boomerang + TDD) |
-| [**mnehmos.prompts.research**](https://github.com/Mnehmos/mnehmos.prompts.research) | 182 techniques from 20+ papers · Interactive taxonomy, prompt builder |
+| [**mnehmos.prompts.research**](https://github.com/Mnehmos/mnehmos.prompts.research)           | 182 techniques from 20+ papers · Interactive taxonomy, prompt builder       |
 
 ### Shipped Products
 
-| Product | Platform | Description |
-| ------- | -------- | ----------- |
+| Product                                                                               | Platform        | Description                                                     |
+| ------------------------------------------------------------------------------------- | --------------- | --------------------------------------------------------------- |
 | [**mnehmos.quest-keeper.game**](https://github.com/Mnehmos/mnehmos.quest-keeper.game) | Desktop (Tauri) | AI Dungeon Master + 3D battlemap + 7-layer context (~5K tokens) |
-| [**mnehmos.long-hall.game**](https://github.com/Mnehmos/mnehmos.long-hall.game) | Web | Procedural roguelike with ironman saves & cloud leaderboards |
-| [**mnehmos.portal-chess.game**](https://github.com/Mnehmos/mnehmos.portal-chess.game) | Web | Multiplayer chess with portal teleportation mechanics |
-| [**mnehmos.invoicer.app**](https://github.com/Mnehmos/mnehmos.invoicer.app) | Web | Local-storage invoice generator with PDF export |
+| [**mnehmos.long-hall.game**](https://github.com/Mnehmos/mnehmos.long-hall.game)       | Web             | Procedural roguelike with ironman saves & cloud leaderboards    |
+| [**mnehmos.portal-chess.game**](https://github.com/Mnehmos/mnehmos.portal-chess.game) | Web             | Multiplayer chess with portal teleportation mechanics           |
+| [**mnehmos.invoicer.app**](https://github.com/Mnehmos/mnehmos.invoicer.app)           | Web             | Local-storage invoice generator with PDF export                 |
 
 ---
 
@@ -100,4 +102,4 @@ The LLM proposes. The engine validates. State comes from the database, not hallu
 
 ---
 
-*Building infrastructure for AI agents that interact with the real world.*
+_Building infrastructure for AI agents that interact with the real world._
