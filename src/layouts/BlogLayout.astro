@@ -58,23 +58,26 @@ const { title, description, pubDate, updatedDate, tags } = post.data;
     <!-- Content -->
     <div
       class="prose prose-stone prose-lg max-w-none
-      prose-headings:font-display prose-headings:font-bold prose-headings:text-stone-900
+      prose-headings:font-display prose-headings:font-bold prose-headings:text-stone-900 prose-headings:tracking-tight
       prose-a:text-copper prose-a:no-underline hover:prose-a:underline
-      prose-code:bg-stone-100 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-stone-800
-      prose-pre:bg-stone-900 prose-pre:text-stone-100
-      prose-blockquote:border-copper prose-blockquote:text-stone-600"
+      prose-strong:text-stone-900 prose-strong:font-bold
+      prose-code:bg-stone-100 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-stone-800 prose-code:font-mono prose-code:before:content-none prose-code:after:content-none
+      prose-pre:bg-stone-900 prose-pre:text-stone-100 prose-pre:rounded-xl prose-pre:shadow-lg
+      prose-blockquote:border-l-4 prose-blockquote:border-copper prose-blockquote:bg-stone-50 prose-blockquote:py-2 prose-blockquote:px-4 prose-blockquote:italic prose-blockquote:text-stone-700 prose-blockquote:not-italic
+      prose-img:rounded-xl prose-img:shadow-lg prose-img:border prose-img:border-stone-200
+      prose-hr:border-stone-200"
     >
       <slot />
     </div>
 
     <!-- Footer -->
-    <footer class="mt-16 pt-8 border-t border-stone-200">
+    <footer class="mt-16 pt-8 border-t border-stone-200 animate-delay-300">
       <a
         href={`${import.meta.env.BASE_URL}blog`}
-        class="inline-flex items-center gap-2 text-copper hover:text-copper-light font-medium transition-colors"
+        class="inline-flex items-center gap-2 text-copper hover:text-copper-light font-medium transition-colors group"
       >
         <svg
-          class="w-4 h-4"
+          class="w-4 h-4 transform group-hover:-translate-x-1 transition-transform"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -90,3 +93,28 @@ const { title, description, pubDate, updatedDate, tags } = post.data;
     </footer>
   </article>
 </BaseLayout>
+
+<style>
+  article {
+    animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  .animate-delay-300 {
+    animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards;
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style>
