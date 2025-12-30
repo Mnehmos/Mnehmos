@@ -6,7 +6,19 @@ const base = import.meta.env.BASE_URL;
 
 const collectionPosts = await getCollection("blog", ({ data }) => !data.draft);
 
-// Manually add the rich "coded" posts
+// STRATEGY: Hybrid Content Architecture
+// We mix standard Markdown posts (via Astro Collections) with rich, interactive
+// Astro components (Manual Posts).
+//
+// 1. CONTENT COLLECTIONS (src/content/blog/*.md)
+//    - Best for standard text-heavy posts.
+//    - Easy to write, quick to publish.
+//
+// 2. MANUAL RICH POSTS (src/pages/blog/*.astro)
+//    - Used when we need React components, interactive diagrams, or custom layout.
+//    - Must be manually added to the `manualPosts` array below to appear in the index.
+//    - Allows for "Deep Dives" like the OODA loop post.
+//    - PRO TIP: If you create a rich post, ensure you DELETE the corresponding .md file to avoid conflicts.
 const manualPosts = [
   {
     slug: "ukraine-ooda",
@@ -44,10 +56,40 @@ const posts = [...collectionPosts, ...manualPosts].sort(
         >
           Thoughts & Updates
         </h1>
-        <p class="text-lg text-stone-600 max-w-2xl mx-auto">
+        <p class="text-lg text-stone-600 max-w-2xl mx-auto mb-8">
           MCP development patterns, multi-agent coordination, and building in
           public.
         </p>
+
+        <!-- Use The Tools We Build -->
+        <div
+          class="inline-block text-left bg-stone-50 border border-stone-200 rounded-xl p-4 max-w-xl mx-auto text-sm text-stone-500"
+        >
+          <div class="flex gap-3">
+            <div class="text-copper shrink-0 mt-0.5">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                class="w-5 h-5"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M2 10a8 8 0 1116 0 8 8 0 01-16 0zm9.707-2.293a1 1 0 00-1.414-1.414l-3 3a1 1 0 000 1.414l3 3a1 1 0 001.414-1.414L9.414 11H13a1 1 0 100-2H9.414l2.293-2.293z"
+                  clip-rule="evenodd"></path>
+              </svg>
+            </div>
+            <div>
+              <strong class="text-stone-900 block mb-1"
+                >Recursive Construction</strong
+              >
+              This blog is built using the very agentic workflows it describes. Simple
+              posts are Markdown; complex ones (like OODA) are specialized Astro components
+              co-authored with AI, demonstrating the "Hybrid Architecture" pattern
+              in practice.
+            </div>
+          </div>
+        </div>
       </div>
 
       <!-- Posts List -->
