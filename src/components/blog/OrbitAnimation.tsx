@@ -21,7 +21,7 @@ export default function OrbitAnimation() {
   const energyRef = useRef(0);
   const mouseRef = useRef({ x: 0, y: 0 });
   const lastMouseRef = useRef({ x: 0, y: 0 });
-  const requestRef = useRef<number>();
+  const requestRef = useRef<number>(0);
   const lastTimeRef = useRef<number>(0);
 
   const BASE_PARTICLE_COUNT = 40;
