@@ -7,9 +7,8 @@ const base = import.meta.env.BASE_URL;
 const collectionPosts = await getCollection("blog", ({ data }) => !data.draft);
 
 // AGENT INSTRUCTIONS: HYBRID BLOG ARCHITECTURE
-// This blog uses a hybrid approach:
-// 1. SIMPLE POSTS: Use standard Markdown in `src/content/blog/*.md`.
-// 2. RICH POSTS: Use custom Astro components in `src/pages/blog/*.astro`.
+// This blog uses a single approach:
+// 1. RICH POSTS: Use custom Astro components in `src/pages/blog/*.astro`. We convert all markdown posts to astro components using AI.
 //
 // HOW TO ADD A NEW RICH POST:
 // 1. Create the file: `src/pages/blog/my-new-post.astro`.
