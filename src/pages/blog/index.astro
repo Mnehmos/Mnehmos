@@ -4,7 +4,24 @@ import { getCollection } from "astro:content";
 
 const base = import.meta.env.BASE_URL;
 
-const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
+const collectionPosts = await getCollection("blog", ({ data }) => !data.draft);
+
+// Manually add the rich "coded" posts
+const manualPosts = [
+  {
+    slug: "ukraine-ooda",
+    data: {
+      title: "What Ukraine's Drones Taught Me About Building AI Systems",
+      description:
+        "Extracting software architecture lessons from autonomous drone systems, OODA loops, and distributed state management.",
+      pubDate: new Date("2024-12-30"),
+      tags: ["ooda", "architecture", "multi-agent", "distributed-systems"],
+      draft: false,
+    },
+  },
+];
+
+const posts = [...collectionPosts, ...manualPosts].sort(
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
 );
 ---

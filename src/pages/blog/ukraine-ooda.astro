@@ -1,0 +1,338 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { OODADiagram } from "../../components/blog/OODADiagram";
+import { StatGrid } from "../../components/blog/StatGrid";
+
+const title = "What Ukraine's Drones Taught Me About Building AI Systems";
+const description =
+  "Extracting software architecture lessons from autonomous drone systems, OODA loops, and distributed state management.";
+const pubDate = new Date("2024-12-30");
+const tags = ["ooda", "architecture", "multi-agent", "distributed-systems"];
+const base = import.meta.env.BASE_URL;
+---
+
+<BaseLayout title={title} description={description}>
+  <article class="max-w-4xl mx-auto px-6 py-12 md:py-20 overflow-hidden">
+    <!-- Breadcrumbs -->
+    <nav class="mb-12 animate-fade-in">
+      <a
+        href={`${base}blog`}
+        class="text-stone-500 hover:text-copper transition-colors flex items-center gap-2 text-sm font-medium group"
+      >
+        <svg
+          class="w-4 h-4 transform group-hover:-translate-x-1 transition-transform"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M15 19l-7-7 7-7"></path>
+        </svg>
+        Back to Blog
+      </a>
+    </nav>
+
+    <!-- Header -->
+    <header class="mb-16">
+      <div class="flex flex-wrap gap-2 mb-6 animate-fade-in">
+        {
+          tags.map((tag) => (
+            <span class="px-3 py-1 bg-copper/10 text-copper text-xs font-bold uppercase tracking-wider rounded-full border border-copper/10">
+              {tag}
+            </span>
+          ))
+        }
+      </div>
+
+      <h1
+        class="font-display text-4xl md:text-6xl font-bold text-stone-900 mb-6 leading-tight animate-slide-up"
+      >
+        What Ukraine's Drones <span class="text-copper">Taught Me</span> About Building
+        AI Systems
+      </h1>
+
+      <p
+        class="text-xl md:text-2xl text-stone-600 mb-8 border-l-4 border-copper pl-6 italic animate-slide-up animation-delay-100"
+      >
+        {description}
+      </p>
+
+      <div
+        class="flex items-center gap-4 text-stone-500 font-medium animate-fade-in animation-delay-200"
+      >
+        <div
+          class="w-10 h-10 rounded-full bg-stone-200 flex items-center justify-center text-stone-600 font-bold border-2 border-white shadow-sm"
+        >
+          VM
+        </div>
+        <div>
+          <div class="text-stone-900 leading-none mb-1">Vario M.</div>
+          <time datetime={pubDate.toISOString()} class="text-sm">
+            {
+              pubDate.toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })
+            }
+          </time>
+        </div>
+      </div>
+    </header>
+
+    <!-- Content Hook: Uncomfortable Disclaimer -->
+    <div
+      class="bg-stone-900 text-stone-300 p-8 rounded-3xl mb-16 relative overflow-hidden group animate-fade-in hover:shadow-2xl transition-shadow border border-white/10"
+    >
+      <div
+        class="absolute top-0 right-0 p-4 opacity-20 pointer-events-none group-hover:opacity-40 transition-opacity"
+      >
+        <svg class="w-32 h-32" fill="currentColor" viewBox="0 0 24 24"
+          ><path
+            d="M12 2L1 21h22L12 2zm0 3.45L19.15 19H4.85L12 5.45zM11 16h2v2h-2v-2zm0-7h2v5h-2V9z"
+          ></path></svg
+        >
+      </div>
+      <h3 class="text-white font-bold mb-4 flex items-center gap-2">
+        <span class="text-copper">!</span> A Note on Context
+      </h3>
+      <p class="relative z-10 leading-relaxed">
+        The most sophisticated AI deployment in the world right now isn't in
+        Silicon Valley. It's on a 600-mile front line in Ukraine. I'm about to
+        extract software architecture lessons from weapons systems—systems
+        designed to kill people. I don't want to sanitize their origin, nor do I
+        want to celebrate it. This is an attempt to learn from necessity.
+      </p>
+    </div>
+
+    <!-- Section: The Problem -->
+    <section class="prose prose-stone prose-lg max-w-none mb-20 scroll-reveal">
+      <h2 class="font-display text-copper text-3xl font-bold mb-6">
+        The Problem: Manual Drones Were Failing
+      </h2>
+      <p>
+        By mid-2024, the situation for Ukrainian drone operators had changed
+        dramatically. Russian electronic warfare (EW) had improved to the point
+        where manual FPV drone hit rates dropped to <strong>30-50%</strong> under
+        jamming. For new pilots, it was as low as <strong>10%</strong>.
+      </p>
+      <p>
+        The solution wasn't better pilots or stronger signals. It was rethinking
+        the <strong>latency of the decision loop</strong>.
+      </p>
+    </section>
+
+    <!-- OODA Component -->
+    <div class="mb-20 scroll-reveal">
+      <h2
+        class="font-display text-2xl font-bold text-stone-900 mb-8 text-center uppercase tracking-widest"
+      >
+        The OODA Framework
+      </h2>
+      <OODADiagram client:visible />
+    </div>
+
+    <!-- Section: DELTA -->
+    <section class="mb-20 scroll-reveal">
+      <div
+        class="bg-white border border-stone-200 p-8 md:p-12 rounded-4xl shadow-sm relative overflow-hidden"
+      >
+        <div
+          class="absolute -right-20 -top-20 w-64 h-64 bg-copper/5 rounded-full blur-3xl"
+        >
+        </div>
+        <h2 class="font-display text-copper text-4xl font-bold mb-4">
+          DELTA: The OS of the Battlefield
+        </h2>
+        <p class="text-lg text-stone-600 mb-8 leading-relaxed">
+          DELTA is Ukraine’s Situational Awareness and Battlefield Management
+          System. It's a cloud-native platform that aggregates data from
+          thousands of sensors—drones, satellites, chatbots, and signal
+          intelligence—into a single interface.
+        </p>
+
+        <StatGrid client:visible />
+
+        <div class="grid md:grid-cols-2 gap-8 mt-12">
+          <div
+            class="bg-stone-50 p-6 rounded-2xl border border-stone-100 h-full transition-all hover:border-copper/30 group"
+          >
+            <h4 class="font-bold text-stone-900 mb-3 flex items-center gap-2">
+              <span
+                class="w-8 h-8 rounded-full bg-copper/10 text-copper flex items-center justify-center text-sm font-mono transition-transform group-hover:scale-110"
+                >01</span
+              >
+              Observe & Orient
+            </h4>
+            <p class="text-sm text-stone-500 leading-relaxed">
+              The aggregate stream of thousands of drones is processed by <strong
+                >Vezha</strong
+              > and <strong>Avengers AI</strong>, identifying over 12,000 enemy
+              units per week automatically.
+            </p>
+          </div>
+          <div
+            class="bg-stone-50 p-6 rounded-2xl border border-stone-100 h-full transition-all hover:border-copper/30 group"
+          >
+            <h4 class="font-bold text-stone-900 mb-3 flex items-center gap-2">
+              <span
+                class="w-8 h-8 rounded-full bg-copper/10 text-copper flex items-center justify-center text-sm font-mono transition-transform group-hover:scale-110"
+                >02</span
+              >
+              Decide & Act
+            </h4>
+            <p class="text-sm text-stone-500 leading-relaxed">
+              The <strong>TFL-1 terminal guidance module</strong> ($50-$100) handles
+              the "last mile." Once the operator selects a target, the drone locks
+              on and strikes autonomously, even if the radio link is severed.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Architecture Lesson -->
+    <section
+      class="bg-stone-900 text-white rounded-4xl p-8 md:p-16 mb-20 scroll-reveal relative overflow-hidden"
+    >
+      <div
+        class="absolute inset-0 bg-linear-to-br from-copper/20 to-transparent pointer-events-none"
+      >
+      </div>
+      <h2 class="font-display text-3xl font-bold mb-8 relative z-10">
+        Architecture Lessons for AI Agents
+      </h2>
+      <div class="grid gap-8 relative z-10">
+        <div class="border-l-2 border-copper/50 pl-6">
+          <h4
+            class="text-copper font-bold mb-2 uppercase tracking-wide text-sm"
+          >
+            Lesson 1
+          </h4>
+          <h3 class="text-xl font-bold mb-3">
+            Distribute the State, Not the Control
+          </h3>
+          <p class="text-stone-400 leading-relaxed italic">
+            "Stateless processes allow for massive scale, but only if the
+            database is smart enough to serve context at the edge."
+          </p>
+        </div>
+        <div class="border-l-2 border-copper/50 pl-6">
+          <h4
+            class="text-copper font-bold mb-2 uppercase tracking-wide text-sm"
+          >
+            Lesson 2
+          </h4>
+          <h3 class="text-xl font-bold mb-3">
+            The "Last Mile" must be Autonomous
+          </h3>
+          <p class="text-stone-400 leading-relaxed">
+            Just as the TFL-1 handles the final strike when communication fails,
+            our LLM agents need "terminal logic" to handle edge cases when the
+            orchestrator is offline.
+          </p>
+        </div>
+        <div class="border-l-2 border-copper/50 pl-6">
+          <h4
+            class="text-copper font-bold mb-2 uppercase tracking-wide text-sm"
+          >
+            Lesson 3
+          </h4>
+          <h3 class="text-xl font-bold mb-3">Interoperable or Irrelevant</h3>
+          <p class="text-stone-400 leading-relaxed">
+            DELTA's power comes from its adherence to NATO standards (CWIX,
+            MIP). AI tools aren't useful in isolation; they must adhere to a
+            strict interface.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer Meta -->
+    <footer class="text-center pt-16 border-t border-stone-200">
+      <p class="text-stone-500 mb-8 max-w-md mx-auto">
+        Extracting engineering principles from the cutting edge of distributed
+        systems.
+      </p>
+      <div class="flex justify-center gap-6">
+        <a
+          href="https://github.com/Mnehmos"
+          class="text-stone-400 hover:text-copper transition-colors"
+        >
+          <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"
+            ><path
+              d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.111.825-.261.825-.579 0-.285-.011-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.22 0 4.609-2.807 5.627-5.479 5.921.43.372.823 1.102.823 2.222 0 1.606-.015 2.896-.015 3.286 0 .321.222.696.832.57C20.565 21.795 24 17.31 24 12c0-6.63-5.37-12-12-12z"
+            ></path></svg
+          >
+        </a>
+      </div>
+    </footer>
+  </article>
+
+  <!-- Global Animations -->
+  <style is:global>
+    @keyframes fade-in {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+    @keyframes slide-up {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .animate-fade-in {
+      animation: fade-in 1s ease-out forwards;
+    }
+    .animate-slide-up {
+      opacity: 0;
+      animation: slide-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    .animation-delay-100 {
+      animation-delay: 0.1s;
+    }
+    .animation-delay-200 {
+      animation-delay: 0.2s;
+    }
+
+    .scroll-reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .scroll-reveal.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+
+  <script>
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: "0px 0px -50px 0px",
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("active");
+        }
+      });
+    }, observerOptions);
+
+    document
+      .querySelectorAll(".scroll-reveal")
+      .forEach((el) => observer.observe(el));
+  </script>
+</BaseLayout>
