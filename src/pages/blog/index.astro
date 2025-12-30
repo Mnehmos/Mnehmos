@@ -19,6 +19,19 @@ const collectionPosts = await getCollection("blog", ({ data }) => !data.draft);
 // 5. If converting a Markdown post, DELETE the original .md file to prevent collisions.
 const manualPosts = [
   {
+    slug: "emergent-rag",
+    data: {
+      title: "RAG Without Vectors: How File System Tools Give LLMs Emergent Retrieval",
+      description:
+        "Forget embeddings. Forget chunks. Give an LLM good file system tools and it will teach itself to retrieve—using reasoning as the similarity function.",
+      pubDate: new Date("2025-12-30"),
+      tags: ["rag", "emergent-behavior", "file-system", "mcp", "llm-tooling"],
+      draft: false,
+      lesson:
+        "Vector RAG precomputes similarity and throws away reasoning. File System RAG computes similarity through reasoning. The LLM is the embedding model—give it search tools and it will teach itself retrieval strategies.",
+    },
+  },
+  {
     slug: "stateful-mcp-architecture",
     data: {
       title: "Six Patterns for Connecting LLM Agents to Stateful Tools",

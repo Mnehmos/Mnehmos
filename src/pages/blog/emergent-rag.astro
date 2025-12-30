@@ -1,0 +1,718 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+const title = "RAG Without Vectors: How File System Tools Give LLMs Emergent Retrieval";
+const description =
+  "Forget embeddings. Forget chunks. Give an LLM good file system tools and it will teach itself to retrieve—using reasoning as the similarity function.";
+const pubDate = new Date("2025-12-30");
+const tags = ["rag", "emergent-behavior", "file-system", "mcp", "llm-tooling"];
+const base = import.meta.env.BASE_URL;
+---
+
+<BaseLayout title={title} description={description}>
+  <article class="max-w-4xl mx-auto px-6 py-12 md:py-20 overflow-hidden">
+    <!-- Breadcrumbs -->
+    <nav class="mb-12 animate-fade-in">
+      <a
+        href={`${base}blog`}
+        class="text-stone-500 dark:text-stone-400 hover:text-copper transition-colors flex items-center gap-2 text-sm font-medium group"
+      >
+        <svg
+          class="w-4 h-4 transform group-hover:-translate-x-1 transition-transform"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M15 19l-7-7 7-7"></path>
+        </svg>
+        Back to Blog
+      </a>
+    </nav>
+
+    <!-- Header -->
+    <header class="mb-16">
+      <div class="flex flex-wrap gap-2 mb-6 animate-fade-in">
+        {
+          tags.map((tag) => (
+            <span class="px-3 py-1 bg-copper/10 text-copper text-xs font-bold uppercase tracking-wider rounded-full border border-copper/10">
+              {tag}
+            </span>
+          ))
+        }
+      </div>
+
+      <h1
+        class="font-display text-4xl md:text-6xl font-bold text-stone-900 dark:text-stone-100 mb-6 leading-tight animate-slide-up"
+      >
+        RAG Without Vectors: <span class="text-copper">Emergent Retrieval</span>
+      </h1>
+
+      <p
+        class="text-xl md:text-2xl text-stone-600 dark:text-stone-300 mb-8 border-l-4 border-copper pl-6 italic animate-slide-up animation-delay-100"
+      >
+        {description}
+      </p>
+
+      <div
+        class="flex items-center gap-4 text-stone-500 font-medium animate-fade-in animation-delay-200"
+      >
+        <div
+          class="w-10 h-10 rounded-full bg-stone-200 dark:bg-stone-700 flex items-center justify-center text-stone-600 dark:text-stone-300 font-bold border-2 border-white dark:border-stone-800 shadow-sm"
+        >
+          V
+        </div>
+        <div>
+          <div class="text-stone-900 dark:text-stone-200 leading-none mb-1">
+            Vario <span class="text-stone-500 dark:text-stone-400 font-normal">aka</span> <span class="text-copper font-normal">Mnehmos</span>
+          </div>
+          <time datetime={pubDate.toISOString()} class="text-sm">
+            {
+              pubDate.toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })
+            }
+          </time>
+        </div>
+      </div>
+    </header>
+
+    <!-- Hook -->
+    <div
+      class="bg-stone-900 text-stone-300 p-8 rounded-3xl mb-16 relative overflow-hidden group animate-fade-in hover:shadow-2xl transition-shadow border border-white/10"
+    >
+      <div
+        class="absolute top-0 right-0 p-4 opacity-20 pointer-events-none group-hover:opacity-40 transition-opacity"
+      >
+        <svg class="w-32 h-32" fill="currentColor" viewBox="0 0 24 24"
+          ><path
+            d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"
+          ></path></svg
+        >
+      </div>
+      <h3 class="text-white font-bold mb-4 flex items-center gap-2">
+        <span class="text-copper">🔍</span> The Heretical Question
+      </h3>
+      <p class="relative z-10 leading-relaxed text-lg">
+        What if you didn't need embeddings, vector databases, or chunking strategies?
+        What if <strong class="text-white">reasoning itself</strong> could be the similarity function?
+      </p>
+    </div>
+
+    <!-- The Standard RAG Pipeline -->
+    <section
+      class="prose prose-stone dark:prose-invert prose-lg max-w-none mb-20 scroll-reveal"
+    >
+      <h2 class="font-display text-copper text-3xl font-bold mb-6">
+        The Standard RAG Pipeline
+      </h2>
+      <p>
+        Everyone knows how Retrieval-Augmented Generation works. You take your documents,
+        you chunk them, you embed them with something like <code>text-embedding-3-small</code>,
+        you store them in Pinecone or Chroma, and at query time you embed the query,
+        find similar vectors, pull the chunks, and stuff them into context.
+      </p>
+
+      <div class="my-12 not-prose">
+        <div
+          class="bg-white dark:bg-stone-800 border-2 border-stone-900 dark:border-stone-700 rounded-xl p-6 md:p-8 font-mono text-sm md:text-base shadow-[8px_8px_0px_0px_rgba(28,25,23,1)] dark:shadow-[8px_8px_0px_0px_rgba(255,255,255,0.1)] transition-colors"
+        >
+          <div
+            class="border-b-2 border-stone-200 dark:border-stone-600 pb-4 mb-4 text-center font-bold text-stone-900 dark:text-stone-100"
+          >
+            TRADITIONAL RAG FLOW
+          </div>
+          <div class="flex flex-col gap-2 text-stone-600 dark:text-stone-400">
+            <div class="flex items-center gap-3">
+              <span class="w-8 h-8 rounded-full bg-blue-500/20 text-blue-400 flex items-center justify-center text-xs font-bold">1</span>
+              <span>Documents → <strong class="text-stone-900 dark:text-stone-100">Chunk</strong> into 500-token pieces</span>
+            </div>
+            <div class="flex items-center gap-3">
+              <span class="w-8 h-8 rounded-full bg-blue-500/20 text-blue-400 flex items-center justify-center text-xs font-bold">2</span>
+              <span>Chunks → <strong class="text-stone-900 dark:text-stone-100">Embed</strong> with neural model</span>
+            </div>
+            <div class="flex items-center gap-3">
+              <span class="w-8 h-8 rounded-full bg-blue-500/20 text-blue-400 flex items-center justify-center text-xs font-bold">3</span>
+              <span>Embeddings → <strong class="text-stone-900 dark:text-stone-100">Store</strong> in vector database</span>
+            </div>
+            <div class="flex items-center gap-3">
+              <span class="w-8 h-8 rounded-full bg-green-500/20 text-green-400 flex items-center justify-center text-xs font-bold">4</span>
+              <span>Query → <strong class="text-stone-900 dark:text-stone-100">Embed</strong> → <strong class="text-stone-900 dark:text-stone-100">Search</strong> → Top-K chunks</span>
+            </div>
+            <div class="flex items-center gap-3">
+              <span class="w-8 h-8 rounded-full bg-green-500/20 text-green-400 flex items-center justify-center text-xs font-bold">5</span>
+              <span>Chunks → <strong class="text-stone-900 dark:text-stone-100">Stuff</strong> into context → LLM answers</span>
+            </div>
+          </div>
+          <div class="mt-4 text-center text-xs text-stone-400 uppercase tracking-widest font-bold">
+            ~$0.02/1M tokens embedded • Vector DB costs • Chunking complexity
+          </div>
+        </div>
+      </div>
+
+      <p>
+        It works. It's battle-tested. But it's also <strong>expensive</strong>, <strong>brittle</strong>,
+        and requires constant tuning of chunk sizes, overlap, retrieval thresholds, and reranking strategies.
+      </p>
+    </section>
+
+    <!-- The Alternative -->
+    <section class="mb-20 scroll-reveal">
+      <div
+        class="bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 p-8 md:p-12 rounded-4xl shadow-sm relative overflow-hidden transition-colors"
+      >
+        <div
+          class="absolute -right-20 -top-20 w-64 h-64 bg-copper/5 rounded-full blur-3xl"
+        >
+        </div>
+        <h2 class="font-display text-copper text-4xl font-bold mb-4">
+          The Heresy: Let the LLM Be the Retriever
+        </h2>
+        <p
+          class="text-lg text-stone-600 dark:text-stone-300 mb-8 leading-relaxed"
+        >
+          What if instead of pre-computing similarity through embeddings, you gave the LLM
+          <strong>tools to explore</strong> and let it figure out what's relevant?
+        </p>
+
+        <div class="grid md:grid-cols-2 gap-8">
+          <div
+            class="bg-stone-50 dark:bg-stone-950 p-6 rounded-2xl border border-stone-100 dark:border-stone-800 h-full"
+          >
+            <h4
+              class="font-bold text-stone-900 dark:text-stone-100 mb-3 flex items-center gap-2"
+            >
+              <span
+                class="w-8 h-8 rounded-full bg-red-500/10 text-red-400 flex items-center justify-center text-sm font-mono"
+                >❌</span
+              >
+              Vector RAG
+            </h4>
+            <p
+              class="text-sm text-stone-500 dark:text-stone-400 leading-relaxed"
+            >
+              Similarity is <em>pre-computed</em> by a frozen embedding model.
+              It can't reason. "Authentication" and "login" might be far apart in embedding space
+              despite being conceptually identical.
+            </p>
+          </div>
+          <div
+            class="bg-stone-50 dark:bg-stone-950 p-6 rounded-2xl border border-stone-100 dark:border-stone-800 h-full"
+          >
+            <h4
+              class="font-bold text-stone-900 dark:text-stone-100 mb-3 flex items-center gap-2"
+            >
+              <span
+                class="w-8 h-8 rounded-full bg-green-500/10 text-green-400 flex items-center justify-center text-sm font-mono"
+                >✓</span
+              >
+              File System RAG
+            </h4>
+            <p
+              class="text-sm text-stone-500 dark:text-stone-400 leading-relaxed"
+            >
+              Similarity is <em>computed at query time</em> by the LLM's reasoning.
+              It can understand "I need authentication code" means searching for
+              <code>auth</code>, <code>login</code>, <code>session</code>, and <code>jwt</code>.
+            </p>
+          </div>
+        </div>
+
+        <div class="mt-8 bg-stone-950 dark:bg-black rounded-xl p-6 font-mono text-sm border-l-4 border-copper text-stone-300 overflow-x-auto">
+          <code class="block">
+            <span class="text-stone-500">// The LLM's retrieval "algorithm"</span><br />
+            <br />
+            <span class="text-blue-300">User:</span> "How does authentication work?"<br />
+            <br />
+            <span class="text-yellow-300">LLM thinks:</span><br />
+            ├── Auth code is probably in /src/auth/ or /lib/auth/<br />
+            ├── Maybe there's a middleware folder<br />
+            └── JWT handling might be in utils/<br />
+            <br />
+            <span class="text-green-300">LLM acts:</span><br />
+            ├── <span class="text-purple-300">search_files</span>("*.auth.ts", "src/")<br />
+            ├── <span class="text-purple-300">search_in_file</span>("jwt", "src/middleware/index.ts")<br />
+            └── <span class="text-purple-300">read_file_lines</span>("src/auth/session.ts", 1, 50)<br />
+            <br />
+            <span class="text-stone-500">// The LLM IS the similarity function</span>
+          </code>
+        </div>
+      </div>
+    </section>
+
+    <!-- The Tool Stack -->
+    <section
+      class="prose prose-stone dark:prose-invert prose-lg max-w-none mb-20 scroll-reveal"
+    >
+      <h2 class="font-display text-copper text-3xl font-bold mb-6">
+        The Tool Stack That Enables This
+      </h2>
+      <p>
+        Building the OODA MCP server taught me what tools an LLM needs to perform
+        emergent retrieval. It's not one tool—it's a <strong>progression</strong> from
+        broad discovery to surgical extraction.
+      </p>
+
+      <div class="my-12 not-prose">
+        <div class="grid gap-4">
+          <div class="bg-stone-50 dark:bg-stone-900 p-4 rounded-xl border-l-4 border-blue-400">
+            <div class="flex items-center gap-3 mb-2">
+              <span class="font-mono text-blue-400 text-sm font-bold">DISCOVER</span>
+              <span class="font-bold text-stone-900 dark:text-stone-100">list_directory, search_files</span>
+            </div>
+            <p class="text-sm text-stone-500">
+              "What's in this project?" → Browse folder structure, find files by pattern.
+              Like scanning a library's catalog.
+            </p>
+          </div>
+          
+          <div class="bg-stone-50 dark:bg-stone-900 p-4 rounded-xl border-l-4 border-yellow-400">
+            <div class="flex items-center gap-3 mb-2">
+              <span class="font-mono text-yellow-400 text-sm font-bold">LOCATE</span>
+              <span class="font-bold text-stone-900 dark:text-stone-100">search_in_file, batch_search_in_files</span>
+            </div>
+            <p class="text-sm text-stone-500">
+              "Where is this concept?" → Search for patterns across files with context lines.
+              Supports regex and <strong>fuzzy matching</strong> with configurable thresholds.
+            </p>
+          </div>
+          
+          <div class="bg-stone-50 dark:bg-stone-900 p-4 rounded-xl border-l-4 border-green-400">
+            <div class="flex items-center gap-3 mb-2">
+              <span class="font-mono text-green-400 text-sm font-bold">EXTRACT</span>
+              <span class="font-bold text-stone-900 dark:text-stone-100">read_file_lines, read_file</span>
+            </div>
+            <p class="text-sm text-stone-500">
+              "Show me this specific part." → Read line ranges, tail files, get exactly what's needed.
+              <code>offset: -50</code> reads last 50 lines like Unix tail.
+            </p>
+          </div>
+
+          <div class="bg-stone-50 dark:bg-stone-900 p-4 rounded-xl border-l-4 border-purple-400">
+            <div class="flex items-center gap-3 mb-2">
+              <span class="font-mono text-purple-400 text-sm font-bold">BATCH</span>
+              <span class="font-bold text-stone-900 dark:text-stone-100">batch_read_files, batch_search_in_files</span>
+            </div>
+            <p class="text-sm text-stone-500">
+              "Search all of these at once." → Parallel operations reduce round-trips.
+              One tool call can search 20 files simultaneously.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <p>
+        The magic happens in the <strong>progression</strong>. The LLM doesn't read everything—it
+        narrows down iteratively, just like a human developer would.
+      </p>
+    </section>
+
+    <!-- Fuzzy Matching -->
+    <section class="mb-20 scroll-reveal">
+      <div
+        class="relative bg-stone-900 rounded-4xl p-8 md:p-12 overflow-hidden text-stone-300"
+      >
+        <div
+          class="absolute inset-0 bg-linear-to-b from-stone-800/50 to-stone-900 pointer-events-none"
+        >
+        </div>
+        <div class="absolute top-0 right-0 p-8 opacity-10">
+          <svg class="w-64 h-64" viewBox="0 0 24 24" fill="currentColor">
+            <path
+              d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"
+            ></path>
+          </svg>
+        </div>
+
+        <div class="relative z-10">
+          <h2
+            class="font-display text-3xl md:text-4xl font-bold text-white mb-6"
+          >
+            The Secret Sauce: Fuzzy Matching
+          </h2>
+          <p class="text-lg leading-relaxed mb-8">
+            Vector embeddings capture "semantic similarity" through high-dimensional geometry.
+            But you can get <strong>80% of the benefit</strong> with simple Levenshtein distance.
+          </p>
+
+          <div
+            class="bg-black/50 rounded-xl p-6 font-mono text-sm border border-white/10 mb-8 overflow-x-auto"
+          >
+            <span class="text-stone-500">// From ooda.mcp: batch_search_in_files with fuzzy matching</span><br />
+            <br />
+            batch_search_in_files(&#123;<br />
+            &nbsp;&nbsp;searches: [<br />
+            &nbsp;&nbsp;&nbsp;&nbsp;&#123; path: <span class="text-green-300">"src/auth/session.ts"</span>, pattern: <span class="text-green-300">"autentication"</span> &#125;<br />
+            &nbsp;&nbsp;],<br />
+            &nbsp;&nbsp;<span class="text-yellow-300">isFuzzy: true</span>,<br />
+            &nbsp;&nbsp;<span class="text-yellow-300">fuzzyThreshold: 0.7</span>,  <span class="text-stone-500">// 70% similarity</span><br />
+            &nbsp;&nbsp;contextLines: 3<br />
+            &#125;)<br />
+            <br />
+            <span class="text-stone-500">// Returns matches for "authentication" despite typo</span><br />
+            <span class="text-stone-500">// similarity: 0.85 → "authentication"</span>
+          </div>
+
+          <p class="mb-8">
+            This is critical for LLM tolerance. The model might misspell, use synonyms,
+            or guess at naming conventions. Fuzzy matching catches these without the
+            overhead of embedding computation.
+          </p>
+
+          <div class="grid md:grid-cols-3 gap-4">
+            <div class="bg-stone-950 p-4 rounded-xl border border-stone-800">
+              <div class="text-copper font-bold mb-2">LLM Types</div>
+              <code class="text-sm">"autentication"</code>
+            </div>
+            <div class="bg-stone-950 p-4 rounded-xl border border-stone-800 flex items-center justify-center">
+              <div class="text-center">
+                <div class="text-xs text-stone-500 mb-1">Levenshtein</div>
+                <span class="text-lg">→ 0.85</span>
+              </div>
+            </div>
+            <div class="bg-stone-950 p-4 rounded-xl border border-stone-800">
+              <div class="text-green-400 font-bold mb-2">Matches</div>
+              <code class="text-sm">"authentication"</code>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Comparison Table -->
+    <section
+      class="bg-stone-100 dark:bg-stone-900 rounded-4xl p-8 md:p-12 mb-20 scroll-reveal transition-colors"
+    >
+      <h2
+        class="font-display text-3xl font-bold text-stone-900 dark:text-stone-100 mb-8"
+      >
+        When to Use Which Approach
+      </h2>
+      <p class="text-lg text-stone-600 dark:text-stone-400 mb-8">
+        Emergent RAG isn't a replacement—it's an alternative for specific use cases.
+      </p>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="border-b-2 border-stone-200 dark:border-stone-700">
+              <th class="text-left py-3 px-4 font-bold text-stone-900 dark:text-stone-100">Factor</th>
+              <th class="text-left py-3 px-4 font-bold text-copper">Vector RAG</th>
+              <th class="text-left py-3 px-4 font-bold text-green-500">File System RAG</th>
+            </tr>
+          </thead>
+          <tbody class="text-stone-600 dark:text-stone-400">
+            <tr class="border-b border-stone-200 dark:border-stone-800">
+              <td class="py-3 px-4 font-medium text-stone-900 dark:text-stone-100">Setup Cost</td>
+              <td class="py-3 px-4">High (embeddings, vector DB, chunking)</td>
+              <td class="py-3 px-4">Zero (files already exist)</td>
+            </tr>
+            <tr class="border-b border-stone-200 dark:border-stone-800">
+              <td class="py-3 px-4 font-medium text-stone-900 dark:text-stone-100">Query Cost</td>
+              <td class="py-3 px-4">Low (one embedding + vector search)</td>
+              <td class="py-3 px-4">Higher (multiple tool calls)</td>
+            </tr>
+            <tr class="border-b border-stone-200 dark:border-stone-800">
+              <td class="py-3 px-4 font-medium text-stone-900 dark:text-stone-100">Reasoning</td>
+              <td class="py-3 px-4">None (geometric similarity only)</td>
+              <td class="py-3 px-4">Full LLM reasoning at retrieval time</td>
+            </tr>
+            <tr class="border-b border-stone-200 dark:border-stone-800">
+              <td class="py-3 px-4 font-medium text-stone-900 dark:text-stone-100">Data Freshness</td>
+              <td class="py-3 px-4">Stale (must re-embed on changes)</td>
+              <td class="py-3 px-4">Always current (reads live files)</td>
+            </tr>
+            <tr class="border-b border-stone-200 dark:border-stone-800">
+              <td class="py-3 px-4 font-medium text-stone-900 dark:text-stone-100">Best For</td>
+              <td class="py-3 px-4">Large static corpora, semantic search</td>
+              <td class="py-3 px-4">Codebases, live documents, exploration</td>
+            </tr>
+            <tr>
+              <td class="py-3 px-4 font-medium text-stone-900 dark:text-stone-100">Structure Awareness</td>
+              <td class="py-3 px-4">Lost (flat chunks)</td>
+              <td class="py-3 px-4">Preserved (folder hierarchy, file names)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- The Real Insight -->
+    <section
+      class="prose prose-stone dark:prose-invert prose-lg max-w-none mb-20 scroll-reveal"
+    >
+      <h2 class="font-display text-copper text-3xl font-bold mb-6">
+        The Real Insight: Context Is Navigation
+      </h2>
+      <p>
+        Traditional RAG treats retrieval as a <strong>lookup problem</strong>: given a query,
+        return the most similar chunks. But when you give an LLM file system tools, it treats
+        retrieval as a <strong>navigation problem</strong>: given a goal, explore until you
+        find what you need.
+      </p>
+
+      <p>
+        This is closer to how humans actually work. When I need to understand authentication
+        in a codebase, I don't compute embeddings—I:
+      </p>
+
+      <ol>
+        <li>Look at the folder structure (<code>list_directory</code>)</li>
+        <li>Find likely candidates (<code>search_files("*auth*")</code>)</li>
+        <li>Search for key terms (<code>search_in_file("jwt")</code>)</li>
+        <li>Read the relevant sections (<code>read_file_lines</code>)</li>
+      </ol>
+
+      <p>
+        The LLM does exactly this—but faster, in parallel, and with perfect recall of
+        everything it's seen in the conversation.
+      </p>
+
+      <div class="my-12 not-prose">
+        <div class="bg-white dark:bg-stone-800 border-2 border-stone-900 dark:border-stone-700 rounded-xl p-6 font-mono text-sm shadow-lg transition-colors">
+          <div class="text-center font-bold text-stone-900 dark:text-stone-100 mb-6 text-lg">
+            RETRIEVAL AS NAVIGATION
+          </div>
+          
+          <div class="flex flex-col md:flex-row gap-4 items-stretch">
+            <div class="flex-1 bg-stone-100 dark:bg-stone-900 p-4 rounded-lg text-center">
+              <div class="text-red-400 font-bold mb-2 text-sm">Vector RAG</div>
+              <div class="text-xs text-stone-500 mb-2">Query → Top-K → Done</div>
+              <div class="text-stone-400">One-shot lookup</div>
+            </div>
+            <div class="flex items-center justify-center">
+              <span class="text-2xl text-stone-400">vs</span>
+            </div>
+            <div class="flex-1 bg-stone-100 dark:bg-stone-900 p-4 rounded-lg text-center">
+              <div class="text-green-400 font-bold mb-2 text-sm">File System RAG</div>
+              <div class="text-xs text-stone-500 mb-2">Query → Explore → Refine → Extract</div>
+              <div class="text-stone-400">Iterative navigation</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Implementation Tips -->
+    <section class="mb-20 scroll-reveal">
+      <h2
+        class="font-display text-3xl font-bold text-stone-900 dark:text-stone-100 mb-8"
+      >
+        Implementation: The Tool Stack
+      </h2>
+
+      <div class="space-y-6">
+        <div
+          class="bg-white dark:bg-stone-950 p-6 rounded-2xl shadow-sm border border-stone-200 dark:border-stone-800 transition-colors"
+        >
+          <h3
+            class="font-bold text-copper mb-2 uppercase tracking-wide text-sm"
+          >
+            1. Discovery Layer
+          </h3>
+          <h4
+            class="font-display text-xl font-bold text-stone-900 dark:text-stone-100 mb-4"
+          >
+            list_directory + search_files
+          </h4>
+          <div class="bg-stone-950 rounded-xl p-4 font-mono text-xs text-green-400 overflow-x-auto">
+            <pre>// Broad discovery
+search_files(&#123;
+  directory: "src/",
+  pattern: "*.auth.ts",
+  recursive: true,
+  maxResults: 100
+&#125;)
+
+// Returns: ["src/auth/session.auth.ts", "src/middleware/jwt.auth.ts", ...]</pre>
+          </div>
+        </div>
+
+        <div
+          class="bg-white dark:bg-stone-950 p-6 rounded-2xl shadow-sm border border-stone-200 dark:border-stone-800 transition-colors"
+        >
+          <h3
+            class="font-bold text-copper mb-2 uppercase tracking-wide text-sm"
+          >
+            2. Location Layer
+          </h3>
+          <h4
+            class="font-display text-xl font-bold text-stone-900 dark:text-stone-100 mb-4"
+          >
+            search_in_file + batch_search_in_files
+          </h4>
+          <div class="bg-stone-950 rounded-xl p-4 font-mono text-xs text-green-400 overflow-x-auto">
+            <pre>// Find specific patterns with context
+search_in_file(&#123;
+  path: "src/auth/session.ts",
+  pattern: "validateToken",
+  contextLines: 5,  // 5 lines before and after
+  maxMatches: 10
+&#125;)
+
+// Returns matches with surrounding context
+// Line 47: "export function validateToken(token: string) &#123;"</pre>
+          </div>
+        </div>
+
+        <div
+          class="bg-white dark:bg-stone-950 p-6 rounded-2xl shadow-sm border border-stone-200 dark:border-stone-800 transition-colors"
+        >
+          <h3
+            class="font-bold text-copper mb-2 uppercase tracking-wide text-sm"
+          >
+            3. Extraction Layer
+          </h3>
+          <h4
+            class="font-display text-xl font-bold text-stone-900 dark:text-stone-100 mb-4"
+          >
+            read_file_lines with surgical precision
+          </h4>
+          <div class="bg-stone-950 rounded-xl p-4 font-mono text-xs text-green-400 overflow-x-auto">
+            <pre>// Read just the function, not the whole file
+read_file_lines(&#123;
+  path: "src/auth/session.ts",
+  startLine: 47,
+  endLine: 72,
+  includeLineNumbers: true
+&#125;)
+
+// Or read the last 50 lines of a log file
+read_file_lines(&#123;
+  path: "logs/auth.log",
+  offset: -50  // Negative = from end, like tail
+&#125;)</pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Summary -->
+    <section
+      class="prose prose-stone dark:prose-invert prose-lg max-w-none mb-20 scroll-reveal"
+    >
+      <h2 class="font-display text-copper text-3xl font-bold mb-6">
+        The Emergent Property
+      </h2>
+      <p>
+        When you give an LLM these tools, something interesting emerges: <strong>it teaches
+        itself retrieval strategies</strong>. Not through training, but through in-context
+        reasoning about what it needs.
+      </p>
+
+      <p>
+        Ask it to find authentication code and it will search for <code>auth</code>, <code>login</code>,
+        <code>session</code>, <code>jwt</code>, and <code>token</code>—without being told that these
+        concepts are related. The semantic knowledge is <em>already in the model</em>; you just
+        need to give it tools to act on that knowledge.
+      </p>
+
+      <div class="my-12 not-prose">
+        <div class="bg-stone-950 rounded-xl p-6 border-l-4 border-copper">
+          <p class="text-copper font-bold mb-4 text-lg">The Punchline</p>
+          <p class="text-stone-300 text-lg leading-relaxed">
+            Vector RAG precomputes similarity and throws away reasoning.<br />
+            File System RAG computes similarity through reasoning.<br /><br />
+            <span class="text-white font-bold">The LLM is the embedding model.</span>
+          </p>
+        </div>
+      </div>
+
+      <p>
+        Is this always better than vector RAG? No. Is it simpler, cheaper, and more transparent
+        for many use cases? Absolutely. And for codebases—where structure, naming conventions,
+        and conceptual organization matter—it's often <em>superior</em>.
+      </p>
+    </section>
+
+    <!-- Footer Meta -->
+    <footer
+      class="text-center pt-16 border-t border-stone-200 dark:border-stone-800"
+    >
+      <p class="text-stone-500 mb-8 max-w-md mx-auto">
+        The tools discussed are part of the OODA MCP server, available in the Mnehmos MCP ecosystem.
+      </p>
+      <div class="flex justify-center gap-6">
+        <a
+          href="https://github.com/Mnehmos"
+          class="text-stone-400 hover:text-copper transition-colors"
+        >
+          <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"
+            ><path
+              d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.111.825-.261.825-.579 0-.285-.011-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.22 0 4.609-2.807 5.627-5.479 5.921.43.372.823 1.102.823 2.222 0 1.606-.015 2.896-.015 3.286 0 .321.222.696.832.57C20.565 21.795 24 17.31 24 12c0-6.63-5.37-12-12-12z"
+            ></path></svg
+          >
+        </a>
+      </div>
+    </footer>
+  </article>
+
+  <!-- Global Animations -->
+  <style is:global>
+    @keyframes fade-in {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+    @keyframes slide-up {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .animate-fade-in {
+      animation: fade-in 1s ease-out forwards;
+    }
+    .animate-slide-up {
+      opacity: 0;
+      animation: slide-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    .animation-delay-100 {
+      animation-delay: 0.1s;
+    }
+    .animation-delay-200 {
+      animation-delay: 0.2s;
+    }
+
+    .scroll-reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .scroll-reveal.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+
+  <script>
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: "0px 0px -50px 0px",
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("active");
+        }
+      });
+    }, observerOptions);
+
+    document
+      .querySelectorAll(".scroll-reveal")
+      .forEach((el) => observer.observe(el));
+  </script>
+</BaseLayout>
