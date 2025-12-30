@@ -1,4 +1,6 @@
 ---
+import OrbitAnimation from "../components/blog/OrbitAnimation";
+
 interface Props {
   title: string;
   description?: string;
@@ -90,6 +92,8 @@ const base = import.meta.env.BASE_URL;
   <body
     class="bg-stone-50 text-stone-800 dark:bg-stone-950 dark:text-stone-100 antialiased transition-colors duration-300"
   >
+    <OrbitAnimation client:idle />
+
     <!-- Navigation -->
     <nav
       class="fixed top-0 left-0 right-0 z-50 bg-stone-50/90 dark:bg-stone-950/90 backdrop-blur-sm border-b border-stone-200 dark:border-stone-800 transition-colors duration-300"
