@@ -15,7 +15,7 @@ Building tools that let AI agents interact with complex stateful systems—wheth
 ### MCP Servers
 
 | Project | Tools | Description |
-|---------|-------|-------------|
+| ------- | ----- | ----------- |
 | [**mnehmos.ooda.mcp**](https://github.com/Mnehmos/mnehmos.ooda.mcp) | 62 | Full computer control—filesystem, shell, screen, keyboard, mouse, clipboard |
 | [**mnehmos.synch.mcp**](https://github.com/Mnehmos/mnehmos.synch.mcp) | 19 | Persistent memory bank, context handoffs, locks for agent coordination |
 | [**mnehmos.trace.mcp**](https://github.com/Mnehmos/mnehmos.trace.mcp) | 11 | Schema validation between MCP producers and consumers |
@@ -27,14 +27,14 @@ Building tools that let AI agents interact with complex stateful systems—wheth
 ### Frameworks & Research
 
 | Project | Description |
-|---------|-------------|
+| ------- | ----------- |
 | [**mnehmos.multi-agent.framework**](https://github.com/Mnehmos/mnehmos.multi-agent.framework) | 528⭐ · Production-ready multi-agent coordination (SPARC + Boomerang + TDD) |
 | [**mnehmos.prompts.research**](https://github.com/Mnehmos/mnehmos.prompts.research) | 182 techniques from 20+ papers · Interactive taxonomy, prompt builder |
 
 ### Shipped Products
 
 | Product | Platform | Description |
-|---------|----------|-------------|
+| ------- | -------- | ----------- |
 | [**mnehmos.quest-keeper.game**](https://github.com/Mnehmos/mnehmos.quest-keeper.game) | Desktop (Tauri) | AI Dungeon Master + 3D battlemap + 7-layer context (~5K tokens) |
 | [**mnehmos.long-hall.game**](https://github.com/Mnehmos/mnehmos.long-hall.game) | Web | Procedural roguelike with ironman saves & cloud leaderboards |
 | [**mnehmos.portal-chess.game**](https://github.com/Mnehmos/mnehmos.portal-chess.game) | Web | Multiplayer chess with portal teleportation mechanics |
@@ -44,7 +44,7 @@ Building tools that let AI agents interact with complex stateful systems—wheth
 
 ## 📊 By The Numbers
 
-```
+```text
 300+  MCP tools across 7 servers
 528   GitHub stars on Multi-Agent Framework
 182   Prompt engineering techniques documented
@@ -61,6 +61,7 @@ Building tools that let AI agents interact with complex stateful systems—wheth
 **Tools don't think, they act.**
 
 Every MCP server I build follows these principles:
+
 - **Deterministic**: Same inputs → same outputs
 - **Idempotent**: Re-running produces identical results
 - **Auditable**: Every operation produces manifests and logs
@@ -72,17 +73,20 @@ The LLM proposes. The engine validates. State comes from the database, not hallu
 
 ## 🔗 Quick Links
 
-**MCP Servers**
+### MCP Servers
+
 - [mnehmos.ooda.mcp](https://github.com/Mnehmos/mnehmos.ooda.mcp) — Computer control
 - [mnehmos.synch.mcp](https://github.com/Mnehmos/mnehmos.synch.mcp) — Agent memory bank
 - [mnehmos.index-foundry.mcp](https://github.com/Mnehmos/mnehmos.index-foundry.mcp) — RAG pipeline factory
 
-**Live Demos**
+### Live Demos
+
 - [The Long Hall](https://mnehmos.github.io/mnehmos.long-hall.game/) — Roguelike dungeon crawler
 - [Quest Keeper AI](https://questkeeperai.com) — AI D&D assistant
 - [Prompt Engineering Guide](https://mnehmos.github.io/mnehmos.prompts.research/) — 182 techniques
 
-**Documentation**
+### Documentation
+
 - [Multi-Agent Framework](https://github.com/Mnehmos/mnehmos.multi-agent.framework) — AGENTS.md universal spec
 - [RPG Engine](https://github.com/Mnehmos/mnehmos.rpg.mcp) — 145 D&D 5e tools
 
@@ -96,6 +100,4 @@ The LLM proposes. The engine validates. State comes from the database, not hallu
 
 ---
 
-<p align="center">
-  <i>Building infrastructure for AI agents that interact with the real world.</i>
-</p>
+*Building infrastructure for AI agents that interact with the real world.*

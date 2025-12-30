@@ -1,0 +1,17 @@
+{
+  "name": "mnehmos-resume",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "Mnehmos Developer Portfolio - MCP Infrastructure, Multi-Agent Systems, AI-Powered Games",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
+  },
+  "dependencies": {
+    "@tailwindcss/vite": "^4.1.18",
+    "astro": "^5.7.13",
+    "tailwindcss": "^4.1.18"
+  }
+}

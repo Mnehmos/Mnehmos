@@ -1,0 +1,269 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+
+// All projects organized by category - VERIFIED FROM ACTUAL READMES
+const mcpServers = [
+  {
+    title: "OODA MCP",
+    description: "Full computer control implementing the OODA pattern—observe (screen), orient (context), decide (LLM), act (input). Screen capture, keyboard/mouse control, window management, clipboard, and system operations.",
+    type: "mcp-server" as const,
+    link: "https://github.com/Mnehmos/mnehmos.ooda.mcp",
+    tags: ["TypeScript", "MCP", "Desktop Automation", "OODA", "Cross-Platform"],
+    stats: { tools: 62 },
+    featured: true
+  },
+  {
+    title: "Index Foundry MCP",
+    description: "Deterministic Vector Index Factory for RAG pipelines. 5-phase workflow: Connect (URL/PDF/folder) → Extract → Normalize (chunk/enrich/dedupe) → Index (embed/upsert) → Serve. Auto-generates Railway deployment.",
+    type: "mcp-server" as const,
+    link: "https://github.com/Mnehmos/mnehmos.index-foundry.mcp",
+    tags: ["TypeScript", "RAG", "Vector Search", "MCP", "Railway"],
+    stats: { tools: 40 },
+    featured: true
+  },
+  {
+    title: "Synch MCP",
+    description: "Global Memory Bank for AI agent coordination. Active context management, filing cabinet for indexed files, spatial maps (\"PC as Rooms\"), bug tracking, lock management for parallel agents, and context event emission.",
+    type: "mcp-server" as const,
+    link: "https://github.com/Mnehmos/mnehmos.synch.mcp",
+    tags: ["TypeScript", "Memory Bank", "Agent Coordination", "MCP", "SQLite"],
+    stats: { tools: 19 }
+  },
+  {
+    title: "Trace MCP",
+    description: "Static analysis for schema mismatch detection. Extract schemas from MCP servers (Zod), trace consumer usage, compare and scaffold. Supports OpenAPI, GraphQL SDL, Apollo, tRPC, fetch, axios.",
+    type: "mcp-server" as const,
+    link: "https://github.com/Mnehmos/mnehmos.trace.mcp",
+    tags: ["TypeScript", "Static Analysis", "Schema Validation", "MCP", "GraphQL"],
+    stats: { tools: 11 }
+  },
+  {
+    title: "arXiv MCP",
+    description: "Academic paper search and retrieval. Search by title, author, category with full-text PDF extraction and caching. Ideal for research workflows.",
+    type: "mcp-server" as const,
+    link: "https://github.com/Mnehmos/mnehmos.arxiv.mcp",
+    tags: ["TypeScript", "arXiv", "PDF Extraction", "MCP", "Research"],
+    stats: { tools: 4 }
+  },
+  {
+    title: "Sight MCP",
+    description: "Rust MCP server that gives Claude Desktop the ability to see your screen and guide you through UI tasks via an always-on-top overlay. Collaborative automation—Claude provides intelligence, you provide clicks.",
+    type: "mcp-server" as const,
+    link: "https://github.com/Mnehmos/mnehmos.sight.mcp",
+    tags: ["Rust", "Vision AI", "Screen Guidance", "MCP", "Coming Soon"]
+  }
+];
+
+const games = [
+  {
+    title: "ChatRPG Game (D&D 5e)",
+    description: "D&D 5e MCP Server for AI Dungeon Masters. 30+ tools for characters, combat, spells, conditions, spatial calculations. Web client available as stateless demo (session-based).",
+    type: "game" as const,
+    link: "https://github.com/Mnehmos/mnehmos.chatrpg.game",
+    liveUrl: "https://mnehmos.github.io/mnehmos.chatrpg.game/",
+    tags: ["TypeScript", "D&D 5e", "MCP", "Game Engine"],
+    stats: { tools: 30 },
+    features: ['mcp-tools'] as ('rag' | 'mcp-tools' | 'ai-chat')[],
+    featured: true
+  },
+  {
+    title: "Quest Keeper AI",
+    description: "Desktop RPG companion (Tauri app) combining AI Dungeon Master with visual game engine. 3D battlemap, 2D world map, spellcasting, NPC memory. Uses 145+ MCP tools from rpg-mcp backend.",
+    type: "game" as const,
+    link: "https://github.com/Mnehmos/mnehmos.quest-keeper.game",
+    liveUrl: "https://questkeeperai.com",
+    tags: ["Tauri", "React", "Three.js", "MCP", "Desktop App"],
+    stats: { tools: 145 },
+    features: ['mcp-tools', 'ai-chat'] as ('rag' | 'mcp-tools' | 'ai-chat')[]
+  },
+  {
+    title: "The Long Hall",
+    description: "Procedural roguelike dungeon crawler with ironman saves, cloud leaderboards, and RPG progression. 5 classes, turn-based D&D-inspired combat, equipment system, seeded RNG.",
+    type: "game" as const,
+    link: "https://github.com/Mnehmos/mnehmos.long-hall.game",
+    liveUrl: "https://mnehmos.github.io/mnehmos.long-hall.game/",
+    tags: ["TypeScript", "Roguelike", "Browser Game", "PostgreSQL", "Clerk Auth"]
+  }
+];
+
+const frameworks = [
+  {
+    title: "Multi-Agent Framework",
+    description: "Production-ready multi-agent coordination with TDD workflows (Red→Green→Blue). Role contracts: Orchestrator, Architect, Planner, Code, Debug. IDE integrations for Roo Code, Claude Code, Cursor, GitHub Copilot.",
+    type: "framework" as const,
+    link: "https://github.com/Mnehmos/mnehmos.multi-agent.framework",
+    liveUrl: "https://mnehmos.github.io/mnehmos.multi-agent.framework/",
+    tags: ["TypeScript", "TDD", "Multi-Agent", "Claude Code", "Roo Code"],
+    stats: { stars: 528 },
+    features: ['rag'] as ('rag' | 'mcp-tools' | 'ai-chat')[],
+    featured: true
+  }
+];
+
+const research = [
+  {
+    title: "Prompt Engineering Taxonomy",
+    description: "Interactive taxonomy of 100+ prompt engineering techniques from 17 research papers. Categorization, visualizations, filtering, and JSON export. Based on u/Background-Zombie869's compilation.",
+    type: "research" as const,
+    link: "https://github.com/Mnehmos/mnehmos.prompts.research",
+    liveUrl: "https://mnehmos.github.io/mnehmos.prompts.research/",
+    tags: ["JavaScript", "Research", "Prompt Engineering", "Taxonomy"],
+    stats: { techniques: 100 }
+  },
+  {
+    title: "DSA Graham Research",
+    description: "Research and data for Democratic Socialists of America chapter formation in Graham County, Arizona (LD19). Demographics, economics, labor data, and organizing strategy.",
+    type: "research" as const,
+    link: "https://github.com/Mnehmos/mnehmos.dsa-graham.research",
+    tags: ["Politics", "Research", "Arizona", "Community Organizing"]
+  },
+  {
+    title: "LCM Research",
+    description: "Large context model research and experimentation with extended context windows.",
+    type: "research" as const,
+    link: "https://github.com/Mnehmos/mnehmos.lcm.research",
+    tags: ["Research", "LLM", "Context Windows"]
+  }
+];
+
+const apps = [
+  {
+    title: "Invoicer",
+    description: "100% client-side invoice manager. All data stays in localStorage—no server, no tracking, complete privacy. Professional PDF export, company branding, tax support.",
+    type: "app" as const,
+    link: "https://github.com/Mnehmos/mnehmos.invoicer.app",
+    liveUrl: "https://mnehmos.github.io/mnehmos.invoicer.app/",
+    tags: ["JavaScript", "Privacy-First", "PDF Export", "Local Storage"]
+  },
+  {
+    title: "Fan Controller",
+    description: "Desktop fan speed controller application with temperature monitoring and custom curve support.",
+    type: "app" as const,
+    link: "https://github.com/Mnehmos/mnehmos.fan-controller.app",
+    tags: ["Desktop App", "Hardware", "Monitoring"]
+  }
+];
+
+// Count features for stats
+const allProjects = [...mcpServers, ...games, ...frameworks, ...research, ...apps];
+const liveSites = allProjects.filter(p => 'liveUrl' in p && p.liveUrl).length;
+const mcpToolProjects = allProjects.filter(p => 'features' in p && (p as any).features?.includes('mcp-tools')).length;
+---
+
+<BaseLayout title="All Projects">
+  <section class="py-20">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="text-center mb-16">
+        <span class="inline-block px-3 py-1 bg-copper/10 text-copper rounded-full text-sm font-medium mb-4">
+          Full Portfolio
+        </span>
+        <h1 class="font-display text-4xl md:text-5xl font-bold text-stone-900">
+          All Projects
+        </h1>
+        <p class="mt-4 text-lg text-stone-600 max-w-2xl mx-auto">
+          MCP servers, frameworks, games, research, and applications.
+        </p>
+        
+        <!-- Feature Stats -->
+        <div class="flex flex-wrap justify-center gap-4 mt-6">
+          <div class="px-4 py-2 bg-copper/10 text-copper rounded-full text-sm font-medium">
+            🔧 {mcpToolProjects} MCP Tool Integration
+          </div>
+          <div class="px-4 py-2 bg-emerald-100 text-emerald-700 rounded-full text-sm font-medium">
+            🌐 {liveSites} Live Sites
+          </div>
+        </div>
+      </div>
+      
+      <!-- MCP Servers -->
+      <div class="mb-16">
+        <h2 class="font-display text-2xl font-bold text-stone-900 mb-6 flex items-center gap-3">
+          <span class="w-10 h-10 bg-copper/10 rounded-lg flex items-center justify-center">
+            <svg class="w-5 h-5 text-copper" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01"/>
+            </svg>
+          </span>
+          MCP Servers
+          <span class="text-sm font-normal text-stone-500">({mcpServers.length} servers)</span>
+        </h2>
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {mcpServers.map((project) => (
+            <ProjectCard {...project} />
+          ))}
+        </div>
+      </div>
+      
+      <!-- Frameworks -->
+      <div class="mb-16">
+        <h2 class="font-display text-2xl font-bold text-stone-900 mb-6 flex items-center gap-3">
+          <span class="w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center">
+            <svg class="w-5 h-5 text-emerald-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"/>
+            </svg>
+          </span>
+          Frameworks
+        </h2>
+        <div class="grid md:grid-cols-2 gap-6">
+          {frameworks.map((project) => (
+            <ProjectCard {...project} />
+          ))}
+        </div>
+      </div>
+      
+      <!-- Games -->
+      <div class="mb-16">
+        <h2 class="font-display text-2xl font-bold text-stone-900 mb-6 flex items-center gap-3">
+          <span class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
+            <svg class="w-5 h-5 text-purple-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10l-2 1m0 0l-2-1m2 1v2.5M20 7l-2 1m2-1l-2-1m2 1v2.5M14 4l-2-1-2 1M4 7l2-1M4 7l2 1M4 7v2.5M12 21l-2-1m2 1l2-1m-2 1v-2.5M6 18l-2-1v-2.5M18 18l2-1v-2.5"/>
+            </svg>
+          </span>
+          Games
+          <span class="text-sm font-normal text-stone-500">({games.length} games)</span>
+        </h2>
+        <div class="grid md:grid-cols-3 gap-6">
+          {games.map((project) => (
+            <ProjectCard {...project} />
+          ))}
+        </div>
+      </div>
+      
+      <!-- Research -->
+      <div class="mb-16">
+        <h2 class="font-display text-2xl font-bold text-stone-900 mb-6 flex items-center gap-3">
+          <span class="w-10 h-10 bg-amber-100 rounded-lg flex items-center justify-center">
+            <svg class="w-5 h-5 text-amber-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+            </svg>
+          </span>
+          Research
+          <span class="text-sm font-normal text-stone-500">({research.length} projects)</span>
+        </h2>
+        <div class="grid md:grid-cols-3 gap-6">
+          {research.map((project) => (
+            <ProjectCard {...project} />
+          ))}
+        </div>
+      </div>
+      
+      <!-- Applications -->
+      <div>
+        <h2 class="font-display text-2xl font-bold text-stone-900 mb-6 flex items-center gap-3">
+          <span class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+            <svg class="w-5 h-5 text-blue-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+            </svg>
+          </span>
+          Applications
+          <span class="text-sm font-normal text-stone-500">({apps.length} apps)</span>
+        </h2>
+        <div class="grid md:grid-cols-2 gap-4">
+          {apps.map((project) => (
+            <ProjectCard {...project} />
+          ))}
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

@@ -1,0 +1,100 @@
+---
+const base = import.meta.env.BASE_URL;
+
+// Stats from the README
+const stats = [
+  { number: "300+", label: "MCP Tools" },
+  { number: "528", label: "GitHub Stars" },
+  { number: "182", label: "Prompt Techniques" },
+  { number: "7", label: "MCP Servers" }
+];
+
+const expertise = [
+  "MCP Server Development",
+  "Multi-Agent Systems",
+  "AI-Powered Games",
+  "RAG Pipelines"
+];
+---
+
+<section class="bg-linear-to-b from-stone-100 to-stone-50 py-20 md:py-28">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="grid md:grid-cols-2 gap-12 items-center">
+      <!-- Left: Text Content -->
+      <div>
+        <span class="inline-block px-3 py-1 bg-copper/10 text-copper rounded-full text-sm font-medium mb-6">
+          MCP Infrastructure Developer
+        </span>
+        
+        <h1 class="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-stone-900 mb-6 leading-tight">
+          Building tools for
+          <span class="gradient-text">AI agents</span>
+        </h1>
+        
+        <p class="text-lg md:text-xl text-stone-600 mb-8 leading-relaxed">
+          Tools that let AI interact with complex stateful systems—whether that's a computer desktop, 
+          a distributed workflow, or a D&D campaign.
+        </p>
+        
+        <!-- Expertise Tags -->
+        <div class="flex flex-wrap gap-2 mb-8">
+          {expertise.map((item) => (
+            <span class="px-3 py-1.5 bg-stone-200 text-stone-700 rounded-lg text-sm font-medium">
+              {item}
+            </span>
+          ))}
+        </div>
+        
+        <!-- CTA Buttons -->
+        <div class="flex flex-wrap gap-4">
+          <a 
+            href={`${base}projects`}
+            class="inline-flex items-center gap-2 bg-copper text-white px-6 py-3 rounded-lg font-semibold hover:bg-copper-light transition-colors"
+          >
+            View Projects
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+            </svg>
+          </a>
+          <a 
+            href={`${base}chat`}
+            class="inline-flex items-center gap-2 bg-stone-900 text-white px-6 py-3 rounded-lg font-semibold hover:bg-stone-800 transition-colors"
+          >
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+            </svg>
+            Chat with AI
+          </a>
+        </div>
+      </div>
+      
+      <!-- Right: Stats Grid -->
+      <div class="grid grid-cols-2 gap-4">
+        {stats.map((stat, i) => (
+          <div class={`bg-white p-6 rounded-2xl border border-stone-200 shadow-sm ${i === 0 ? 'border-copper/30' : ''}`}>
+            <div class={`font-display text-3xl md:text-4xl font-bold ${i === 0 ? 'text-copper' : 'text-stone-900'}`}>
+              {stat.number}
+            </div>
+            <div class="text-stone-600 mt-1">{stat.label}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+    
+    <!-- Philosophy Quote -->
+    <div class="mt-16 p-8 bg-stone-900 rounded-2xl text-white">
+      <div class="max-w-3xl mx-auto text-center">
+        <svg class="w-8 h-8 mx-auto mb-4 text-copper" fill="currentColor" viewBox="0 0 24 24">
+          <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/>
+        </svg>
+        <p class="text-xl md:text-2xl font-display font-medium mb-4">
+          Tools don't think, they act.
+        </p>
+        <p class="text-stone-400">
+          Every MCP server follows these principles: Deterministic, Idempotent, Auditable, Composable.
+          The LLM proposes. The engine validates. State comes from the database, not hallucination.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
