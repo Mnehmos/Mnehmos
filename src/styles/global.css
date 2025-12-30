@@ -490,3 +490,30 @@ html {
   margin-top: 1.3333333em;
   margin-bottom: 1.3333333em;
 }
+
+/* === DARK MODE PROSE OVERRIDES === */
+.dark .prose {
+  color: #e7e5e4; /* stone-200 */
+}
+
+.dark .prose h1,
+.dark .prose h2,
+.dark .prose h3,
+.dark .prose h4 {
+  color: #fafaf9; /* stone-50 */
+}
+
+.dark .prose strong {
+  color: #f5f5f4; /* stone-100 */
+}
+
+.dark .prose code {
+  background: #292524; /* stone-800 */
+  color: #e7e5e4; /* stone-200 */
+}
+
+.dark .prose blockquote {
+  color: #d6d3d1; /* stone-300 */
+  background: #1c1917; /* stone-900 */
+  border-left-color: var(--copper);
+}
