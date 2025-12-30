@@ -194,59 +194,393 @@ const base = import.meta.env.BASE_URL;
       </div>
     </section>
 
-    <!-- Architecture Lesson -->
-    <section
-      class="bg-stone-900 text-white rounded-4xl p-8 md:p-16 mb-20 scroll-reveal relative overflow-hidden"
-    >
-      <div
-        class="absolute inset-0 bg-linear-to-br from-copper/20 to-transparent pointer-events-none"
-      >
-      </div>
-      <h2 class="font-display text-3xl font-bold mb-8 relative z-10">
-        Architecture Lessons for AI Agents
+    <!-- Section: DELTA Deep Dive -->
+    <section class="prose prose-stone prose-lg max-w-none mb-20 scroll-reveal">
+      <h2 class="font-display text-copper text-3xl font-bold mb-6">
+        DELTA: OODA at National Scale
       </h2>
-      <div class="grid gap-8 relative z-10">
-        <div class="border-l-2 border-copper/50 pl-6">
-          <h4
-            class="text-copper font-bold mb-2 uppercase tracking-wide text-sm"
-          >
-            Lesson 1
-          </h4>
-          <h3 class="text-xl font-bold mb-3">
-            Distribute the State, Not the Control
+      <p>
+        DELTA is Ukraine's situational awareness and battlefield management
+        system. According to CSIS analysis and Ukrainian government statements,
+        it aggregates data from drones, satellites, ground sensors, radar, and
+        even civilian informants via chatbots—all into a single interface that
+        runs on standard laptops, tablets, and phones.
+      </p>
+
+      <p>
+        What matters architecturally: DELTA is built as an ecosystem of modules,
+        each handling a different phase of the OODA loop.
+      </p>
+
+      <div class="grid md:grid-cols-2 gap-8 my-12 not-prose">
+        <div class="bg-stone-50 p-6 rounded-2xl border-l-4 border-copper">
+          <h3 class="font-display font-bold text-lg mb-2 text-stone-900">
+            OBSERVE
           </h3>
-          <p class="text-stone-400 leading-relaxed italic">
-            "Stateless processes allow for massive scale, but only if the
-            database is smart enough to serve context at the edge."
+          <ul class="space-y-2 text-sm text-stone-600">
+            <li class="flex items-start gap-2">
+              <span class="text-copper mt-1">▪</span> Drone video feeds via Vezha
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-copper mt-1">▪</span> Satellite imagery integration
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-copper mt-1">▪</span> Ground sensor networks
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-copper mt-1">▪</span> Civilian intelligence chatbots
+            </li>
+          </ul>
+        </div>
+        <div class="bg-stone-50 p-6 rounded-2xl border-l-4 border-copper">
+          <h3 class="font-display font-bold text-lg mb-2 text-stone-900">
+            ORIENT
+          </h3>
+          <ul class="space-y-2 text-sm text-stone-600">
+            <li class="flex items-start gap-2">
+              <span class="text-copper mt-1">▪</span> Avengers AI analyzes video
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-copper mt-1">▪</span> Identifies 70% of enemy units
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-copper mt-1">▪</span> Detection time: ~2.2s per unit
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-copper mt-1">▪</span> Automatic feed prioritization
+            </li>
+          </ul>
+        </div>
+        <div class="bg-stone-50 p-6 rounded-2xl border-l-4 border-copper">
+          <h3 class="font-display font-bold text-lg mb-2 text-stone-900">
+            DECIDE
+          </h3>
+          <ul class="space-y-2 text-sm text-stone-600">
+            <li class="flex items-start gap-2">
+              <span class="text-copper mt-1">▪</span> Deltamonitor live map
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-copper mt-1">▪</span> Target Hub prioritizes strikes
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-copper mt-1">▪</span> Direct digital mission assignment
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-copper mt-1">▪</span> "Uber for Artillery" routing
+            </li>
+          </ul>
+        </div>
+        <div class="bg-stone-50 p-6 rounded-2xl border-l-4 border-copper">
+          <h3 class="font-display font-bold text-lg mb-2 text-stone-900">
+            ACT
+          </h3>
+          <ul class="space-y-2 text-sm text-stone-600">
+            <li class="flex items-start gap-2">
+              <span class="text-copper mt-1">▪</span> Mission Control coordination
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-copper mt-1">▪</span> AI terminal guidance (TFL-1)
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-copper mt-1">▪</span> Automated result feedback
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-copper mt-1">▪</span> Rapid re-looping
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <p>
+        In December 2024, Ukrainian forces reportedly conducted their first
+        fully unmanned operation near Lyptsi—reconnaissance, target acquisition,
+        and strike executed by machines with human oversight but not direct
+        control.
+      </p>
+    </section>
+
+    <!-- Nervous System Insight -->
+    <section class="mb-20 scroll-reveal">
+      <div
+        class="relative bg-stone-900 rounded-4xl p-8 md:p-12 overflow-hidden text-stone-300"
+      >
+        <div
+          class="absolute inset-0 bg-linear-to-b from-stone-800/50 to-stone-900 pointer-events-none"
+        >
+        </div>
+        <div class="absolute top-0 right-0 p-8 opacity-10">
+          <svg class="w-64 h-64" viewBox="0 0 24 24" fill="currentColor">
+            <path
+              d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"
+            ></path>
+          </svg>
+        </div>
+
+        <div class="relative z-10">
+          <h2
+            class="font-display text-3xl md:text-4xl font-bold text-white mb-6"
+          >
+            The Nervous System Insight
+          </h2>
+          <p class="text-lg leading-relaxed mb-8">
+            Here's what changed my thinking about AI architecture: <strong
+              >safety features need to operate at nervous system speed.</strong
+            >
+          </p>
+          <p class="mb-8">
+            When you touch something hot, you don't think "that's hot, I should
+            move my hand." Your hand is already moving. The reflex happens
+            before conscious processing.
+          </p>
+
+          <div
+            class="bg-black/50 rounded-xl p-6 font-mono text-sm border border-white/10 mb-8 overflow-x-auto"
+          >
+            <pre class="text-blue-300">LAYER 1: REFLEXES (milliseconds)</pre>
+            ├── Hardcoded limits ├── Immediate fallbacks ├── Circuit breakers └──
+            No AI involved—just rules
+
+            <pre class="text-blue-300 mt-4">LAYER 2: REACTIONS (seconds)</pre>
+            ├── Pattern matching (machine vision) ├── Known-good responses └── Lightweight
+            inference
+
+            <pre
+              class="text-blue-300 mt-4">LAYER 3: REASONING (seconds to minutes)</pre>
+            ├── Full situational analysis ├── Complex planning └── Human decision
+            points
+          </div>
+
+          <p class="mb-8">
+            Most AI systems put everything in Layer 3. That's like routing "hand
+            on stove" through your prefrontal cortex. You'll figure out the
+            right answer eventually—with burns.
+          </p>
+
+          <p class="mb-6">
+            I learned this the hard way. Early versions of my RPG game engine
+            let the AI agent manage character hit points directly. Prompt
+            instructions said "never reduce HP below zero." Worked fine in
+            testing. In production, a complex sequence blew right past it.
+          </p>
+
+          <p class="mb-4">
+            The fix wasn't better prompting. It was moving the constraint to
+            code:
+          </p>
+
+          <div
+            class="bg-stone-950 rounded-xl p-6 font-mono text-sm border-l-4 border-copper text-stone-300 overflow-x-auto"
+          >
+            <code class="block font-mono">
+              <span class="text-stone-500"
+                >// This runs AFTER the agent acts, BEFORE state commits</span
+              ><br />
+              <span class="text-purple-400">if</span> (character.hp &lt; <span
+                class="text-orange-400">0</span
+              >) character.hp = <span class="text-orange-400">0</span>;<br />
+              <span class="text-purple-400">if</span> (character.hp === <span
+                class="text-orange-400">0</span
+              > && !character.deathSavesStarted) &#123;<br />
+              &nbsp;&nbsp;character.deathSavesStarted = <span
+                class="text-blue-400">true</span
+              >;<br />
+              &nbsp;&nbsp;<span class="text-yellow-300">emit</span>(<span
+                class="text-green-300">'death_save_required'</span
+              >, character.id);<br />
+              &#125;
+            </code>
+          </div>
+          <p class="mt-4 text-sm text-stone-500 italic">
+            The agent can't reason its way around this. It's not a suggestion.
+            It's a reflex.
           </p>
         </div>
-        <div class="border-l-2 border-copper/50 pl-6">
-          <h4
-            class="text-copper font-bold mb-2 uppercase tracking-wide text-sm"
+      </div>
+    </section>
+
+    <!-- Database Intelligence -->
+    <section class="prose prose-stone prose-lg max-w-none mb-20 scroll-reveal">
+      <h2 class="font-display text-copper text-3xl font-bold mb-6">
+        The Database Is the Intelligence
+      </h2>
+      <p>
+        Another insight: <strong
+          >the agent isn't smart. The database is smart. The agent is just
+          hands.</strong
+        >
+      </p>
+      <p>
+        Ukraine's "mother drone" system illustrates this. A carrier drone
+        delivers AI-guided FPVs 300km behind enemy lines. The AI doesn't "know"
+        anything substantial. It queries onboard models and sensor data. Kill
+        the process, spin up a new one, feed it the same data—same output.
+      </p>
+
+      <div class="my-12 not-prose">
+        <div
+          class="bg-white border-2 border-stone-900 rounded-xl p-6 md:p-8 font-mono text-sm md:text-base shadow-[8px_8px_0px_0px_rgba(28,25,23,1)]"
+        >
+          <div
+            class="border-b-2 border-stone-200 pb-4 mb-4 text-center font-bold text-stone-900"
           >
-            Lesson 2
-          </h4>
-          <h3 class="text-xl font-bold mb-3">
-            The "Last Mile" must be Autonomous
-          </h3>
-          <p class="text-stone-400 leading-relaxed">
-            Just as the TFL-1 handles the final strike when communication fails,
-            our LLM agents need "terminal logic" to handle edge cases when the
-            orchestrator is offline.
-          </p>
+            DATABASE (THE ACTUAL INTELLIGENCE)
+          </div>
+          <div class="text-stone-600 mb-6 text-center">
+            Sensor feeds • Drone telemetry • Target coordinates<br />
+            Unit positions • Historical patterns
+          </div>
+          <div class="flex justify-center mb-6">
+            <svg
+              class="w-6 h-6 text-stone-400 animate-bounce"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              ><path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg
+            >
+          </div>
+          <div class="bg-stone-100 rounded-lg p-4 text-stone-700">
+            <div
+              class="font-bold text-stone-900 mb-2 border-b border-stone-200 pb-2"
+            >
+              STATELESS PROCESSES
+            </div>
+            <ul class="space-y-2">
+              <li class="flex justify-between">
+                <span>Avengers:</span>
+                <span class="text-stone-500">Video analysis</span>
+              </li>
+              <li class="flex justify-between">
+                <span>Target Hub:</span>
+                <span class="text-stone-500">Strike planning</span>
+              </li>
+              <li class="flex justify-between">
+                <span>Vezha:</span>
+                <span class="text-stone-500">Stream routing</span>
+              </li>
+            </ul>
+          </div>
+          <div
+            class="mt-4 text-center text-xs text-stone-400 uppercase tracking-widest font-bold"
+          >
+            These are just automation
+          </div>
         </div>
-        <div class="border-l-2 border-copper/50 pl-6">
-          <h4
-            class="text-copper font-bold mb-2 uppercase tracking-wide text-sm"
+      </div>
+
+      <p>
+        Lose a situational awareness center? The others keep running. Lose a
+        drone operator's connection? The AI completes the strike. The system
+        degrades gracefully because state lives in the database, not in any
+        single process.
+      </p>
+    </section>
+
+    <!-- Architecture Lessons / Conclusion -->
+    <section class="bg-stone-100 rounded-4xl p-8 md:p-12 mb-20 scroll-reveal">
+      <h2 class="font-display text-3xl font-bold text-stone-900 mb-8">
+        How This Shapes My Architecture
+      </h2>
+      <p class="text-lg text-stone-600 mb-8">
+        I build MCP (Model Context Protocol) servers—the tools that let AI
+        agents interact with the world. Every tool I build now follows these
+        wartime lessons.
+      </p>
+
+      <div class="space-y-8">
+        <div class="bg-white p-6 rounded-2xl shadow-sm border border-stone-200">
+          <h3
+            class="font-bold text-copper mb-2 uppercase tracking-wide text-sm"
           >
-            Lesson 3
+            Separation of Concerns
+          </h3>
+          <h4 class="font-display text-xl font-bold text-stone-900 mb-4">
+            Split by OODA Phase
           </h4>
-          <h3 class="text-xl font-bold mb-3">Interoperable or Irrelevant</h3>
-          <p class="text-stone-400 leading-relaxed">
-            DELTA's power comes from its adherence to NATO standards (CWIX,
-            MIP). AI tools aren't useful in isolation; they must adhere to a
-            strict interface.
-          </p>
+          <ul class="space-y-4 font-mono text-sm text-stone-600">
+            <li class="p-3 bg-stone-50 rounded-lg border-l-4 border-blue-400">
+              <strong class="text-stone-900">OBSERVE:</strong> Read-only tools (get_context,
+              search_index)
+            </li>
+            <li class="p-3 bg-stone-50 rounded-lg border-l-4 border-yellow-400">
+              <strong class="text-stone-900">ORIENT:</strong> Analysis tools (validate_schema,
+              check_line_of_sight)
+            </li>
+            <li class="p-3 bg-stone-50 rounded-lg border-l-4 border-purple-400">
+              <strong class="text-stone-900">DECIDE:</strong> The LLM reasons over
+              observed + oriented data
+            </li>
+            <li class="p-3 bg-stone-50 rounded-lg border-l-4 border-red-400">
+              <strong class="text-stone-900">ACT:</strong> Write tools with built-in
+              reflexes (emit_event, execute_action)
+            </li>
+          </ul>
+        </div>
+
+        <div class="bg-white p-6 rounded-2xl shadow-sm border border-stone-200">
+          <h3
+            class="font-bold text-copper mb-2 uppercase tracking-wide text-sm"
+          >
+            Latency & Autonomy
+          </h3>
+          <h4 class="font-display text-xl font-bold text-stone-900 mb-4">
+            What Centralizes vs. What stays Local?
+          </h4>
+          <div class="grid md:grid-cols-2 gap-6">
+            <div>
+              <div
+                class="font-bold text-stone-900 mb-2 flex items-center gap-2"
+              >
+                <svg
+                  class="w-4 h-4 text-stone-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  ><path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
+                  ></path></svg
+                >
+                Centralize
+              </div>
+              <ul class="text-sm text-stone-600 space-y-1 list-disc pl-4">
+                <li>Shared context</li>
+                <li>Historical decisions</li>
+                <li>Schema contracts</li>
+                <li>Coordination state</li>
+              </ul>
+            </div>
+            <div>
+              <div
+                class="font-bold text-stone-900 mb-2 flex items-center gap-2"
+              >
+                <svg
+                  class="w-4 h-4 text-stone-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  ><path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z"
+                  ></path></svg
+                >
+                Keep Local
+              </div>
+              <ul class="text-sm text-stone-600 space-y-1 list-disc pl-4">
+                <li>Reflexes & invariants</li>
+                <li>Latency-critical ops</li>
+                <li>Offline fallbacks</li>
+                <li>"Terminal guidance" logic</li>
+              </ul>
+            </div>
+          </div>
         </div>
       </div>
     </section>
