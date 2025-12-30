@@ -19,12 +19,25 @@ const collectionPosts = await getCollection("blog", ({ data }) => !data.draft);
 // 5. If converting a Markdown post, DELETE the original .md file to prevent collisions.
 const manualPosts = [
   {
+    slug: "stateful-mcp-architecture",
+    data: {
+      title: "Six Patterns for Connecting LLM Agents to Stateful Tools",
+      description:
+        "A deep dive into MCP server architecture: externalizing state, composite operations, fuzzy validation, fork/snapshot synchronization, and designing for chat interfaces.",
+      pubDate: new Date("2025-12-30"),
+      tags: ["mcp", "architecture", "state-management", "llm-tooling"],
+      draft: false,
+      lesson:
+        "The agent isn't smart—the database is. Externalize all state, expose rich query tools for context reconstruction, batch operations to reduce round-trips, and design output for chat windows with ASCII art and visual hierarchy.",
+    },
+  },
+  {
     slug: "ukraine-ooda",
     data: {
       title: "What Ukraine's Drones Taught Me About Building AI Systems",
       description:
         "Extracting software architecture lessons from autonomous drone systems, OODA loops, and distributed state management.",
-      pubDate: new Date("2024-12-30"),
+      pubDate: new Date("2025-12-30"),
       tags: ["ooda", "architecture", "multi-agent", "distributed-systems"],
       draft: false,
       lesson:

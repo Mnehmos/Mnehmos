@@ -1,0 +1,729 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+const title = "Six Patterns for Connecting LLM Agents to Stateful Tools";
+const description =
+  "A deep dive into MCP server architecture: externalizing state, composite operations, fuzzy validation, fork/snapshot synchronization, and designing for chat interfaces.";
+const pubDate = new Date("2025-12-30");
+const tags = ["mcp", "architecture", "state-management", "llm-tooling"];
+const base = import.meta.env.BASE_URL;
+---
+
+<BaseLayout title={title} description={description}>
+  <article class="max-w-4xl mx-auto px-6 py-12 md:py-20 overflow-hidden">
+    <!-- Breadcrumbs -->
+    <nav class="mb-12 animate-fade-in">
+      <a
+        href={`${base}blog`}
+        class="text-stone-500 dark:text-stone-400 hover:text-copper transition-colors flex items-center gap-2 text-sm font-medium group"
+      >
+        <svg
+          class="w-4 h-4 transform group-hover:-translate-x-1 transition-transform"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M15 19l-7-7 7-7"></path>
+        </svg>
+        Back to Blog
+      </a>
+    </nav>
+
+    <!-- Header -->
+    <header class="mb-16">
+      <div class="flex flex-wrap gap-2 mb-6 animate-fade-in">
+        {
+          tags.map((tag) => (
+            <span class="px-3 py-1 bg-copper/10 text-copper text-xs font-bold uppercase tracking-wider rounded-full border border-copper/10">
+              {tag}
+            </span>
+          ))
+        }
+      </div>
+
+      <h1
+        class="font-display text-4xl md:text-6xl font-bold text-stone-900 dark:text-stone-100 mb-6 leading-tight animate-slide-up"
+      >
+        Six Patterns for Connecting <span class="text-copper">LLM Agents</span> to Stateful Tools
+      </h1>
+
+      <p
+        class="text-xl md:text-2xl text-stone-600 dark:text-stone-300 mb-8 border-l-4 border-copper pl-6 italic animate-slide-up animation-delay-100"
+      >
+        {description}
+      </p>
+
+      <div
+        class="flex items-center gap-4 text-stone-500 font-medium animate-fade-in animation-delay-200"
+      >
+        <div
+          class="w-10 h-10 rounded-full bg-stone-200 dark:bg-stone-700 flex items-center justify-center text-stone-600 dark:text-stone-300 font-bold border-2 border-white dark:border-stone-800 shadow-sm"
+        >
+          V
+        </div>
+        <div>
+          <div class="text-stone-900 dark:text-stone-200 leading-none mb-1">
+            Vario <span class="text-stone-500 dark:text-stone-400 font-normal">aka</span> <span class="text-copper font-normal">Mnehmos</span>
+          </div>
+          <time datetime={pubDate.toISOString()} class="text-sm">
+            {
+              pubDate.toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })
+            }
+          </time>
+        </div>
+      </div>
+    </header>
+
+    <!-- Content Hook -->
+    <div
+      class="bg-stone-900 text-stone-300 p-8 rounded-3xl mb-16 relative overflow-hidden group animate-fade-in hover:shadow-2xl transition-shadow border border-white/10"
+    >
+      <div
+        class="absolute top-0 right-0 p-4 opacity-20 pointer-events-none group-hover:opacity-40 transition-opacity"
+      >
+        <svg class="w-32 h-32" fill="currentColor" viewBox="0 0 24 24"
+          ><path
+            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"
+          ></path></svg
+        >
+      </div>
+      <h3 class="text-white font-bold mb-4 flex items-center gap-2">
+        <span class="text-copper">⚡</span> The Problem Statement
+      </h3>
+      <p class="relative z-10 leading-relaxed">
+        LLMs are stateless. They process input, generate output, and forget everything.
+        But real-world applications—games, document indexing, multi-agent workflows—are
+        fundamentally <strong class="text-white">stateful</strong>. After building 6+ MCP servers
+        totaling 200+ tools, I've identified six architectural patterns that bridge
+        this gap without fighting the LLM's nature.
+      </p>
+    </div>
+
+    <!-- Pattern 1 -->
+    <section
+      class="prose prose-stone dark:prose-invert prose-lg max-w-none mb-20 scroll-reveal"
+    >
+      <h2 class="font-display text-copper text-3xl font-bold mb-6">
+        Pattern 1: Externalize All State to Persistent Storage
+      </h2>
+      <p>
+        The agent isn't smart. The <strong>database</strong> is smart. The agent is just hands.
+      </p>
+      <p>
+        Every MCP server I've built follows this rule: state lives in JSON files,
+        SQLite, or external databases—never in memory that dies with the process.
+        When a new conversation starts, the agent queries the state store and reconstructs
+        context from scratch.
+      </p>
+
+      <div class="my-12 not-prose">
+        <div
+          class="bg-white dark:bg-stone-800 border-2 border-stone-900 dark:border-stone-700 rounded-xl p-6 md:p-8 font-mono text-sm md:text-base shadow-[8px_8px_0px_0px_rgba(28,25,23,1)] dark:shadow-[8px_8px_0px_0px_rgba(255,255,255,0.1)] transition-colors"
+        >
+          <div
+            class="border-b-2 border-stone-200 dark:border-stone-600 pb-4 mb-4 text-center font-bold text-stone-900 dark:text-stone-100"
+          >
+            SYNCH MCP: MEMORY ARCHITECTURE
+          </div>
+          <div class="text-stone-600 dark:text-stone-400 mb-6 text-center">
+            Active Context • Filing Cabinet • Bug Tracker • Spatial Maps
+          </div>
+          <div class="bg-stone-100 dark:bg-stone-900 rounded-lg p-4 text-stone-700 dark:text-stone-300">
+            <div class="font-bold text-stone-900 dark:text-stone-100 mb-2 border-b border-stone-200 dark:border-stone-700 pb-2">
+              Storage Layers
+            </div>
+            <ul class="space-y-2">
+              <li class="flex justify-between">
+                <span>Active Context:</span>
+                <span class="text-stone-500">Current focus + summary</span>
+              </li>
+              <li class="flex justify-between">
+                <span>Filing Cabinet:</span>
+                <span class="text-stone-500">Indexed file summaries</span>
+              </li>
+              <li class="flex justify-between">
+                <span>Spatial Map:</span>
+                <span class="text-stone-500">Project folder graph</span>
+              </li>
+              <li class="flex justify-between">
+                <span>Bug Tracker:</span>
+                <span class="text-stone-500">Issues with severity</span>
+              </li>
+            </ul>
+          </div>
+          <div class="mt-4 text-center text-xs text-stone-400 uppercase tracking-widest font-bold">
+            Agent is stateless. Storage is the intelligence.
+          </div>
+        </div>
+      </div>
+
+      <p>
+        The key insight: design your storage schema so a brand-new agent instance
+        can call <code>get_active_context</code> and immediately understand what's
+        happening. If context reconstruction requires reading 50 files, you've failed.
+      </p>
+    </section>
+
+    <!-- Pattern 2 -->
+    <section class="mb-20 scroll-reveal">
+      <div
+        class="bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 p-8 md:p-12 rounded-4xl shadow-sm relative overflow-hidden transition-colors"
+      >
+        <div
+          class="absolute -right-20 -top-20 w-64 h-64 bg-copper/5 rounded-full blur-3xl"
+        >
+        </div>
+        <h2 class="font-display text-copper text-4xl font-bold mb-4">
+          Pattern 2: Rich Query Tools for Context Reconstruction
+        </h2>
+        <p
+          class="text-lg text-stone-600 dark:text-stone-300 mb-8 leading-relaxed"
+        >
+          Instead of passing massive context windows, expose tools that let the agent
+          selectively query what it needs. The LLM asks questions; the tools answer.
+        </p>
+
+        <div class="grid md:grid-cols-2 gap-8">
+          <div
+            class="bg-stone-50 dark:bg-stone-950 p-6 rounded-2xl border border-stone-100 dark:border-stone-800 h-full transition-all hover:border-copper/30 group"
+          >
+            <h4
+              class="font-bold text-stone-900 dark:text-stone-100 mb-3 flex items-center gap-2"
+            >
+              <span
+                class="w-8 h-8 rounded-full bg-copper/10 text-copper flex items-center justify-center text-sm font-mono transition-transform group-hover:scale-110"
+                >🎮</span
+              >
+              ChatRPG Game Engine
+            </h4>
+            <p
+              class="text-sm text-stone-500 dark:text-stone-400 leading-relaxed"
+            >
+              <code>get_session_context</code> returns location, party, notes, combat state
+              in one call. <code>render_battlefield</code> generates ASCII maps. The agent
+              reconstructs a D&D session by asking "what's happening?" not reading history.
+            </p>
+          </div>
+          <div
+            class="bg-stone-50 dark:bg-stone-950 p-6 rounded-2xl border border-stone-100 dark:border-stone-800 h-full transition-all hover:border-copper/30 group"
+          >
+            <h4
+              class="font-bold text-stone-900 dark:text-stone-100 mb-3 flex items-center gap-2"
+            >
+              <span
+                class="w-8 h-8 rounded-full bg-copper/10 text-copper flex items-center justify-center text-sm font-mono transition-transform group-hover:scale-110"
+                >📚</span
+              >
+              Index Foundry
+            </h4>
+            <p
+              class="text-sm text-stone-500 dark:text-stone-400 leading-relaxed"
+            >
+              <code>project_query</code> with semantic, keyword, or hybrid modes.
+              <code>debug_query</code> shows similarity scores and retrieval traces.
+              <code>classify_query</code> determines if RAG is even needed.
+            </p>
+          </div>
+        </div>
+
+        <div class="mt-8 bg-stone-950 dark:bg-black rounded-xl p-6 font-mono text-sm border-l-4 border-copper text-stone-300 overflow-x-auto">
+          <code class="block">
+            <span class="text-stone-500">// OODA MCP: 62 tools organized by query type</span><br />
+            <br />
+            <span class="text-blue-300">OBSERVE</span><br />
+            ├── read_file, list_directory, search_files<br />
+            ├── screenshot, get_active_window, list_windows<br />
+            └── get_system_info, list_processes<br />
+            <br />
+            <span class="text-yellow-300">ORIENT</span><br />
+            ├── search_in_file, batch_search_in_files<br />
+            └── file_info, batch_file_info<br />
+            <br />
+            <span class="text-purple-300">DECIDE</span><br />
+            └── (LLM reasoning over observed data)<br />
+            <br />
+            <span class="text-red-300">ACT</span><br />
+            ├── write_file, str_replace, apply_diff<br />
+            ├── keyboard_*, mouse_*, clipboard_*<br />
+            └── launch_application, exec_cli
+          </code>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pattern 3 -->
+    <section
+      class="prose prose-stone dark:prose-invert prose-lg max-w-none mb-20 scroll-reveal"
+    >
+      <h2 class="font-display text-copper text-3xl font-bold mb-6">
+        Pattern 3: Composite Operations Reduce Coordination
+      </h2>
+      <p>
+        Every tool call is a round-trip. Network latency, token generation, parsing—it
+        adds up. When an operation logically requires multiple steps, <strong>batch them
+        into a single tool</strong>.
+      </p>
+
+      <div class="grid md:grid-cols-2 gap-8 my-12 not-prose">
+        <div
+          class="bg-stone-50 dark:bg-stone-900 p-6 rounded-2xl border-l-4 border-copper"
+        >
+          <h3
+            class="font-display font-bold text-lg mb-2 text-stone-900 dark:text-stone-100"
+          >
+            BEFORE: Many Tools
+          </h3>
+          <ul class="space-y-2 text-sm text-stone-600 dark:text-stone-400">
+            <li class="flex items-start gap-2">
+              <span class="text-red-400 mt-1">✗</span> create_encounter
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-red-400 mt-1">✗</span> get_encounter
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-red-400 mt-1">✗</span> end_encounter
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-red-400 mt-1">✗</span> commit_encounter
+            </li>
+          </ul>
+          <p class="text-xs text-stone-500 mt-4">4 tools × overhead = slow</p>
+        </div>
+        <div
+          class="bg-stone-50 dark:bg-stone-900 p-6 rounded-2xl border-l-4 border-copper"
+        >
+          <h3
+            class="font-display font-bold text-lg mb-2 text-stone-900 dark:text-stone-100"
+          >
+            AFTER: One Composite
+          </h3>
+          <ul class="space-y-2 text-sm text-stone-600 dark:text-stone-400">
+            <li class="flex items-start gap-2">
+              <span class="text-green-400 mt-1">✓</span> manage_encounter
+            </li>
+            <li class="text-stone-500 pl-6">operation: "create" | "get" | "end" | "commit"</li>
+          </ul>
+          <p class="text-xs text-stone-500 mt-4">1 tool, enum-driven = fast</p>
+        </div>
+      </div>
+
+      <p>
+        The OODA MCP takes this further with batch variants: <code>batch_read_files</code>,
+        <code>batch_str_replace</code>, <code>batch_exec_cli</code>. Index Foundry's
+        <code>project_build</code> runs an entire pipeline—fetch, extract, chunk, embed,
+        upsert—in a single call.
+      </p>
+
+      <div class="my-8 bg-stone-950 dark:bg-black rounded-xl p-6 font-mono text-sm border border-stone-800 text-stone-300 overflow-x-auto not-prose">
+        <code class="block">
+          <span class="text-stone-500">// ChatRPG: manage_condition composite</span><br />
+          &#123;<br />
+          &nbsp;&nbsp;<span class="text-green-300">"operation"</span>: <span class="text-orange-300">"add"</span> | <span class="text-orange-300">"remove"</span> | <span class="text-orange-300">"query"</span> | <span class="text-orange-300">"tick"</span>,<br />
+          &nbsp;&nbsp;<span class="text-green-300">"batch"</span>: [<br />
+          &nbsp;&nbsp;&nbsp;&nbsp;&#123; targetId, condition, duration &#125;,<br />
+          &nbsp;&nbsp;&nbsp;&nbsp;&#123; targetId, condition, duration &#125;<br />
+          &nbsp;&nbsp;]<br />
+          &#125;
+        </code>
+      </div>
+    </section>
+
+    <!-- Pattern 4 -->
+    <section class="mb-20 scroll-reveal">
+      <div
+        class="relative bg-stone-900 rounded-4xl p-8 md:p-12 overflow-hidden text-stone-300"
+      >
+        <div
+          class="absolute inset-0 bg-linear-to-b from-stone-800/50 to-stone-900 pointer-events-none"
+        >
+        </div>
+        <div class="absolute top-0 right-0 p-8 opacity-10">
+          <svg class="w-64 h-64" viewBox="0 0 24 24" fill="currentColor">
+            <path
+              d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"
+            ></path>
+          </svg>
+        </div>
+
+        <div class="relative z-10">
+          <h2
+            class="font-display text-3xl md:text-4xl font-bold text-white mb-6"
+          >
+            Pattern 4: Fuzzy Validation for LLM Tolerance
+          </h2>
+          <p class="text-lg leading-relaxed mb-8">
+            LLMs make typos. They use synonyms. They forget exact enum values. Instead of
+            failing hard, <strong>match fuzzy and correct automatically</strong>.
+          </p>
+
+          <div
+            class="bg-black/50 rounded-xl p-6 font-mono text-sm border border-white/10 mb-8 overflow-x-auto"
+          >
+            <span class="text-stone-500">// ChatRPG: fuzzy-enum.ts</span><br />
+            <span class="text-purple-400">function</span> <span class="text-yellow-300">fuzzyMatch</span>(input: <span class="text-blue-300">string</span>, validValues: <span class="text-blue-300">string</span>[]) &#123;<br />
+            &nbsp;&nbsp;<span class="text-stone-500">// "FRIGHTNED" → "frightened"</span><br />
+            &nbsp;&nbsp;<span class="text-stone-500">// "half cover" → "half"</span><br />
+            &nbsp;&nbsp;<span class="text-stone-500">// "fire dmg" → "fire"</span><br />
+            &nbsp;&nbsp;<span class="text-purple-400">return</span> <span class="text-yellow-300">findClosestMatch</span>(normalize(input), validValues);<br />
+            &#125;
+          </div>
+
+          <p class="mb-8">
+            Every D&D enum in ChatRPG—conditions, damage types, abilities, sizes—uses
+            fuzzy matching. The LLM can say "poisened" and the tool auto-corrects to
+            "poisoned". This eliminates entire classes of retry loops.
+          </p>
+
+          <div class="grid md:grid-cols-3 gap-4">
+            <div class="bg-stone-950 p-4 rounded-xl border border-stone-800">
+              <div class="text-copper font-bold mb-2">Input</div>
+              <code class="text-sm">"FRIGHTNED"</code>
+            </div>
+            <div class="bg-stone-950 p-4 rounded-xl border border-stone-800 flex items-center justify-center">
+              <span class="text-2xl">→</span>
+            </div>
+            <div class="bg-stone-950 p-4 rounded-xl border border-stone-800">
+              <div class="text-green-400 font-bold mb-2">Matched</div>
+              <code class="text-sm">"frightened"</code>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pattern 5 -->
+    <section
+      class="prose prose-stone dark:prose-invert prose-lg max-w-none mb-20 scroll-reveal"
+    >
+      <h2 class="font-display text-copper text-3xl font-bold mb-6">
+        Pattern 5: Fork/Snapshot Synchronization
+      </h2>
+      <p>
+        Some operations need isolation. Combat in a D&D game shouldn't permanently modify
+        character HP until the encounter is resolved. This requires a <strong>fork/snapshot
+        architecture</strong>.
+      </p>
+
+      <div class="my-12 not-prose">
+        <div class="bg-white dark:bg-stone-800 border-2 border-stone-900 dark:border-stone-700 rounded-xl p-6 font-mono text-sm shadow-lg transition-colors">
+          <div class="text-center font-bold text-stone-900 dark:text-stone-100 mb-6 text-lg">
+            ENCOUNTER STATE ISOLATION
+          </div>
+          
+          <div class="grid md:grid-cols-3 gap-4 mb-6">
+            <div class="bg-stone-100 dark:bg-stone-900 p-4 rounded-lg text-center">
+              <div class="text-copper font-bold mb-2">Persistent Storage</div>
+              <div class="text-2xl font-bold text-stone-900 dark:text-stone-100">28 HP</div>
+              <div class="text-xs text-stone-500">characters/fenric.json</div>
+            </div>
+            <div class="flex items-center justify-center">
+              <div class="text-center">
+                <div class="text-stone-500 text-xs mb-1">FORK</div>
+                <span class="text-2xl">→</span>
+              </div>
+            </div>
+            <div class="bg-stone-100 dark:bg-stone-900 p-4 rounded-lg text-center">
+              <div class="text-yellow-500 font-bold mb-2">Encounter Snapshot</div>
+              <div class="text-2xl font-bold text-stone-900 dark:text-stone-100">23 HP</div>
+              <div class="text-xs text-stone-500">5 damage taken in combat</div>
+            </div>
+          </div>
+
+          <div class="border-t-2 border-stone-200 dark:border-stone-700 pt-4">
+            <div class="text-center text-stone-600 dark:text-stone-400 mb-4">
+              Changes stay isolated until explicit <code class="text-copper">commit</code>
+            </div>
+            <div class="flex justify-center gap-4">
+              <div class="px-4 py-2 bg-green-500/10 text-green-400 rounded-lg text-sm font-bold">
+                manage_encounter(operation: "commit")
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <p>
+        This pattern appears in multiple servers:
+      </p>
+      <ul>
+        <li><strong>ChatRPG:</strong> Encounter participants are snapshots; commit syncs back to persistent characters</li>
+        <li><strong>Synch MCP:</strong> File locks with reader/writer semantics for multi-agent coordination</li>
+        <li><strong>Index Foundry:</strong> Run-based pipeline with isolated artifacts per run_id</li>
+      </ul>
+
+      <div class="my-8 bg-stone-950 dark:bg-black rounded-xl p-6 font-mono text-sm border border-stone-800 text-stone-300 overflow-x-auto not-prose">
+        <code class="block">
+          <span class="text-stone-500">// Synch MCP: Lock manager for multi-agent safety</span><br />
+          <span class="text-purple-400">await</span> acquire_lock(&#123;<br />
+          &nbsp;&nbsp;resource_id: <span class="text-green-300">"src/app.ts"</span>,<br />
+          &nbsp;&nbsp;agent_id: <span class="text-green-300">"agent-alpha"</span>,<br />
+          &nbsp;&nbsp;operation: <span class="text-green-300">"write"</span>,<br />
+          &nbsp;&nbsp;timeout_ms: <span class="text-orange-300">30000</span><br />
+          &#125;);<br />
+          <br />
+          <span class="text-stone-500">// Other agents can read but not write</span><br />
+          <span class="text-stone-500">// Write lock auto-expires after timeout</span>
+        </code>
+      </div>
+    </section>
+
+    <!-- Pattern 6 -->
+    <section
+      class="bg-stone-100 dark:bg-stone-900 rounded-4xl p-8 md:p-12 mb-20 scroll-reveal transition-colors"
+    >
+      <h2
+        class="font-display text-3xl font-bold text-stone-900 dark:text-stone-100 mb-8"
+      >
+        Pattern 6: Design Output for Chat Interfaces
+      </h2>
+      <p class="text-lg text-stone-600 dark:text-stone-400 mb-8">
+        The output of MCP tools isn't consumed by APIs—it's displayed in chat windows.
+        That means: <strong>ASCII art, clear formatting, and visual hierarchy matter</strong>.
+      </p>
+
+      <div class="space-y-8">
+        <div
+          class="bg-white dark:bg-stone-950 p-6 rounded-2xl shadow-sm border border-stone-200 dark:border-stone-800 transition-colors"
+        >
+          <h3
+            class="font-bold text-copper mb-2 uppercase tracking-wide text-sm"
+          >
+            ASCII Art Rendering
+          </h3>
+          <h4
+            class="font-display text-xl font-bold text-stone-900 dark:text-stone-100 mb-4"
+          >
+            ChatRPG Battlefield Maps
+          </h4>
+          <div class="bg-stone-950 rounded-xl p-4 font-mono text-xs text-green-400 overflow-x-auto">
+            <pre>╔═══════════════════════════════════════════╗
+║              COMBAT ENCOUNTER              ║
+║                Round 3                     ║
+╠═══════════════════════════════════════════╣
+║                                           ║
+║    ·  ·  ·  ·  ·  ·  ·  ·  ·  ·          ║
+║    ·  ·  F  ·  ·  ·  ·  G  ·  ·          ║
+║    ·  ·  ·  ·  █  █  ·  ·  ·  ·          ║
+║    ·  W  ·  ·  █  █  ·  ·  G  ·          ║
+║    ·  ·  ·  ·  ·  ·  ·  ·  ·  ·          ║
+║                                           ║
+║    F = Fighter  W = Wizard  G = Goblin    ║
+║    █ = Obstacle                           ║
+╚═══════════════════════════════════════════╝</pre>
+          </div>
+        </div>
+
+        <div
+          class="bg-white dark:bg-stone-950 p-6 rounded-2xl shadow-sm border border-stone-200 dark:border-stone-800 transition-colors"
+        >
+          <h3
+            class="font-bold text-copper mb-2 uppercase tracking-wide text-sm"
+          >
+            Structured Output
+          </h3>
+          <h4
+            class="font-display text-xl font-bold text-stone-900 dark:text-stone-100 mb-4"
+          >
+            Character Sheets & Status
+          </h4>
+          <div class="bg-stone-950 rounded-xl p-4 font-mono text-xs text-stone-300 overflow-x-auto">
+            <pre>╔═══════════════════ CHARACTER SHEET ════════════════════╗
+║                         Finn                            ║
+║              PC - Halfling Rogue (Level 5)              ║
+║                                                         ║
+║                HP: [████████████████] 35/35             ║
+║                                                         ║
+║ ─────────────────────────────────────────────────────── ║
+║                                                         ║
+║ AC         │ Speed        │ Initiative   │ Prof Bonus   ║
+║ 15         │ 25 ft        │ +4           │ +3           ║
+╚═════════════════════════════════════════════════════════╝</pre>
+          </div>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-6">
+          <div class="bg-white dark:bg-stone-950 p-6 rounded-2xl shadow-sm border border-stone-200 dark:border-stone-800">
+            <h4 class="font-bold text-stone-900 dark:text-stone-100 mb-3">Good Patterns</h4>
+            <ul class="space-y-2 text-sm text-stone-600 dark:text-stone-400">
+              <li class="flex items-start gap-2">
+                <span class="text-green-400 mt-1">✓</span> Box drawing characters for structure
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-green-400 mt-1">✓</span> Visual health bars with Unicode
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-green-400 mt-1">✓</span> Legends explaining symbols
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-green-400 mt-1">✓</span> Consistent spacing and alignment
+              </li>
+            </ul>
+          </div>
+          <div class="bg-white dark:bg-stone-950 p-6 rounded-2xl shadow-sm border border-stone-200 dark:border-stone-800">
+            <h4 class="font-bold text-stone-900 dark:text-stone-100 mb-3">Anti-Patterns</h4>
+            <ul class="space-y-2 text-sm text-stone-600 dark:text-stone-400">
+              <li class="flex items-start gap-2">
+                <span class="text-red-400 mt-1">✗</span> Raw JSON dumps
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-red-400 mt-1">✗</span> Tables wider than chat windows
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-red-400 mt-1">✗</span> No visual hierarchy
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-red-400 mt-1">✗</span> Missing context/explanations
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Summary -->
+    <section
+      class="prose prose-stone dark:prose-invert prose-lg max-w-none mb-20 scroll-reveal"
+    >
+      <h2 class="font-display text-copper text-3xl font-bold mb-6">
+        Putting It All Together
+      </h2>
+      <p>
+        These six patterns form a cohesive architecture for LLM-powered stateful applications:
+      </p>
+
+      <div class="my-12 not-prose">
+        <div class="grid gap-4">
+          <div class="bg-stone-50 dark:bg-stone-900 p-4 rounded-xl border-l-4 border-blue-400">
+            <span class="font-mono text-blue-400 text-sm">01</span>
+            <span class="font-bold text-stone-900 dark:text-stone-100 ml-2">Externalize State</span>
+            <span class="text-stone-500 ml-2">→ Database is intelligence, agent is hands</span>
+          </div>
+          <div class="bg-stone-50 dark:bg-stone-900 p-4 rounded-xl border-l-4 border-green-400">
+            <span class="font-mono text-green-400 text-sm">02</span>
+            <span class="font-bold text-stone-900 dark:text-stone-100 ml-2">Rich Query Tools</span>
+            <span class="text-stone-500 ml-2">→ Agent reconstructs context by asking</span>
+          </div>
+          <div class="bg-stone-50 dark:bg-stone-900 p-4 rounded-xl border-l-4 border-yellow-400">
+            <span class="font-mono text-yellow-400 text-sm">03</span>
+            <span class="font-bold text-stone-900 dark:text-stone-100 ml-2">Composite Operations</span>
+            <span class="text-stone-500 ml-2">→ Reduce round-trips, batch intelligently</span>
+          </div>
+          <div class="bg-stone-50 dark:bg-stone-900 p-4 rounded-xl border-l-4 border-purple-400">
+            <span class="font-mono text-purple-400 text-sm">04</span>
+            <span class="font-bold text-stone-900 dark:text-stone-100 ml-2">Fuzzy Validation</span>
+            <span class="text-stone-500 ml-2">→ Auto-correct typos, don't fail hard</span>
+          </div>
+          <div class="bg-stone-50 dark:bg-stone-900 p-4 rounded-xl border-l-4 border-red-400">
+            <span class="font-mono text-red-400 text-sm">05</span>
+            <span class="font-bold text-stone-900 dark:text-stone-100 ml-2">Fork/Snapshot Sync</span>
+            <span class="text-stone-500 ml-2">→ Isolate changes until explicit commit</span>
+          </div>
+          <div class="bg-stone-50 dark:bg-stone-900 p-4 rounded-xl border-l-4 border-copper">
+            <span class="font-mono text-copper text-sm">06</span>
+            <span class="font-bold text-stone-900 dark:text-stone-100 ml-2">Chat-First Output</span>
+            <span class="text-stone-500 ml-2">→ ASCII art, visual hierarchy, legends</span>
+          </div>
+        </div>
+      </div>
+
+      <p>
+        The tools described here are all open source and part of the <strong>Mnehmos MCP
+        ecosystem</strong>. Each server solves a different problem—memory, computer control,
+        gaming, RAG indexing—but they all follow these same architectural principles.
+      </p>
+    </section>
+
+    <!-- Footer Meta -->
+    <footer
+      class="text-center pt-16 border-t border-stone-200 dark:border-stone-800"
+    >
+      <p class="text-stone-500 mb-8 max-w-md mx-auto">
+        Building stateful LLM applications one MCP tool at a time.
+      </p>
+      <div class="flex justify-center gap-6">
+        <a
+          href="https://github.com/Mnehmos"
+          class="text-stone-400 hover:text-copper transition-colors"
+        >
+          <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"
+            ><path
+              d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.111.825-.261.825-.579 0-.285-.011-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.22 0 4.609-2.807 5.627-5.479 5.921.43.372.823 1.102.823 2.222 0 1.606-.015 2.896-.015 3.286 0 .321.222.696.832.57C20.565 21.795 24 17.31 24 12c0-6.63-5.37-12-12-12z"
+            ></path></svg
+          >
+        </a>
+      </div>
+    </footer>
+  </article>
+
+  <!-- Global Animations -->
+  <style is:global>
+    @keyframes fade-in {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+    @keyframes slide-up {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .animate-fade-in {
+      animation: fade-in 1s ease-out forwards;
+    }
+    .animate-slide-up {
+      opacity: 0;
+      animation: slide-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    .animation-delay-100 {
+      animation-delay: 0.1s;
+    }
+    .animation-delay-200 {
+      animation-delay: 0.2s;
+    }
+
+    .scroll-reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .scroll-reveal.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+
+  <script>
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: "0px 0px -50px 0px",
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("active");
+        }
+      });
+    }, observerOptions);
+
+    document
+      .querySelectorAll(".scroll-reveal")
+      .forEach((el) => observer.observe(el));
+  </script>
+</BaseLayout>
