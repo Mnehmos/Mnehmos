@@ -15,189 +15,175 @@ export default function OrbitAnimation() {
   const containerRef = useRef<HTMLDivElement>(null);
   const [particles, setParticles] = useState<Particle[]>([]);
   const [energy, setEnergy] = useState(0); // 0-100
-  const mousePos = useRef({ x: 0, y: 0 });
-  const lastMousePos = useRef({ x: 0, y: 0 });
-  const energyDecayRef = useRef<NodeJS.Timeout | undefined>(undefined);
+  
+  // Refs for animation loop values to avoid re-renders
+  const particlesRef = useRef<Particle[]>([]);
+  const energyRef = useRef(0);
+  const mouseRef = useRef({ x: 0, y: 0 });
+  const lastMouseRef = useRef({ x: 0, y: 0 });
+  const requestRef = useRef<number>();
+  const lastTimeRef = useRef<number>(0);
 
-  const BASE_PARTICLE_COUNT = 30;
-  const MAX_PARTICLE_COUNT = BASE_PARTICLE_COUNT * 3;
-  const CONNECTION_DISTANCE = 20; // % distance threshold for connections
+  const BASE_PARTICLE_COUNT = 40;
+  const MAX_PARTICLE_COUNT = 120;
+  const CONNECTION_DISTANCE = 15; // % distance
 
-  // Initialize particles
+  // Initialize particles once
   useEffect(() => {
-    const initialParticles: Particle[] = Array.from({ length: BASE_PARTICLE_COUNT }, (_, i) => ({
+    const initialParticles: Particle[] = new Array(BASE_PARTICLE_COUNT).fill(0).map((_, i) => ({
       id: i,
       x: Math.random() * 100,
       y: Math.random() * 100,
-      vx: (Math.random() - 0.5) * 0.2,
-      vy: (Math.random() - 0.5) * 0.2,
+      vx: (Math.random() - 0.5) * 0.1,
+      vy: (Math.random() - 0.5) * 0.1,
       z: Math.random(),
-      size: 2 + Math.random() * 3,
+      size: 1 + Math.random() * 3,
     }));
+    particlesRef.current = initialParticles;
     setParticles(initialParticles);
   }, []);
 
-  // Track mouse movement and calculate energy
+  // Mouse move handler
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
-      const newX = e.clientX;
-      const newY = e.clientY;
-      
-      // Calculate velocity (movement speed)
-      const dx = newX - lastMousePos.current.x;
-      const dy = newY - lastMousePos.current.y;
-      const velocity = Math.sqrt(dx * dx + dy * dy);
-      
-      // Increase energy based on velocity (capped at 100)
-      setEnergy(prev => Math.min(100, prev + velocity * 0.5));
-      
-      mousePos.current = { x: newX, y: newY };
-      lastMousePos.current = { x: newX, y: newY };
-      
-      // Clear existing decay timer
-      if (energyDecayRef.current) {
-        clearTimeout(energyDecayRef.current);
-      }
-      
-      // Start energy decay after mouse stops moving
-      energyDecayRef.current = setTimeout(() => {
-        setEnergy(prev => Math.max(0, prev - 1));
-      }, 50);
+      // Update mouse ref directly
+      const { innerWidth, innerHeight } = window;
+      mouseRef.current = { 
+        x: (e.clientX / innerWidth) * 100, 
+        y: (e.clientY / innerHeight) * 100 
+      };
     };
 
     window.addEventListener("mousemove", handleMouseMove);
-    return () => {
-      window.removeEventListener("mousemove", handleMouseMove);
-      if (energyDecayRef.current) {
-        clearTimeout(energyDecayRef.current);
-      }
-    };
+    return () => window.removeEventListener("mousemove", handleMouseMove);
   }, []);
 
-  // Energy decay loop
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setEnergy(prev => Math.max(0, prev * 0.98)); // Gradual decay
-    }, 100);
-    return () => clearInterval(interval);
-  }, []);
+  // Animation Loop
+  const animate = (time: number) => {
+    if (!lastTimeRef.current) lastTimeRef.current = time;
+    // const deltaTime = time - lastTimeRef.current; // Unused for now but good for future
+    lastTimeRef.current = time;
 
-  // Update particles based on energy
-  useEffect(() => {
-    const targetCount = Math.floor(BASE_PARTICLE_COUNT + (energy / 100) * (MAX_PARTICLE_COUNT - BASE_PARTICLE_COUNT));
+    // 1. Calculate Energy
+    const dx = mouseRef.current.x - lastMouseRef.current.x;
+    const dy = mouseRef.current.y - lastMouseRef.current.y;
+    const movement = Math.sqrt(dx * dx + dy * dy);
     
-    setParticles(prev => {
-      let updated = [...prev];
-      
-      // Add particles if below target
-      while (updated.length < targetCount) {
-        updated.push({
+    // Add energy from movement, decay over time
+    let newEnergy = energyRef.current + movement * 2;
+    newEnergy *= 0.98; // Decay
+    newEnergy = Math.max(0, Math.min(100, newEnergy));
+    energyRef.current = newEnergy;
+
+    lastMouseRef.current = mouseRef.current;
+
+    // 2. Manage Particles
+    const targetCount = Math.floor(BASE_PARTICLE_COUNT + (newEnergy / 100) * (MAX_PARTICLE_COUNT - BASE_PARTICLE_COUNT));
+    let currentParticles = [...particlesRef.current];
+
+    // Spawn/Despawn logic (simplified for RAF)
+    if (currentParticles.length < targetCount && Math.random() > 0.8) {
+       currentParticles.push({
           id: Date.now() + Math.random(),
           x: Math.random() * 100,
           y: Math.random() * 100,
-          vx: (Math.random() - 0.5) * 0.5,
-          vy: (Math.random() - 0.5) * 0.5,
+          vx: (Math.random() - 0.5) * 0.3,
+          vy: (Math.random() - 0.5) * 0.3,
           z: Math.random(),
-          size: 2 + Math.random() * 3,
-        });
-      }
-      
-      // Remove particles if above target
-      if (updated.length > targetCount) {
-        updated = updated.slice(0, targetCount);
-      }
-      
-      // Update particle positions and velocities
-      const speedMultiplier = 1 + (energy / 100) * 2; // 1x to 3x speed
-      
-      return updated.map(p => {
-        let newX = p.x + p.vx * speedMultiplier;
-        let newY = p.y + p.vy * speedMultiplier;
-        let newVx = p.vx;
-        let newVy = p.vy;
-        
-        // Bounce off edges
-        if (newX < 0 || newX > 100) {
-          newVx = -p.vx;
-          newX = Math.max(0, Math.min(100, newX));
-        }
-        if (newY < 0 || newY > 100) {
-          newVy = -p.vy;
-          newY = Math.max(0, Math.min(100, newY));
-        }
-        
-        // Cycle z-depth for fade in/out effect
-        let newZ = p.z + (Math.random() - 0.5) * 0.01;
-        newZ = Math.max(0, Math.min(1, newZ));
-        
-        return {
-          ...p,
-          x: newX,
-          y: newY,
-          vx: newVx,
-          vy: newVy,
-          z: newZ,
-        };
-      });
+          size: 1 + Math.random() * 3,
+       });
+    } else if (currentParticles.length > targetCount && Math.random() > 0.8) {
+       currentParticles.shift();
+    }
+
+    // 3. Update Physics
+    const speedMultiplier = 1 + (newEnergy / 100) * 3;
+    
+    currentParticles = currentParticles.map(p => {
+      let { x, y, vx, vy, z } = p;
+
+      // Gravity/Parallax effect towards mouse
+      const pullX = (mouseRef.current.x - x) * 0.0005 * z;
+      const pullY = (mouseRef.current.y - y) * 0.0005 * z;
+
+      vx += pullX;
+      vy += pullY;
+
+      // Update position
+      x += vx * speedMultiplier;
+      y += vy * speedMultiplier;
+
+      // Bounds bounce
+      if (x < 0 || x > 100) vx *= -1;
+      if (y < 0 || y > 100) vy *= -1;
+      x = Math.max(0, Math.min(100, x));
+      y = Math.max(0, Math.min(100, y));
+
+      // Z-cycle
+      z += 0.002;
+      if (z > 1) z = 0;
+
+      return { ...p, x, y, vx, vy, z };
     });
-  }, [energy]);
 
-  // Calculate heat color based on energy
-  const getHeatColor = (baseZ: number) => {
-    const normalizedEnergy = energy / 100;
+    particlesRef.current = currentParticles;
+
+    // Sync state for React render (throttled slightly if needed, but 60fps is fine for this count)
+    setParticles(currentParticles);
+    setEnergy(newEnergy);
+
+    requestRef.current = requestAnimationFrame(animate);
+  };
+
+  useEffect(() => {
+    requestRef.current = requestAnimationFrame(animate);
+    return () => {
+      if (requestRef.current) cancelAnimationFrame(requestRef.current);
+    };
+  }, []);
+
+  // Simplified Color Palette: Copper -> Orange -> Amber
+  const getParticleColor = (z: number, energyLvl: number) => {
+    // Base opacity via Z
+    const opacity = 0.2 + z * 0.6;
     
-    if (normalizedEnergy < 0.3) {
-      // Low energy: Copper
-      return `rgba(184, 115, 51, ${0.3 + baseZ * 0.7})`;
-    } else if (normalizedEnergy < 0.6) {
-      // Medium energy: Orange
-      return `rgba(251, 146, 60, ${0.4 + baseZ * 0.6})`;
-    } else if (normalizedEnergy < 0.85) {
-      // High energy: Yellow
-      return `rgba(250, 204, 21, ${0.5 + baseZ * 0.5})`;
-    } else {
-      // Max energy: White/Yellow hot
-      return `rgba(255, 255, 200, ${0.6 + baseZ * 0.4})`;
-    }
+    if (energyLvl > 80) return `rgba(251, 191, 36, ${opacity})`; // Amber-400
+    if (energyLvl > 40) return `rgba(245, 158, 11, ${opacity})`; // Amber-500
+    return `rgba(184, 115, 51, ${opacity})`; // Copper
   };
 
-  // Calculate particle distance
-  const getDistance = (p1: Particle, p2: Particle) => {
-    const dx = p1.x - p2.x;
-    const dy = p1.y - p2.y;
-    return Math.sqrt(dx * dx + dy * dy);
-  };
-
-  // Generate connection lines between nearby particles (neural network effect)
+  // Connection Lines
   const renderConnections = () => {
-    const connections: React.ReactElement[] = [];
-    const connectionOpacity = 0.1 + (energy / 100) * 0.3; // Connections intensify with energy
+    const lines: React.ReactElement[] = [];
+    const threshold = CONNECTION_DISTANCE;
     
-    for (let i = 0; i < particles.length; i++) {
-      for (let j = i + 1; j < particles.length; j++) {
-        const distance = getDistance(particles[i], particles[j]);
-        
-        if (distance < CONNECTION_DISTANCE) {
-          // Line opacity based on distance and particle depth
-          const opacity = (1 - distance / CONNECTION_DISTANCE) * connectionOpacity * Math.min(particles[i].z, particles[j].z);
-          
-          connections.push(
-            <line
-              key={`${particles[i].id}-${particles[j].id}`}
-              x1={`${particles[i].x}%`}
-              y1={`${particles[i].y}%`}
-              x2={`${particles[j].x}%`}
-              y2={`${particles[j].y}%`}
-              stroke={energy > 60 ? "rgba(250, 204, 21, " + opacity + ")" : "rgba(184, 115, 51, " + opacity + ")"}
-              strokeWidth="1"
-              opacity={opacity}
-            />
-          );
+    // Optimization: only check subset if too many particles
+    const checkLimit = Math.min(particles.length, 60);
+
+    for (let i = 0; i < checkLimit; i++) {
+        for (let j = i + 1; j < checkLimit; j++) {
+            const p1 = particles[i];
+            const p2 = particles[j];
+            const dist = Math.sqrt(Math.pow(p1.x - p2.x, 2) + Math.pow(p1.y - p2.y, 2));
+
+            if (dist < threshold) {
+                const opacity = (1 - dist / threshold) * 0.2 * Math.min(p1.z, p2.z) * (1 + energy/100);
+                lines.push(
+                    <line
+                        key={`${p1.id}-${p2.id}`}
+                        x1={`${p1.x}%`} 
+                        y1={`${p1.y}%`}
+                        x2={`${p2.x}%`}
+                        y2={`${p2.y}%`}
+                        stroke="#B87333"
+                        strokeWidth={0.5}
+                        strokeOpacity={opacity}
+                    />
+                );
+            }
         }
-      }
     }
-    
-    return connections;
+    return lines;
   };
 
   return (
@@ -206,45 +192,34 @@ export default function OrbitAnimation() {
       className="fixed inset-0 z-0 pointer-events-none overflow-hidden"
       aria-hidden="true"
     >
-      {/* Background glow - intensity based on energy */}
+      {/* Dynamic Background Gradient */}
       <div 
         className="absolute inset-0 transition-opacity duration-300"
         style={{
-          background: `radial-gradient(circle at 50% 50%, rgba(184, 115, 51, ${0.05 + energy / 1000}) 0%, transparent 70%)`,
+          background: `radial-gradient(circle at 50% 50%, rgba(184, 115, 51, ${0.02 + energy / 2000}) 0%, transparent 70%)`,
         }}
       />
-
-      {/* Neural network connections (SVG overlay) */}
+      
+      {/* Connections Layer */}
       <svg className="absolute inset-0 w-full h-full">
         {renderConnections()}
       </svg>
 
-      {/* Particles */}
-      <div className="absolute inset-0">
-        {particles.map((particle) => (
-          <motion.div
-            key={particle.id}
-            className="absolute rounded-full"
+      {/* Particles Layer */}
+      {particles.map(p => (
+         <motion.div
+            key={p.id}
+            className="absolute rounded-full bg-current"
             style={{
-              left: `${particle.x}%`,
-              top: `${particle.y}%`,
-              width: `${particle.size}px`,
-              height: `${particle.size}px`,
-              backgroundColor: getHeatColor(particle.z),
-              filter: `blur(${(1 - particle.z) * 2}px)`,
-              opacity: 0.3 + particle.z * 0.7,
+                left: `${p.x}%`,
+                top: `${p.y}%`,
+                width: `${p.size}px`,
+                height: `${p.size}px`,
+                backgroundColor: getParticleColor(p.z, energy),
+                boxShadow: energy > 50 ? `0 0 ${p.size * 2}px rgba(184, 115, 51, 0.4)` : 'none',
             }}
-            animate={{
-              scale: [1, 1.2, 1],
-            }}
-            transition={{
-              duration: 2 + Math.random() * 2,
-              repeat: Infinity,
-              ease: "easeInOut",
-            }}
-          />
-        ))}
-      </div>
+         />
+      ))}
     </div>
   );
 }
