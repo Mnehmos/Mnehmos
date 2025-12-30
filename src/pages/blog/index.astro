@@ -6,19 +6,18 @@ const base = import.meta.env.BASE_URL;
 
 const collectionPosts = await getCollection("blog", ({ data }) => !data.draft);
 
-// STRATEGY: Hybrid Content Architecture
-// We mix standard Markdown posts (via Astro Collections) with rich, interactive
-// Astro components (Manual Posts).
+// AGENT INSTRUCTIONS: HYBRID BLOG ARCHITECTURE
+// This blog uses a hybrid approach:
+// 1. SIMPLE POSTS: Use standard Markdown in `src/content/blog/*.md`.
+// 2. RICH POSTS: Use custom Astro components in `src/pages/blog/*.astro`.
 //
-// 1. CONTENT COLLECTIONS (src/content/blog/*.md)
-//    - Best for standard text-heavy posts.
-//    - Easy to write, quick to publish.
-//
-// 2. MANUAL RICH POSTS (src/pages/blog/*.astro)
-//    - Used when we need React components, interactive diagrams, or custom layout.
-//    - Must be manually added to the `manualPosts` array below to appear in the index.
-//    - Allows for "Deep Dives" like the OODA loop post.
-//    - PRO TIP: If you create a rich post, ensure you DELETE the corresponding .md file to avoid conflicts.
+// HOW TO ADD A NEW RICH POST:
+// 1. Create the file: `src/pages/blog/my-new-post.astro`.
+// 2. Add it to the `manualPosts` array below.
+// 3. IMPORTANT: Add a `lesson` field. This provides a "Mini Lesson" on the blog index card,
+//    giving readers value/insight immediately on hover without clicking.
+// 4. Ensure the `slug` matches the filename (without extension).
+// 5. If converting a Markdown post, DELETE the original .md file to prevent collisions.
 const manualPosts = [
   {
     slug: "ukraine-ooda",
@@ -29,6 +28,8 @@ const manualPosts = [
       pubDate: new Date("2024-12-30"),
       tags: ["ooda", "architecture", "multi-agent", "distributed-systems"],
       draft: false,
+      lesson:
+        "Safety isn't a prompt—it's a reflex. Build 'nervous system' layers into your code that enforce invariants before the LLM even sees the result. Distribute state to the database, keep the agent stateless.",
     },
   },
 ];
@@ -43,9 +44,9 @@ const posts = [...collectionPosts, ...manualPosts].sort(
   description="Thoughts on MCP development, multi-agent systems, and building AI-powered applications."
 >
   <section class="py-20">
-    <div class="max-w-4xl mx-auto px-6">
+    <div class="max-w-6xl mx-auto px-6">
       <!-- Header -->
-      <div class="text-center mb-16">
+      <div class="text-center mb-20">
         <span
           class="inline-block px-3 py-1 bg-copper/10 text-copper rounded-full text-sm font-medium mb-4"
         >
@@ -92,41 +93,99 @@ const posts = [...collectionPosts, ...manualPosts].sort(
         </div>
       </div>
 
-      <!-- Posts List -->
+      <!-- Posts Grid -->
       {
         posts.length === 0 ? (
           <p class="text-center text-stone-500">
             No posts yet. Check back soon!
           </p>
         ) : (
-          <div class="space-y-8">
+          <div class="grid md:grid-cols-2 gap-8">
             {posts.map((post) => (
-              <article class="group">
+              <article class="group relative h-full">
                 <a
                   href={`${base}blog/${post.slug}`}
-                  class="block p-6 bg-white rounded-xl border border-stone-200 hover:border-copper/50 hover:shadow-md transition-all"
+                  class="block h-full bg-white rounded-4xl border border-stone-200 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 relative"
                 >
-                  <div class="flex flex-wrap gap-2 mb-3">
-                    {post.data.tags.map((tag) => (
-                      <span class="px-2 py-0.5 bg-stone-100 text-stone-600 text-xs rounded-full">
-                        {tag}
-                      </span>
-                    ))}
+                  <!-- Content Container -->
+                  <div class="p-8 h-full flex flex-col relative z-10 bg-white transition-transform duration-500 group-hover:-translate-y-2">
+                    <!-- Tags -->
+                    <div class="flex flex-wrap gap-2 mb-6">
+                      {post.data.tags.map((tag) => (
+                        <span class="px-3 py-1 bg-stone-100 text-stone-600 text-xs font-medium rounded-full uppercase tracking-wide">
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+
+                    <!-- Title & Date -->
+                    <div class="mb-auto">
+                      <h2 class="font-display text-2xl font-bold text-stone-900 mb-3 group-hover:text-copper transition-colors">
+                        {post.data.title}
+                      </h2>
+                      <time
+                        class="text-sm text-stone-400 font-mono block mb-4"
+                        datetime={post.data.pubDate.toISOString()}
+                      >
+                        {post.data.pubDate.toLocaleDateString("en-US", {
+                          year: "numeric",
+                          month: "long",
+                          day: "numeric",
+                        })}
+                      </time>
+                      <p class="text-stone-600 leading-relaxed">
+                        {post.data.description}
+                      </p>
+                    </div>
+
+                    <!-- Read More Indicator (Visible by default) -->
+                    <div class="mt-8 flex items-center gap-2 text-stone-400 text-sm font-bold group-hover:text-copper transition-colors">
+                      Read Post
+                      <svg
+                        class="w-4 h-4 transition-transform group-hover:translate-x-1"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          stroke-width="2"
+                          d="M17 8l4 4m0 0l-4 4m4-4H3"
+                        />
+                      </svg>
+                    </div>
                   </div>
-                  <h2 class="font-display text-xl font-bold text-stone-900 group-hover:text-copper transition-colors mb-2">
-                    {post.data.title}
-                  </h2>
-                  <p class="text-stone-600 mb-3">{post.data.description}</p>
-                  <time
-                    class="text-sm text-stone-500"
-                    datetime={post.data.pubDate.toISOString()}
-                  >
-                    {post.data.pubDate.toLocaleDateString("en-US", {
-                      year: "numeric",
-                      month: "long",
-                      day: "numeric",
-                    })}
-                  </time>
+
+                  <!-- Mini Lesson Overlay (Reveals on Hover) -->
+                  {post.data.lesson && (
+                    <div class="absolute inset-0 z-20 bg-stone-900/95 backdrop-blur-sm p-8 flex flex-col justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                      <div class="translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-100">
+                        <span class="text-copper text-xs font-bold uppercase tracking-widest mb-3 block">
+                          The Mini Lesson
+                        </span>
+                        <p class="text-white text-lg leading-relaxed font-medium mb-8">
+                          "{post.data.lesson}"
+                        </p>
+                        <span class="inline-flex items-center gap-2 text-white font-bold border-b border-copper pb-0.5">
+                          Read Deep Dive
+                          <svg
+                            class="w-4 h-4"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                          >
+                            <path
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              stroke-width="2"
+                              d="M14 5l7 7m0 0l-7 7m7-7H3"
+                            />
+                          </svg>
+                        </span>
+                      </div>
+                    </div>
+                  )}
                 </a>
               </article>
             ))}
