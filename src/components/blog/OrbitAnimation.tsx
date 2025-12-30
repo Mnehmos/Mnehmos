@@ -97,14 +97,14 @@ export default function OrbitAnimation() {
     }
 
     // 3. Update Physics
-    const speedMultiplier = 1 + (newEnergy / 100) * 3;
+    const speedMultiplier = 0.5 + (newEnergy / 100) * 1.5; // Reduced by 50%
     
     currentParticles = currentParticles.map(p => {
       let { x, y, vx, vy, z } = p;
 
       // Gravity/Parallax effect towards mouse
-      const pullX = (mouseRef.current.x - x) * 0.0005 * z;
-      const pullY = (mouseRef.current.y - y) * 0.0005 * z;
+      const pullX = (mouseRef.current.x - x) * 0.00025 * z; // Reduced pull
+      const pullY = (mouseRef.current.y - y) * 0.00025 * z;
 
       vx += pullX;
       vy += pullY;
