@@ -1,0 +1,92 @@
+---
+import BaseLayout from "./BaseLayout.astro";
+import type { CollectionEntry } from "astro:content";
+
+interface Props {
+  post: CollectionEntry<"blog">;
+}
+
+const { post } = Astro.props;
+const { title, description, pubDate, updatedDate, tags } = post.data;
+---
+
+<BaseLayout title={title} description={description}>
+  <article class="max-w-3xl mx-auto px-6 py-12">
+    <!-- Header -->
+    <header class="mb-12">
+      <div class="flex flex-wrap gap-2 mb-4">
+        {
+          tags.map((tag) => (
+            <span class="px-2 py-1 bg-copper/10 text-copper text-sm rounded-full">
+              {tag}
+            </span>
+          ))
+        }
+      </div>
+      <h1
+        class="font-display text-4xl md:text-5xl font-bold text-stone-900 mb-4"
+      >
+        {title}
+      </h1>
+      <p class="text-lg text-stone-600 mb-4">{description}</p>
+      <div class="flex items-center gap-4 text-stone-500 text-sm">
+        <time datetime={pubDate.toISOString()}>
+          {
+            pubDate.toLocaleDateString("en-US", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })
+          }
+        </time>
+        {
+          updatedDate && (
+            <span>
+              (Updated:{" "}
+              {updatedDate.toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })}
+              )
+            </span>
+          )
+        }
+      </div>
+    </header>
+
+    <!-- Content -->
+    <div
+      class="prose prose-stone prose-lg max-w-none
+      prose-headings:font-display prose-headings:font-bold prose-headings:text-stone-900
+      prose-a:text-copper prose-a:no-underline hover:prose-a:underline
+      prose-code:bg-stone-100 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:text-stone-800
+      prose-pre:bg-stone-900 prose-pre:text-stone-100
+      prose-blockquote:border-copper prose-blockquote:text-stone-600"
+    >
+      <slot />
+    </div>
+
+    <!-- Footer -->
+    <footer class="mt-16 pt-8 border-t border-stone-200">
+      <a
+        href={`${import.meta.env.BASE_URL}blog`}
+        class="inline-flex items-center gap-2 text-copper hover:text-copper-light font-medium transition-colors"
+      >
+        <svg
+          class="w-4 h-4"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M7 16l-4-4m0 0l4-4m-4 4h18"></path>
+        </svg>
+        Back to all posts
+      </a>
+    </footer>
+  </article>
+</BaseLayout>
