@@ -17,7 +17,7 @@ const base = import.meta.env.BASE_URL;
     <nav class="mb-12 animate-fade-in">
       <a
         href={`${base}blog`}
-        class="text-stone-500 hover:text-copper transition-colors flex items-center gap-2 text-sm font-medium group"
+        class="text-stone-500 dark:text-stone-400 hover:text-copper transition-colors flex items-center gap-2 text-sm font-medium group"
       >
         <svg
           class="w-4 h-4 transform group-hover:-translate-x-1 transition-transform"
@@ -48,14 +48,14 @@ const base = import.meta.env.BASE_URL;
       </div>
 
       <h1
-        class="font-display text-4xl md:text-6xl font-bold text-stone-900 mb-6 leading-tight animate-slide-up"
+        class="font-display text-4xl md:text-6xl font-bold text-stone-900 dark:text-stone-100 mb-6 leading-tight animate-slide-up"
       >
         What Ukraine's Drones <span class="text-copper">Taught Me</span> About Building
         AI Systems
       </h1>
 
       <p
-        class="text-xl md:text-2xl text-stone-600 mb-8 border-l-4 border-copper pl-6 italic animate-slide-up animation-delay-100"
+        class="text-xl md:text-2xl text-stone-600 dark:text-stone-300 mb-8 border-l-4 border-copper pl-6 italic animate-slide-up animation-delay-100"
       >
         {description}
       </p>
@@ -64,12 +64,14 @@ const base = import.meta.env.BASE_URL;
         class="flex items-center gap-4 text-stone-500 font-medium animate-fade-in animation-delay-200"
       >
         <div
-          class="w-10 h-10 rounded-full bg-stone-200 flex items-center justify-center text-stone-600 font-bold border-2 border-white shadow-sm"
+          class="w-10 h-10 rounded-full bg-stone-200 dark:bg-stone-700 flex items-center justify-center text-stone-600 dark:text-stone-300 font-bold border-2 border-white dark:border-stone-800 shadow-sm"
         >
           VM
         </div>
         <div>
-          <div class="text-stone-900 leading-none mb-1">Vario M.</div>
+          <div class="text-stone-900 dark:text-stone-200 leading-none mb-1">
+            Vario M.
+          </div>
           <time datetime={pubDate.toISOString()} class="text-sm">
             {
               pubDate.toLocaleDateString("en-US", {
@@ -109,7 +111,9 @@ const base = import.meta.env.BASE_URL;
     </div>
 
     <!-- Section: The Problem -->
-    <section class="prose prose-stone prose-lg max-w-none mb-20 scroll-reveal">
+    <section
+      class="prose prose-stone dark:prose-invert prose-lg max-w-none mb-20 scroll-reveal"
+    >
       <h2 class="font-display text-copper text-3xl font-bold mb-6">
         The Problem: Manual Drones Were Failing
       </h2>
@@ -128,7 +132,7 @@ const base = import.meta.env.BASE_URL;
     <!-- OODA Component -->
     <div class="mb-20 scroll-reveal">
       <h2
-        class="font-display text-2xl font-bold text-stone-900 mb-8 text-center uppercase tracking-widest"
+        class="font-display text-2xl font-bold text-stone-900 dark:text-stone-100 mb-8 text-center uppercase tracking-widest"
       >
         The OODA Framework
       </h2>
@@ -138,7 +142,7 @@ const base = import.meta.env.BASE_URL;
     <!-- Section: DELTA -->
     <section class="mb-20 scroll-reveal">
       <div
-        class="bg-white border border-stone-200 p-8 md:p-12 rounded-4xl shadow-sm relative overflow-hidden"
+        class="bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 p-8 md:p-12 rounded-4xl shadow-sm relative overflow-hidden transition-colors"
       >
         <div
           class="absolute -right-20 -top-20 w-64 h-64 bg-copper/5 rounded-full blur-3xl"
@@ -147,7 +151,9 @@ const base = import.meta.env.BASE_URL;
         <h2 class="font-display text-copper text-4xl font-bold mb-4">
           DELTA: The OS of the Battlefield
         </h2>
-        <p class="text-lg text-stone-600 mb-8 leading-relaxed">
+        <p
+          class="text-lg text-stone-600 dark:text-stone-300 mb-8 leading-relaxed"
+        >
           DELTA is Ukraine’s Situational Awareness and Battlefield Management
           System. It's a cloud-native platform that aggregates data from
           thousands of sensors—drones, satellites, chatbots, and signal
@@ -158,16 +164,20 @@ const base = import.meta.env.BASE_URL;
 
         <div class="grid md:grid-cols-2 gap-8 mt-12">
           <div
-            class="bg-stone-50 p-6 rounded-2xl border border-stone-100 h-full transition-all hover:border-copper/30 group"
+            class="bg-stone-50 dark:bg-stone-950 p-6 rounded-2xl border border-stone-100 dark:border-stone-800 h-full transition-all hover:border-copper/30 group"
           >
-            <h4 class="font-bold text-stone-900 mb-3 flex items-center gap-2">
+            <h4
+              class="font-bold text-stone-900 dark:text-stone-100 mb-3 flex items-center gap-2"
+            >
               <span
                 class="w-8 h-8 rounded-full bg-copper/10 text-copper flex items-center justify-center text-sm font-mono transition-transform group-hover:scale-110"
                 >01</span
               >
               Observe & Orient
             </h4>
-            <p class="text-sm text-stone-500 leading-relaxed">
+            <p
+              class="text-sm text-stone-500 dark:text-stone-400 leading-relaxed"
+            >
               The aggregate stream of thousands of drones is processed by <strong
                 >Vezha</strong
               > and <strong>Avengers AI</strong>, identifying over 12,000 enemy
@@ -175,16 +185,20 @@ const base = import.meta.env.BASE_URL;
             </p>
           </div>
           <div
-            class="bg-stone-50 p-6 rounded-2xl border border-stone-100 h-full transition-all hover:border-copper/30 group"
+            class="bg-stone-50 dark:bg-stone-950 p-6 rounded-2xl border border-stone-100 dark:border-stone-800 h-full transition-all hover:border-copper/30 group"
           >
-            <h4 class="font-bold text-stone-900 mb-3 flex items-center gap-2">
+            <h4
+              class="font-bold text-stone-900 dark:text-stone-100 mb-3 flex items-center gap-2"
+            >
               <span
                 class="w-8 h-8 rounded-full bg-copper/10 text-copper flex items-center justify-center text-sm font-mono transition-transform group-hover:scale-110"
                 >02</span
               >
               Decide & Act
             </h4>
-            <p class="text-sm text-stone-500 leading-relaxed">
+            <p
+              class="text-sm text-stone-500 dark:text-stone-400 leading-relaxed"
+            >
               The <strong>TFL-1 terminal guidance module</strong> ($50-$100) handles
               the "last mile." Once the operator selects a target, the drone locks
               on and strikes autonomously, even if the radio link is severed.
@@ -195,7 +209,9 @@ const base = import.meta.env.BASE_URL;
     </section>
 
     <!-- Section: DELTA Deep Dive -->
-    <section class="prose prose-stone prose-lg max-w-none mb-20 scroll-reveal">
+    <section
+      class="prose prose-stone dark:prose-invert prose-lg max-w-none mb-20 scroll-reveal"
+    >
       <h2 class="font-display text-copper text-3xl font-bold mb-6">
         DELTA: OODA at National Scale
       </h2>
@@ -213,11 +229,15 @@ const base = import.meta.env.BASE_URL;
       </p>
 
       <div class="grid md:grid-cols-2 gap-8 my-12 not-prose">
-        <div class="bg-stone-50 p-6 rounded-2xl border-l-4 border-copper">
-          <h3 class="font-display font-bold text-lg mb-2 text-stone-900">
+        <div
+          class="bg-stone-50 dark:bg-stone-900 p-6 rounded-2xl border-l-4 border-copper"
+        >
+          <h3
+            class="font-display font-bold text-lg mb-2 text-stone-900 dark:text-stone-100"
+          >
             OBSERVE
           </h3>
-          <ul class="space-y-2 text-sm text-stone-600">
+          <ul class="space-y-2 text-sm text-stone-600 dark:text-stone-400">
             <li class="flex items-start gap-2">
               <span class="text-copper mt-1">▪</span> Drone video feeds via Vezha
             </li>
@@ -232,11 +252,15 @@ const base = import.meta.env.BASE_URL;
             </li>
           </ul>
         </div>
-        <div class="bg-stone-50 p-6 rounded-2xl border-l-4 border-copper">
-          <h3 class="font-display font-bold text-lg mb-2 text-stone-900">
+        <div
+          class="bg-stone-50 dark:bg-stone-900 p-6 rounded-2xl border-l-4 border-copper"
+        >
+          <h3
+            class="font-display font-bold text-lg mb-2 text-stone-900 dark:text-stone-100"
+          >
             ORIENT
           </h3>
-          <ul class="space-y-2 text-sm text-stone-600">
+          <ul class="space-y-2 text-sm text-stone-600 dark:text-stone-400">
             <li class="flex items-start gap-2">
               <span class="text-copper mt-1">▪</span> Avengers AI analyzes video
             </li>
@@ -251,11 +275,15 @@ const base = import.meta.env.BASE_URL;
             </li>
           </ul>
         </div>
-        <div class="bg-stone-50 p-6 rounded-2xl border-l-4 border-copper">
-          <h3 class="font-display font-bold text-lg mb-2 text-stone-900">
+        <div
+          class="bg-stone-50 dark:bg-stone-900 p-6 rounded-2xl border-l-4 border-copper"
+        >
+          <h3
+            class="font-display font-bold text-lg mb-2 text-stone-900 dark:text-stone-100"
+          >
             DECIDE
           </h3>
-          <ul class="space-y-2 text-sm text-stone-600">
+          <ul class="space-y-2 text-sm text-stone-600 dark:text-stone-400">
             <li class="flex items-start gap-2">
               <span class="text-copper mt-1">▪</span> Deltamonitor live map
             </li>
@@ -270,11 +298,15 @@ const base = import.meta.env.BASE_URL;
             </li>
           </ul>
         </div>
-        <div class="bg-stone-50 p-6 rounded-2xl border-l-4 border-copper">
-          <h3 class="font-display font-bold text-lg mb-2 text-stone-900">
+        <div
+          class="bg-stone-50 dark:bg-stone-900 p-6 rounded-2xl border-l-4 border-copper"
+        >
+          <h3
+            class="font-display font-bold text-lg mb-2 text-stone-900 dark:text-stone-100"
+          >
             ACT
           </h3>
-          <ul class="space-y-2 text-sm text-stone-600">
+          <ul class="space-y-2 text-sm text-stone-600 dark:text-stone-400">
             <li class="flex items-start gap-2">
               <span class="text-copper mt-1">▪</span> Mission Control coordination
             </li>
@@ -399,7 +431,9 @@ const base = import.meta.env.BASE_URL;
     </section>
 
     <!-- Database Intelligence -->
-    <section class="prose prose-stone prose-lg max-w-none mb-20 scroll-reveal">
+    <section
+      class="prose prose-stone dark:prose-invert prose-lg max-w-none mb-20 scroll-reveal"
+    >
       <h2 class="font-display text-copper text-3xl font-bold mb-6">
         The Database Is the Intelligence
       </h2>
@@ -418,14 +452,14 @@ const base = import.meta.env.BASE_URL;
 
       <div class="my-12 not-prose">
         <div
-          class="bg-white border-2 border-stone-900 rounded-xl p-6 md:p-8 font-mono text-sm md:text-base shadow-[8px_8px_0px_0px_rgba(28,25,23,1)]"
+          class="bg-white dark:bg-stone-800 border-2 border-stone-900 dark:border-stone-700 rounded-xl p-6 md:p-8 font-mono text-sm md:text-base shadow-[8px_8px_0px_0px_rgba(28,25,23,1)] dark:shadow-[8px_8px_0px_0px_rgba(255,255,255,0.1)] transition-colors"
         >
           <div
-            class="border-b-2 border-stone-200 pb-4 mb-4 text-center font-bold text-stone-900"
+            class="border-b-2 border-stone-200 dark:border-stone-600 pb-4 mb-4 text-center font-bold text-stone-900 dark:text-stone-100"
           >
             DATABASE (THE ACTUAL INTELLIGENCE)
           </div>
-          <div class="text-stone-600 mb-6 text-center">
+          <div class="text-stone-600 dark:text-stone-400 mb-6 text-center">
             Sensor feeds • Drone telemetry • Target coordinates<br />
             Unit positions • Historical patterns
           </div>
@@ -442,9 +476,11 @@ const base = import.meta.env.BASE_URL;
                 d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg
             >
           </div>
-          <div class="bg-stone-100 rounded-lg p-4 text-stone-700">
+          <div
+            class="bg-stone-100 dark:bg-stone-900 rounded-lg p-4 text-stone-700 dark:text-stone-300"
+          >
             <div
-              class="font-bold text-stone-900 mb-2 border-b border-stone-200 pb-2"
+              class="font-bold text-stone-900 dark:text-stone-100 mb-2 border-b border-stone-200 dark:border-stone-700 pb-2"
             >
               STATELESS PROCESSES
             </div>
@@ -480,59 +516,82 @@ const base = import.meta.env.BASE_URL;
     </section>
 
     <!-- Architecture Lessons / Conclusion -->
-    <section class="bg-stone-100 rounded-4xl p-8 md:p-12 mb-20 scroll-reveal">
-      <h2 class="font-display text-3xl font-bold text-stone-900 mb-8">
+    <section
+      class="bg-stone-100 dark:bg-stone-900 rounded-4xl p-8 md:p-12 mb-20 scroll-reveal transition-colors"
+    >
+      <h2
+        class="font-display text-3xl font-bold text-stone-900 dark:text-stone-100 mb-8"
+      >
         How This Shapes My Architecture
       </h2>
-      <p class="text-lg text-stone-600 mb-8">
+      <p class="text-lg text-stone-600 dark:text-stone-400 mb-8">
         I build MCP (Model Context Protocol) servers—the tools that let AI
         agents interact with the world. Every tool I build now follows these
         wartime lessons.
       </p>
 
       <div class="space-y-8">
-        <div class="bg-white p-6 rounded-2xl shadow-sm border border-stone-200">
+        <div
+          class="bg-white dark:bg-stone-950 p-6 rounded-2xl shadow-sm border border-stone-200 dark:border-stone-800 transition-colors"
+        >
           <h3
             class="font-bold text-copper mb-2 uppercase tracking-wide text-sm"
           >
             Separation of Concerns
           </h3>
-          <h4 class="font-display text-xl font-bold text-stone-900 mb-4">
+          <h4
+            class="font-display text-xl font-bold text-stone-900 dark:text-stone-100 mb-4"
+          >
             Split by OODA Phase
           </h4>
-          <ul class="space-y-4 font-mono text-sm text-stone-600">
-            <li class="p-3 bg-stone-50 rounded-lg border-l-4 border-blue-400">
-              <strong class="text-stone-900">OBSERVE:</strong> Read-only tools (get_context,
-              search_index)
+          <ul
+            class="space-y-4 font-mono text-sm text-stone-600 dark:text-stone-400"
+          >
+            <li
+              class="p-3 bg-stone-50 dark:bg-stone-900 rounded-lg border-l-4 border-blue-400"
+            >
+              <strong class="text-stone-900 dark:text-stone-200"
+                >OBSERVE:</strong
+              > Read-only tools (get_context, search_index)
             </li>
-            <li class="p-3 bg-stone-50 rounded-lg border-l-4 border-yellow-400">
-              <strong class="text-stone-900">ORIENT:</strong> Analysis tools (validate_schema,
-              check_line_of_sight)
+            <li
+              class="p-3 bg-stone-50 dark:bg-stone-900 rounded-lg border-l-4 border-yellow-400"
+            >
+              <strong class="text-stone-900 dark:text-stone-200">ORIENT:</strong
+              > Analysis tools (validate_schema, check_line_of_sight)
             </li>
-            <li class="p-3 bg-stone-50 rounded-lg border-l-4 border-purple-400">
-              <strong class="text-stone-900">DECIDE:</strong> The LLM reasons over
-              observed + oriented data
+            <li
+              class="p-3 bg-stone-50 dark:bg-stone-900 rounded-lg border-l-4 border-purple-400"
+            >
+              <strong class="text-stone-900 dark:text-stone-200">DECIDE:</strong
+              > The LLM reasons over observed + oriented data
             </li>
-            <li class="p-3 bg-stone-50 rounded-lg border-l-4 border-red-400">
-              <strong class="text-stone-900">ACT:</strong> Write tools with built-in
-              reflexes (emit_event, execute_action)
+            <li
+              class="p-3 bg-stone-50 dark:bg-stone-900 rounded-lg border-l-4 border-red-400"
+            >
+              <strong class="text-stone-900 dark:text-stone-200">ACT:</strong> Write
+              tools with built-in reflexes (emit_event, execute_action)
             </li>
           </ul>
         </div>
 
-        <div class="bg-white p-6 rounded-2xl shadow-sm border border-stone-200">
+        <div
+          class="bg-white dark:bg-stone-950 p-6 rounded-2xl shadow-sm border border-stone-200 dark:border-stone-800 transition-colors"
+        >
           <h3
             class="font-bold text-copper mb-2 uppercase tracking-wide text-sm"
           >
             Latency & Autonomy
           </h3>
-          <h4 class="font-display text-xl font-bold text-stone-900 mb-4">
+          <h4
+            class="font-display text-xl font-bold text-stone-900 dark:text-stone-100 mb-4"
+          >
             What Centralizes vs. What stays Local?
           </h4>
           <div class="grid md:grid-cols-2 gap-6">
             <div>
               <div
-                class="font-bold text-stone-900 mb-2 flex items-center gap-2"
+                class="font-bold text-stone-900 dark:text-stone-200 mb-2 flex items-center gap-2"
               >
                 <svg
                   class="w-4 h-4 text-stone-400"
@@ -548,7 +607,9 @@ const base = import.meta.env.BASE_URL;
                 >
                 Centralize
               </div>
-              <ul class="text-sm text-stone-600 space-y-1 list-disc pl-4">
+              <ul
+                class="text-sm text-stone-600 dark:text-stone-400 space-y-1 list-disc pl-4"
+              >
                 <li>Shared context</li>
                 <li>Historical decisions</li>
                 <li>Schema contracts</li>
@@ -557,7 +618,7 @@ const base = import.meta.env.BASE_URL;
             </div>
             <div>
               <div
-                class="font-bold text-stone-900 mb-2 flex items-center gap-2"
+                class="font-bold text-stone-900 dark:text-stone-200 mb-2 flex items-center gap-2"
               >
                 <svg
                   class="w-4 h-4 text-stone-400"
@@ -573,7 +634,9 @@ const base = import.meta.env.BASE_URL;
                 >
                 Keep Local
               </div>
-              <ul class="text-sm text-stone-600 space-y-1 list-disc pl-4">
+              <ul
+                class="text-sm text-stone-600 dark:text-stone-400 space-y-1 list-disc pl-4"
+              >
                 <li>Reflexes & invariants</li>
                 <li>Latency-critical ops</li>
                 <li>Offline fallbacks</li>
@@ -586,7 +649,9 @@ const base = import.meta.env.BASE_URL;
     </section>
 
     <!-- Footer Meta -->
-    <footer class="text-center pt-16 border-t border-stone-200">
+    <footer
+      class="text-center pt-16 border-t border-stone-200 dark:border-stone-800"
+    >
       <p class="text-stone-500 mb-8 max-w-md mx-auto">
         Extracting engineering principles from the cutting edge of distributed
         systems.

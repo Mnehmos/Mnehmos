@@ -11,26 +11,27 @@ export const OODADiagram = () => {
   const [activeStep, setActiveStep] = useState<string | null>(null);
 
   return (
-    <div className="relative py-16 px-4 bg-stone-50 rounded-3xl border border-stone-200 overflow-hidden shadow-inner">
+    <div className="relative py-16 px-4 bg-stone-50 dark:bg-stone-900 rounded-3xl border border-stone-200 dark:border-stone-800 overflow-hidden shadow-inner transition-colors duration-300">
       <div className="flex flex-col md:flex-row justify-between items-center gap-8 relative z-10">
         {OODA_STAGES.map((stage, index) => (
           <React.Fragment key={stage.id}>
             <div 
-              className={`group flex flex-col items-center p-6 rounded-2xl transition-all duration-300 cursor-pointer w-full md:w-1/4
-                ${activeStep === stage.id ? 'bg-white shadow-xl scale-105 border-copper/50 border' : 'hover:bg-white hover:shadow-lg border border-transparent'}`}
+              className={`group flex flex-col items-center p-6 rounded-2xl transition-all duration-300 cursor-pointer w-full md:w-1/4 select-none
+                ${activeStep === stage.id ? 'bg-white dark:bg-stone-950 shadow-xl scale-105 border-copper/50 border' : 'hover:bg-white dark:hover:bg-stone-950 hover:shadow-lg border border-transparent'}`}
               onMouseEnter={() => setActiveStep(stage.id)}
               onMouseLeave={() => setActiveStep(null)}
+              onClick={() => setActiveStep(activeStep === stage.id ? null : stage.id)}
             >
               <div className={`w-12 h-12 rounded-full flex items-center justify-center text-2xl mb-4 transition-colors duration-300
-                ${activeStep === stage.id ? 'bg-copper text-white' : 'bg-stone-200 text-stone-600 group-hover:bg-copper group-hover:text-white'}`}>
+                ${activeStep === stage.id ? 'bg-copper text-white' : 'bg-stone-200 dark:bg-stone-800 text-stone-600 dark:text-stone-400 group-hover:bg-copper group-hover:text-white'}`}>
                 {stage.icon}
               </div>
               <h3 className={`font-display font-bold text-lg mb-2 transition-colors
-                ${activeStep === stage.id ? 'text-copper' : 'text-stone-900'}`}>
+                ${activeStep === stage.id ? 'text-copper' : 'text-stone-900 dark:text-stone-100'}`}>
                 {stage.label}
               </h3>
               <p className={`text-sm text-center transition-opacity duration-300
-                ${activeStep === stage.id ? 'opacity-100 text-stone-600' : 'opacity-0 md:opacity-40 group-hover:opacity-100 text-stone-500'}`}>
+                ${activeStep === stage.id ? 'opacity-100 text-stone-600 dark:text-stone-300' : 'opacity-0 md:opacity-40 group-hover:opacity-100 text-stone-500 dark:text-stone-500'}`}>
                 {stage.description}
               </p>
             </div>
@@ -55,7 +56,7 @@ export const OODADiagram = () => {
       </div>
 
       <div className="mt-8 text-center md:hidden">
-        <p className="text-stone-400 text-sm italic">Tap a stage to explore</p>
+        <p className="text-stone-400 dark:text-stone-600 text-sm italic">Tap a stage to explore</p>
       </div>
     </div>
   );

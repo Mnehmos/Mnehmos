@@ -42,12 +42,12 @@ export const StatGrid = () => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 my-12">
       {STATS.map((stat, i) => (
-        <div key={i} className="p-6 rounded-2xl bg-white border border-stone-100 shadow-sm hover:shadow-md hover:border-copper/20 transition-all group">
+        <div key={i} className="p-6 rounded-2xl bg-white dark:bg-stone-900 border border-stone-100 dark:border-stone-800 shadow-sm hover:shadow-md hover:border-copper/20 transition-all group">
           <div className="text-3xl font-display font-bold text-copper mb-1 transition-transform group-hover:scale-110 origin-left inline-block">
             <CountUp end={stat.value} suffix={stat.suffix} />
           </div>
-          <div className="font-bold text-stone-900 mb-2">{stat.label}</div>
-          <div className="text-sm text-stone-500 line-height-relaxed leading-snug">{stat.sublabel}</div>
+          <div className="font-bold text-stone-900 dark:text-stone-100 mb-2">{stat.label}</div>
+          <div className="text-sm text-stone-500 dark:text-stone-400 line-height-relaxed leading-snug">{stat.sublabel}</div>
         </div>
       ))}
     </div>

@@ -1,4 +1,5 @@
 ---
+import OrbitAnimation from "./blog/OrbitAnimation";
 const base = import.meta.env.BASE_URL;
 
 // Stats from the README
@@ -17,8 +18,11 @@ const expertise = [
 ];
 ---
 
-<section class="bg-linear-to-b from-stone-100 to-stone-50 py-20 md:py-28">
-  <div class="max-w-6xl mx-auto px-6">
+<section
+  class="bg-linear-to-b from-stone-100 to-stone-50 dark:from-stone-900 dark:to-stone-950 py-20 md:py-28 relative overflow-hidden transition-colors duration-300"
+>
+  <OrbitAnimation client:visible />
+  <div class="max-w-6xl mx-auto px-6 relative z-10">
     <div class="grid md:grid-cols-2 gap-12 items-center">
       <!-- Left: Text Content -->
       <div>
@@ -29,22 +33,24 @@ const expertise = [
         </span>
 
         <h1
-          class="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-stone-900 mb-6 leading-tight"
+          class="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-stone-900 dark:text-stone-100 mb-6 leading-tight"
         >
-          Building tools for
-          <span class="gradient-text">AI agents</span>
+          Building tools for AI agents
         </h1>
 
-        <p class="text-lg md:text-xl text-stone-600 mb-8 leading-relaxed">
+        <p
+          class="text-lg md:text-xl text-stone-600 dark:text-stone-400 mb-8 leading-relaxed"
+        >
           Tools that let AI interact with complex stateful systems—whether
-          that's a computer desktop, a distributed workflow, or a D&D campaign.
+          that&apos;s a computer desktop, a distributed workflow, or a D&D
+          campaign.
         </p>
 
         <!-- Expertise Tags -->
         <div class="flex flex-wrap gap-2 mb-8">
           {
             expertise.map((item) => (
-              <span class="px-3 py-1.5 bg-stone-200 text-stone-700 rounded-lg text-sm font-medium">
+              <span class="px-3 py-1.5 bg-stone-200 dark:bg-stone-800 text-stone-700 dark:text-stone-300 rounded-lg text-sm font-medium transition-colors">
                 {item}
               </span>
             ))
@@ -75,7 +81,7 @@ const expertise = [
             href="https://github.com/Mnehmos"
             target="_blank"
             rel="noopener noreferrer"
-            class="inline-flex items-center gap-2 bg-stone-900 text-white px-6 py-3 rounded-lg font-semibold hover:bg-stone-800 transition-colors"
+            class="inline-flex items-center gap-2 bg-stone-900 dark:bg-stone-100 text-white dark:text-stone-900 px-6 py-3 rounded-lg font-semibold hover:bg-stone-800 dark:hover:bg-stone-200 transition-colors"
           >
             <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
               <path
@@ -92,14 +98,16 @@ const expertise = [
         {
           stats.map((stat, i) => (
             <div
-              class={`bg-white p-6 rounded-2xl border border-stone-200 shadow-sm ${i === 0 ? "border-copper/30" : ""}`}
+              class={`bg-white dark:bg-stone-900 p-6 rounded-2xl border border-stone-200 dark:border-stone-800 shadow-sm transition-colors ${i === 0 ? "border-copper/30 dark:border-copper/30" : ""}`}
             >
               <div
-                class={`font-display text-3xl md:text-4xl font-bold ${i === 0 ? "text-copper" : "text-stone-900"}`}
+                class={`font-display text-3xl md:text-4xl font-bold ${i === 0 ? "text-copper" : "text-stone-900 dark:text-stone-100"}`}
               >
                 {stat.number}
               </div>
-              <div class="text-stone-600 mt-1">{stat.label}</div>
+              <div class="text-stone-600 dark:text-stone-400 mt-1">
+                {stat.label}
+              </div>
             </div>
           ))
         }
@@ -107,7 +115,9 @@ const expertise = [
     </div>
 
     <!-- Philosophy Quote -->
-    <div class="mt-16 p-8 bg-stone-900 rounded-2xl text-white">
+    <div
+      class="mt-16 p-8 bg-stone-900 dark:bg-stone-800 rounded-2xl text-white transition-colors border border-stone-800 dark:border-stone-700"
+    >
       <div class="max-w-3xl mx-auto text-center">
         <svg
           class="w-8 h-8 mx-auto mb-4 text-copper"
@@ -119,7 +129,7 @@ const expertise = [
           ></path>
         </svg>
         <p class="text-xl md:text-2xl font-display font-medium mb-4">
-          Tools don't think, they act.
+          Tools don&apos;t think, they act.
         </p>
         <p class="text-stone-400">
           Every MCP server follows these principles: Deterministic, Idempotent,
