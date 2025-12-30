@@ -1,0 +1,714 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+const title = "Prompts as Scaffolding: How Agents Should Write Code for Each Other";
+const description =
+  "The conversation history vanishes. But the codebase persists. What if agents embedded prompts in comments—turning code into an inter-agent communication channel?";
+const pubDate = new Date("2025-12-30");
+const tags = ["multi-agent", "tdd", "prompts", "architecture", "red-green-blue"];
+const base = import.meta.env.BASE_URL;
+---
+
+<BaseLayout title={title} description={description}>
+  <article class="max-w-4xl mx-auto px-6 py-12 md:py-20 overflow-hidden">
+    <!-- Breadcrumbs -->
+    <nav class="mb-12 animate-fade-in">
+      <a
+        href={`${base}blog`}
+        class="text-stone-500 dark:text-stone-400 hover:text-copper transition-colors flex items-center gap-2 text-sm font-medium group"
+      >
+        <svg
+          class="w-4 h-4 transform group-hover:-translate-x-1 transition-transform"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M15 19l-7-7 7-7"></path>
+        </svg>
+        Back to Blog
+      </a>
+    </nav>
+
+    <!-- Header -->
+    <header class="mb-16">
+      <div class="flex flex-wrap gap-2 mb-6 animate-fade-in">
+        {
+          tags.map((tag) => (
+            <span class="px-3 py-1 bg-copper/10 text-copper text-xs font-bold uppercase tracking-wider rounded-full border border-copper/10">
+              {tag}
+            </span>
+          ))
+        }
+      </div>
+
+      <h1
+        class="font-display text-4xl md:text-6xl font-bold text-stone-900 dark:text-stone-100 mb-6 leading-tight animate-slide-up"
+      >
+        Prompts as Scaffolding: <span class="text-copper">Code for Each Other</span>
+      </h1>
+
+      <p
+        class="text-xl md:text-2xl text-stone-600 dark:text-stone-300 mb-8 border-l-4 border-copper pl-6 italic animate-slide-up animation-delay-100"
+      >
+        {description}
+      </p>
+
+      <div
+        class="flex items-center gap-4 text-stone-500 font-medium animate-fade-in animation-delay-200"
+      >
+        <div
+          class="w-10 h-10 rounded-full bg-stone-200 dark:bg-stone-700 flex items-center justify-center text-stone-600 dark:text-stone-300 font-bold border-2 border-white dark:border-stone-800 shadow-sm"
+        >
+          V
+        </div>
+        <div>
+          <div class="text-stone-900 dark:text-stone-200 leading-none mb-1">
+            Vario <span class="text-stone-500 dark:text-stone-400 font-normal">aka</span> <span class="text-copper font-normal">Mnehmos</span>
+          </div>
+          <time datetime={pubDate.toISOString()} class="text-sm">
+            {
+              pubDate.toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })
+            }
+          </time>
+        </div>
+      </div>
+    </header>
+
+    <!-- Hook -->
+    <div
+      class="bg-stone-900 text-stone-300 p-8 rounded-3xl mb-16 relative overflow-hidden group animate-fade-in hover:shadow-2xl transition-shadow border border-white/10"
+    >
+      <div
+        class="absolute top-0 right-0 p-4 opacity-20 pointer-events-none group-hover:opacity-40 transition-opacity"
+      >
+        <svg class="w-32 h-32" fill="currentColor" viewBox="0 0 24 24"
+          ><path
+            d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z"
+          ></path></svg
+        >
+      </div>
+      <h3 class="text-white font-bold mb-4 flex items-center gap-2">
+        <span class="text-copper">💡</span> The Ephemeral Problem
+      </h3>
+      <p class="relative z-10 leading-relaxed text-lg">
+        Multi-agent systems have a fundamental problem: <strong class="text-white">context vanishes between conversations</strong>.
+        The orchestrator hands off to a worker, the worker completes the task, and when the next worker picks it up...
+        all that rich context is <em>gone</em>.
+      </p>
+    </div>
+
+    <!-- The Problem -->
+    <section
+      class="prose prose-stone dark:prose-invert prose-lg max-w-none mb-20 scroll-reveal"
+    >
+      <h2 class="font-display text-copper text-3xl font-bold mb-6">
+        The Context Collapse
+      </h2>
+      <p>
+        You've designed the perfect multi-agent workflow. An Orchestrator breaks down work.
+        A Red Phase agent writes failing tests. A Green Phase agent implements. A Blue Phase
+        agent refactors. Beautiful in theory.
+      </p>
+
+      <p>
+        But what actually happens?
+      </p>
+
+      <div class="my-12 not-prose">
+        <div
+          class="bg-white dark:bg-stone-800 border-2 border-stone-900 dark:border-stone-700 rounded-xl p-6 md:p-8 font-mono text-sm md:text-base shadow-[8px_8px_0px_0px_rgba(28,25,23,1)] dark:shadow-[8px_8px_0px_0px_rgba(255,255,255,0.1)] transition-colors"
+        >
+          <div
+            class="border-b-2 border-stone-200 dark:border-stone-600 pb-4 mb-4 text-center font-bold text-stone-900 dark:text-stone-100"
+          >
+            REALITY OF MULTI-AGENT HANDOFFS
+          </div>
+          <div class="flex flex-col gap-3 text-stone-600 dark:text-stone-400">
+            <div class="flex items-start gap-3">
+              <span class="w-8 h-8 rounded-full bg-red-500/20 text-red-400 flex items-center justify-center text-xs font-bold shrink-0">🔴</span>
+              <span><strong class="text-stone-900 dark:text-stone-100">Red Phase:</strong> Writes tests with deep understanding of edge cases, noting why certain tests exist</span>
+            </div>
+            <div class="flex items-start gap-3">
+              <span class="w-8 h-8 rounded-full bg-yellow-500/20 text-yellow-400 flex items-center justify-center text-xs font-bold shrink-0">📤</span>
+              <span><strong class="text-stone-900 dark:text-stone-100">Handoff:</strong> "Tests written. Task complete."</span>
+            </div>
+            <div class="flex items-start gap-3">
+              <span class="w-8 h-8 rounded-full bg-green-500/20 text-green-400 flex items-center justify-center text-xs font-bold shrink-0">🟢</span>
+              <span><strong class="text-stone-900 dark:text-stone-100">Green Phase:</strong> Opens test file. No idea <em>why</em> the tests exist. Just makes them pass.</span>
+            </div>
+            <div class="flex items-start gap-3">
+              <span class="w-8 h-8 rounded-full bg-yellow-500/20 text-yellow-400 flex items-center justify-center text-xs font-bold shrink-0">📤</span>
+              <span><strong class="text-stone-900 dark:text-stone-100">Handoff:</strong> "Implementation done. All tests green."</span>
+            </div>
+            <div class="flex items-start gap-3">
+              <span class="w-8 h-8 rounded-full bg-blue-500/20 text-blue-400 flex items-center justify-center text-xs font-bold shrink-0">🔵</span>
+              <span><strong class="text-stone-900 dark:text-stone-100">Blue Phase:</strong> Opens both files. No history. No intent. Just... code.</span>
+            </div>
+          </div>
+          <div class="mt-6 text-center text-xs text-red-400 uppercase tracking-widest font-bold">
+            🔥 Context collapsed at every handoff 🔥
+          </div>
+        </div>
+      </div>
+
+      <p>
+        The boomerang payload helps—it carries <code>summary</code> and <code>notes</code>. But it's
+        still external to the code. It lives in the conversation history. And conversation history
+        is ephemeral, token-limited, and invisible to future agents in future sessions.
+      </p>
+    </section>
+
+    <!-- The Insight -->
+    <section class="mb-20 scroll-reveal">
+      <div
+        class="bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 p-8 md:p-12 rounded-4xl shadow-sm relative overflow-hidden transition-colors"
+      >
+        <div
+          class="absolute -right-20 -top-20 w-64 h-64 bg-copper/5 rounded-full blur-3xl"
+        >
+        </div>
+        <h2 class="font-display text-copper text-4xl font-bold mb-4">
+          The Codebase Is Persistent. Use It.
+        </h2>
+        <p
+          class="text-lg text-stone-600 dark:text-stone-300 mb-8 leading-relaxed"
+        >
+          The insight hit me while analyzing the multi-agent framework: <strong>the codebase
+          is the only thing that survives between agent sessions</strong>. So why not
+          use it as the communication channel?
+        </p>
+
+        <div class="grid md:grid-cols-2 gap-8">
+          <div
+            class="bg-stone-50 dark:bg-stone-950 p-6 rounded-2xl border border-stone-100 dark:border-stone-800 h-full"
+          >
+            <h4
+              class="font-bold text-stone-900 dark:text-stone-100 mb-3 flex items-center gap-2"
+            >
+              <span
+                class="w-8 h-8 rounded-full bg-red-500/10 text-red-400 flex items-center justify-center text-sm font-mono"
+                >❌</span
+              >
+              Conversation History
+            </h4>
+            <p
+              class="text-sm text-stone-500 dark:text-stone-400 leading-relaxed"
+            >
+              Ephemeral. Token-limited. Lost between sessions.
+              Invisible to agents that join later. Requires explicit
+              handoff payloads that are easily forgotten.
+            </p>
+          </div>
+          <div
+            class="bg-stone-50 dark:bg-stone-950 p-6 rounded-2xl border border-stone-100 dark:border-stone-800 h-full"
+          >
+            <h4
+              class="font-bold text-stone-900 dark:text-stone-100 mb-3 flex items-center gap-2"
+            >
+              <span
+                class="w-8 h-8 rounded-full bg-green-500/10 text-green-400 flex items-center justify-center text-sm font-mono"
+                >✓</span
+              >
+              The Codebase
+            </h4>
+            <p
+              class="text-sm text-stone-500 dark:text-stone-400 leading-relaxed"
+            >
+              Persistent. Git-tracked. Always available.
+              Comments, TODOs, JSDoc—they're already part of the code.
+              Future agents <em>will read the code</em>. They can read instructions too.
+            </p>
+          </div>
+        </div>
+
+        <div class="mt-8 bg-stone-950 dark:bg-black rounded-xl p-6 font-mono text-sm border-l-4 border-copper text-stone-300 overflow-x-auto">
+          <code class="block">
+            <span class="text-stone-500">// The key insight:</span><br />
+            <span class="text-stone-500">// Instead of just writing code...</span><br />
+            <span class="text-stone-500">// Write code that INSTRUCTS the next agent.</span><br />
+            <br />
+            <span class="text-purple-300">// TODO(green-phase):</span> <span class="text-green-300">This test expects retry logic with exponential backoff.</span><br />
+            <span class="text-purple-300">// TODO(green-phase):</span> <span class="text-green-300">Max 3 retries, base delay 1000ms.</span><br />
+            <span class="text-purple-300">// CONTEXT:</span> <span class="text-yellow-300">User complained about flaky network in issue #47.</span><br />
+            <br />
+            <span class="text-blue-300">test</span>(<span class="text-green-300">'should retry failed requests with exponential backoff'</span>, ...);
+          </code>
+        </div>
+      </div>
+    </section>
+
+    <!-- The Pattern -->
+    <section
+      class="prose prose-stone dark:prose-invert prose-lg max-w-none mb-20 scroll-reveal"
+    >
+      <h2 class="font-display text-copper text-3xl font-bold mb-6">
+        The Scaffolding Pattern
+      </h2>
+      <p>
+        I call this <strong>Prompts as Scaffolding</strong>: using code comments as inter-agent
+        communication that persists across sessions and survives context collapse.
+      </p>
+
+      <p>
+        The key is structured annotations that tell the next phase <em>exactly</em> what to do:
+      </p>
+
+      <div class="my-12 not-prose">
+        <div class="grid gap-6">
+          <div class="bg-red-500/5 dark:bg-red-500/10 p-6 rounded-2xl border border-red-500/20">
+            <h4 class="font-bold text-red-500 mb-2 flex items-center gap-2">
+              <span class="font-mono">🔴</span> Red Phase → Green Phase
+            </h4>
+            <div class="bg-stone-950 rounded-xl p-4 font-mono text-xs text-stone-300 overflow-x-auto">
+              <pre>{`// TODO(green-phase): Implement validateToken function
+// SIGNATURE: (token: string) => Promise<TokenPayload | null>
+// REQUIREMENTS:
+//   - Return null for invalid/expired tokens
+//   - Parse JWT and extract payload
+//   - Cache valid tokens for 5 minutes
+// EDGE_CASES:
+//   - Empty string should return null
+//   - Malformed JWT should return null, not throw
+// CONTEXT: This is security-critical. See auth ADR-003.
+
+test('should validate and cache JWT tokens', async () => {
+  // Test implementation...
+});`}</pre>
+            </div>
+          </div>
+
+          <div class="bg-green-500/5 dark:bg-green-500/10 p-6 rounded-2xl border border-green-500/20">
+            <h4 class="font-bold text-green-500 mb-2 flex items-center gap-2">
+              <span class="font-mono">🟢</span> Green Phase → Blue Phase
+            </h4>
+            <div class="bg-stone-950 rounded-xl p-4 font-mono text-xs text-stone-300 overflow-x-auto">
+              <pre>{`// REFACTOR(blue-phase): This cache implementation is naive.
+// ISSUES:
+//   - Memory leak: no eviction beyond TTL
+//   - No cache warming strategy
+//   - Consider using LRU cache library
+// LEAVE_ALONE: Core JWT parsing is intentionally simple
+
+const tokenCache = new Map<string, {payload: TokenPayload, expiresAt: number}>();
+
+export async function validateToken(token: string): Promise<TokenPayload | null> {
+  // Implementation that makes tests pass...
+}`}</pre>
+            </div>
+          </div>
+
+          <div class="bg-blue-500/5 dark:bg-blue-500/10 p-6 rounded-2xl border border-blue-500/20">
+            <h4 class="font-bold text-blue-500 mb-2 flex items-center gap-2">
+              <span class="font-mono">🔵</span> Blue Phase → Future Work
+            </h4>
+            <div class="bg-stone-950 rounded-xl p-4 font-mono text-xs text-stone-300 overflow-x-auto">
+              <pre>{`// EXTEND(feature): Add token refresh capability
+// WHEN: User requests keep-me-logged-in feature
+// APPROACH: Check expiry before validation, refresh if under 5min remaining
+// BLOCKED_BY: Need refresh token endpoint from backend team
+
+/**
+ * Validates a JWT token and returns its payload.
+ *
+ * @security This is the auth boundary. All routes depend on this.
+ * @perf Uses LRU cache with 1000-entry limit, 5-minute TTL.
+ * @see ADR-003 for design decisions
+ */
+export async function validateToken(token: string): Promise<TokenPayload | null> {
+  // Clean, refactored implementation...
+}`}</pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Annotation Taxonomy -->
+    <section class="mb-20 scroll-reveal">
+      <div
+        class="relative bg-stone-900 rounded-4xl p-8 md:p-12 overflow-hidden text-stone-300"
+      >
+        <div
+          class="absolute inset-0 bg-linear-to-b from-stone-800/50 to-stone-900 pointer-events-none"
+        >
+        </div>
+        <div class="absolute top-0 right-0 p-8 opacity-10">
+          <svg class="w-64 h-64" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"></path>
+          </svg>
+        </div>
+
+        <div class="relative z-10">
+          <h2
+            class="font-display text-3xl md:text-4xl font-bold text-white mb-6"
+          >
+            An Annotation Taxonomy
+          </h2>
+          <p class="text-lg leading-relaxed mb-8">
+            Different annotations serve different purposes. Here's a taxonomy for
+            inter-agent communication through code:
+          </p>
+
+          <div class="grid md:grid-cols-2 gap-4">
+            <div class="bg-stone-950 p-4 rounded-xl border border-stone-800">
+              <div class="text-copper font-mono font-bold mb-2 text-sm">TODO(target-mode)</div>
+              <p class="text-sm text-stone-400">Action required. The target mode should do this.</p>
+            </div>
+            <div class="bg-stone-950 p-4 rounded-xl border border-stone-800">
+              <div class="text-yellow-400 font-mono font-bold mb-2 text-sm">CONTEXT:</div>
+              <p class="text-sm text-stone-400">Background information. Why this exists.</p>
+            </div>
+            <div class="bg-stone-950 p-4 rounded-xl border border-stone-800">
+              <div class="text-blue-400 font-mono font-bold mb-2 text-sm">REFACTOR(target-mode)</div>
+              <p class="text-sm text-stone-400">Works, but needs improvement. Non-blocking.</p>
+            </div>
+            <div class="bg-stone-950 p-4 rounded-xl border border-stone-800">
+              <div class="text-green-400 font-mono font-bold mb-2 text-sm">REQUIREMENTS:</div>
+              <p class="text-sm text-stone-400">Specification of expected behavior. Testable.</p>
+            </div>
+            <div class="bg-stone-950 p-4 rounded-xl border border-stone-800">
+              <div class="text-purple-400 font-mono font-bold mb-2 text-sm">EDGE_CASES:</div>
+              <p class="text-sm text-stone-400">Non-obvious inputs that must be handled.</p>
+            </div>
+            <div class="bg-stone-950 p-4 rounded-xl border border-stone-800">
+              <div class="text-red-400 font-mono font-bold mb-2 text-sm">LEAVE_ALONE:</div>
+              <p class="text-sm text-stone-400">Explicitly not for optimization. Has reasons.</p>
+            </div>
+            <div class="bg-stone-950 p-4 rounded-xl border border-stone-800">
+              <div class="text-orange-400 font-mono font-bold mb-2 text-sm">BLOCKED_BY:</div>
+              <p class="text-sm text-stone-400">Cannot proceed until external dependency resolves.</p>
+            </div>
+            <div class="bg-stone-950 p-4 rounded-xl border border-stone-800">
+              <div class="text-cyan-400 font-mono font-bold mb-2 text-sm">EXTEND(feature)</div>
+              <p class="text-sm text-stone-400">Future enhancement point. Not for current scope.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Integration with Boomerang -->
+    <section
+      class="prose prose-stone dark:prose-invert prose-lg max-w-none mb-20 scroll-reveal"
+    >
+      <h2 class="font-display text-copper text-3xl font-bold mb-6">
+        Combining with Boomerang Payloads
+      </h2>
+      <p>
+        Prompts-as-scaffolding doesn't <em>replace</em> structured handoffs—it <strong>augments</strong>
+        them. The boomerang payload carries the immediate summary; the code annotations carry the deep context.
+      </p>
+
+      <div class="my-12 not-prose">
+        <div class="bg-white dark:bg-stone-800 border-2 border-stone-900 dark:border-stone-700 rounded-xl p-6 font-mono text-sm shadow-lg transition-colors overflow-x-auto">
+          <div class="text-center font-bold text-stone-900 dark:text-stone-100 mb-6 text-lg">
+            COMPLETE HANDOFF PATTERN
+          </div>
+          
+          <div class="space-y-4 text-stone-600 dark:text-stone-400">
+            <div class="bg-stone-100 dark:bg-stone-900 p-4 rounded-lg">
+              <div class="text-copper font-bold mb-2">1️⃣ Code Annotations (Persistent)</div>
+              <code class="text-xs block">
+                <span class="text-stone-500">// Embedded in test files, source files, JSDoc</span><br />
+                <span class="text-stone-500">// Survives sessions, searchable, git-tracked</span>
+              </code>
+            </div>
+            
+            <div class="bg-stone-100 dark:bg-stone-900 p-4 rounded-lg">
+              <div class="text-green-400 font-bold mb-2">2️⃣ Boomerang Payload (Immediate)</div>
+              <code class="text-xs block text-green-300">
+{`{
+  "type": "task-completed",
+  "from": "red-phase",
+  "to": "orchestrator",
+  "summary": "Wrote 7 failing tests for validateToken",
+  "files_changed": ["tests/auth/validateToken.test.ts"],
+  "notes": "See TODO(green-phase) annotations for impl hints"
+}`}
+              </code>
+            </div>
+
+            <div class="bg-stone-100 dark:bg-stone-900 p-4 rounded-lg">
+              <div class="text-purple-400 font-bold mb-2">3️⃣ Orchestrator Decision</div>
+              <code class="text-xs block text-stone-500">
+                // Orchestrator reads boomerang, knows to dispatch green-phase<br />
+                // Green-phase reads code, finds TODO(green-phase) annotations<br />
+                // Full context survives even if orchestrator restarts
+              </code>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Why This Works -->
+    <section
+      class="bg-stone-100 dark:bg-stone-900 rounded-4xl p-8 md:p-12 mb-20 scroll-reveal transition-colors"
+    >
+      <h2
+        class="font-display text-3xl font-bold text-stone-900 dark:text-stone-100 mb-8"
+      >
+        Why This Actually Works
+      </h2>
+      <p class="text-lg text-stone-600 dark:text-stone-400 mb-8">
+        This isn't just theory. There are structural reasons why prompts-as-scaffolding
+        outperforms pure conversation-based handoffs:
+      </p>
+
+      <div class="grid md:grid-cols-2 gap-6">
+        <div class="bg-white dark:bg-stone-950 p-6 rounded-2xl shadow-sm border border-stone-200 dark:border-stone-800">
+          <h4 class="font-bold text-stone-900 dark:text-stone-100 mb-3">1. Locality of Reference</h4>
+          <p class="text-sm text-stone-500 dark:text-stone-400">
+            The instructions are <em>next to the code they describe</em>. Green-phase
+            doesn't need to remember what the orchestrator said—it's right there
+            above the test it needs to implement.
+          </p>
+        </div>
+        <div class="bg-white dark:bg-stone-950 p-6 rounded-2xl shadow-sm border border-stone-200 dark:border-stone-800">
+          <h4 class="font-bold text-stone-900 dark:text-stone-100 mb-3">2. Git History as Audit Trail</h4>
+          <p class="text-sm text-stone-500 dark:text-stone-400">
+            When annotations are removed (TODO completed), it shows in the diff.
+            You can trace what guidance was given and when it was fulfilled.
+            Conversation history can't do this.
+          </p>
+        </div>
+        <div class="bg-white dark:bg-stone-950 p-6 rounded-2xl shadow-sm border border-stone-200 dark:border-stone-800">
+          <h4 class="font-bold text-stone-900 dark:text-stone-100 mb-3">3. Searchable Context</h4>
+          <p class="text-sm text-stone-500 dark:text-stone-400">
+            <code>grep "TODO(blue-phase)"</code> instantly shows all pending refactors.
+            <code>grep "BLOCKED_BY"</code> shows all external dependencies.
+            Try doing that with conversation history.
+          </p>
+        </div>
+        <div class="bg-white dark:bg-stone-950 p-6 rounded-2xl shadow-sm border border-stone-200 dark:border-stone-800">
+          <h4 class="font-bold text-stone-900 dark:text-stone-100 mb-3">4. Human-Readable Too</h4>
+          <p class="text-sm text-stone-500 dark:text-stone-400">
+            These annotations are useful for human developers too.
+            Good comments are good comments. This isn't LLM-specific markup—it's
+            just structured documentation.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Implementation Guide -->
+    <section class="mb-20 scroll-reveal">
+      <h2
+        class="font-display text-3xl font-bold text-stone-900 dark:text-stone-100 mb-8"
+      >
+        Implementation: Mode Contracts
+      </h2>
+
+      <p class="text-lg text-stone-600 dark:text-stone-400 mb-8">
+        The pattern works best when it's part of the mode contract itself—not something
+        agents "should" do, but something they're <strong>required</strong> to do.
+      </p>
+
+      <div class="space-y-6">
+        <div
+          class="bg-white dark:bg-stone-950 p-6 rounded-2xl shadow-sm border border-stone-200 dark:border-stone-800 transition-colors"
+        >
+          <h3
+            class="font-bold text-copper mb-2 uppercase tracking-wide text-sm"
+          >
+            Red Phase Contract
+          </h3>
+          <div class="bg-stone-950 rounded-xl p-4 font-mono text-xs text-green-400 overflow-x-auto">
+            <pre>{`# Red Phase - TDD Test Writing Contract
+
+1. Write failing tests that define expected behavior
+2. ⚠️ FOR EACH TEST, INCLUDE:
+   - TODO(green-phase) with implementation hints
+   - REQUIREMENTS block listing expected behaviors  
+   - EDGE_CASES block for non-obvious inputs
+   - CONTEXT block explaining why this test exists
+
+3. Test file becomes a SPECIFICATION DOCUMENT
+   not just assertions`}</pre>
+          </div>
+        </div>
+
+        <div
+          class="bg-white dark:bg-stone-950 p-6 rounded-2xl shadow-sm border border-stone-200 dark:border-stone-800 transition-colors"
+        >
+          <h3
+            class="font-bold text-copper mb-2 uppercase tracking-wide text-sm"
+          >
+            Green Phase Contract
+          </h3>
+          <div class="bg-stone-950 rounded-xl p-4 font-mono text-xs text-green-400 overflow-x-auto">
+            <pre>{`# Green Phase - TDD Implementation Contract
+
+1. Read all TODO(green-phase) annotations before coding
+2. Implement EXACTLY what annotations specify
+3. ⚠️ WHEN DONE:
+   - Remove completed TODO(green-phase) annotations
+   - Add REFACTOR(blue-phase) for known compromises
+   - Add LEAVE_ALONE for intentional simplicity
+
+4. If annotation is unclear: ask, don't guess`}</pre>
+          </div>
+        </div>
+
+        <div
+          class="bg-white dark:bg-stone-950 p-6 rounded-2xl shadow-sm border border-stone-200 dark:border-stone-800 transition-colors"
+        >
+          <h3
+            class="font-bold text-copper mb-2 uppercase tracking-wide text-sm"
+          >
+            Blue Phase Contract
+          </h3>
+          <div class="bg-stone-950 rounded-xl p-4 font-mono text-xs text-green-400 overflow-x-auto">
+            <pre>{`# Blue Phase - TDD Refactor Contract
+
+1. Search for REFACTOR(blue-phase) annotations
+2. Respect LEAVE_ALONE markers
+3. ⚠️ WHEN DONE:
+   - Remove completed REFACTOR annotations
+   - Add EXTEND(feature) for future enhancements
+   - Update JSDoc with @security, @perf, @see
+
+4. Final code should have NO phase-specific TODOs
+   Only EXTEND markers for future work`}</pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Summary -->
+    <section
+      class="prose prose-stone dark:prose-invert prose-lg max-w-none mb-20 scroll-reveal"
+    >
+      <h2 class="font-display text-copper text-3xl font-bold mb-6">
+        The Codebase as Communication Medium
+      </h2>
+      <p>
+        Multi-agent systems fail when they treat code as output and conversation as context.
+        The code persists; the conversation evaporates.
+      </p>
+
+      <p>
+        Prompts-as-scaffolding inverts this: <strong>embed the context in the code</strong>.
+        When agents write code, they're not just solving the current task—they're
+        <em>teaching the next agent</em> how to continue their work.
+      </p>
+
+      <div class="my-12 not-prose">
+        <div class="bg-stone-950 rounded-xl p-6 border-l-4 border-copper">
+          <p class="text-copper font-bold mb-4 text-lg">The Pattern in One Sentence</p>
+          <p class="text-stone-300 text-lg leading-relaxed">
+            <span class="text-white font-bold">Write code that instructs the next agent.</span><br /><br />
+            Red Phase writes tests that teach Green Phase what to implement.<br />
+            Green Phase writes code that teaches Blue Phase what to refactor.<br />
+            Blue Phase writes documentation that teaches Future Work what to extend.
+          </p>
+        </div>
+      </div>
+
+      <p>
+        The codebase becomes a persistent, searchable, git-tracked communication channel
+        between agents across time. Context collapse becomes context accumulation.
+      </p>
+
+      <p>
+        And the best part? It's just good documentation. The techniques that help agents
+        work together also help humans understand the code. There's no LLM-specific magic—just
+        structured comments with a specific purpose.
+      </p>
+    </section>
+
+    <!-- Footer Meta -->
+    <footer
+      class="text-center pt-16 border-t border-stone-200 dark:border-stone-800"
+    >
+      <p class="text-stone-500 mb-8 max-w-md mx-auto">
+        This pattern emerged from building the Advanced Multi-Agent Framework and analyzing
+        prompt engineering research at mnehmos.prompts.research.
+      </p>
+      <div class="flex justify-center gap-6">
+        <a
+          href="https://github.com/Mnehmos"
+          class="text-stone-400 hover:text-copper transition-colors"
+        >
+          <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"
+            ><path
+              d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.111.825-.261.825-.579 0-.285-.011-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.22 0 4.609-2.807 5.627-5.479 5.921.43.372.823 1.102.823 2.222 0 1.606-.015 2.896-.015 3.286 0 .321.222.696.832.57C20.565 21.795 24 17.31 24 12c0-6.63-5.37-12-12-12z"
+            ></path></svg
+          >
+        </a>
+      </div>
+    </footer>
+  </article>
+
+  <!-- Global Animations -->
+  <style is:global>
+    @keyframes fade-in {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+    @keyframes slide-up {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .animate-fade-in {
+      animation: fade-in 1s ease-out forwards;
+    }
+    .animate-slide-up {
+      opacity: 0;
+      animation: slide-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    .animation-delay-100 {
+      animation-delay: 0.1s;
+    }
+    .animation-delay-200 {
+      animation-delay: 0.2s;
+    }
+
+    .scroll-reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .scroll-reveal.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+
+  <script>
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: "0px 0px -50px 0px",
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("active");
+        }
+      });
+    }, observerOptions);
+
+    document
+      .querySelectorAll(".scroll-reveal")
+      .forEach((el) => observer.observe(el));
+  </script>
+</BaseLayout>

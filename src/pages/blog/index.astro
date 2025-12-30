@@ -19,6 +19,19 @@ const collectionPosts = await getCollection("blog", ({ data }) => !data.draft);
 // 5. If converting a Markdown post, DELETE the original .md file to prevent collisions.
 const manualPosts = [
   {
+    slug: "prompts-as-scaffolding",
+    data: {
+      title: "Prompts as Scaffolding: How Agents Should Write Code for Each Other",
+      description:
+        "The conversation history vanishes. But the codebase persists. What if agents embedded prompts in comments—turning code into an inter-agent communication channel?",
+      pubDate: new Date("2025-12-30"),
+      tags: ["multi-agent", "tdd", "prompts", "architecture", "red-green-blue"],
+      draft: false,
+      lesson:
+        "Write code that instructs the next agent. Red Phase writes tests that teach Green Phase what to implement. The codebase becomes a persistent, searchable, git-tracked communication channel between agents across time.",
+    },
+  },
+  {
     slug: "emergent-rag",
     data: {
       title: "RAG Without Vectors: How File System Tools Give LLMs Emergent Retrieval",
