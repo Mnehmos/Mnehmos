@@ -19,6 +19,19 @@ const collectionPosts = await getCollection("blog", ({ data }) => !data.draft);
 // 5. If converting a Markdown post, DELETE the original .md file to prevent collisions.
 const manualPosts = [
   {
+    slug: "scalpel-not-hammer",
+    data: {
+      title: "The Scalpel, Not the Hammer: Scope as the Cure for Token Bloat",
+      description:
+        "Custom DSLs compress tokens. Scope constraints eliminate them. The real efficiency isn't syntax—it's knowing exactly what surgery you're performing.",
+      pubDate: new Date("2025-12-31"),
+      tags: ["scope", "tokens", "mcp", "prompting", "architecture"],
+      draft: false,
+      lesson:
+        "Tokens = Scope × Iterations × Verbosity. DSLs attack verbosity. But constrained scope and fuzzy-matched-guiding-errors reduce iterations. Batch operations collapse 20 calls into 1. The scalpel cuts all three.",
+    },
+  },
+  {
     slug: "prompts-as-scaffolding",
     data: {
       title: "Prompts as Scaffolding: How Agents Should Write Code for Each Other",

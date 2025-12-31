@@ -1,0 +1,708 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+const title = "The Scalpel, Not the Hammer: Scope as the Cure for Token Bloat";
+const description =
+  "Custom DSLs compress tokens. Scope constraints eliminate them. The real efficiency isn't syntax—it's knowing exactly what surgery you're performing.";
+const pubDate = new Date("2025-12-31");
+const tags = ["scope", "tokens", "mcp", "prompting", "architecture"];
+const base = import.meta.env.BASE_URL;
+---
+
+<BaseLayout title={title} description={description}>
+  <article class="max-w-4xl mx-auto px-6 py-12 md:py-20 overflow-hidden">
+    <!-- Breadcrumbs -->
+    <nav class="mb-12 animate-fade-in">
+      <a
+        href={`${base}blog`}
+        class="text-stone-500 dark:text-stone-400 hover:text-copper transition-colors flex items-center gap-2 text-sm font-medium group"
+      >
+        <svg
+          class="w-4 h-4 transform group-hover:-translate-x-1 transition-transform"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M15 19l-7-7 7-7"></path>
+        </svg>
+        Back to Blog
+      </a>
+    </nav>
+
+    <!-- Header -->
+    <header class="mb-16">
+      <div class="flex flex-wrap gap-2 mb-6 animate-fade-in">
+        {
+          tags.map((tag) => (
+            <span class="px-3 py-1 bg-copper/10 text-copper text-xs font-bold uppercase tracking-wider rounded-full border border-copper/10">
+              {tag}
+            </span>
+          ))
+        }
+      </div>
+
+      <h1
+        class="font-display text-4xl md:text-6xl font-bold text-stone-900 dark:text-stone-100 mb-6 leading-tight animate-slide-up"
+      >
+        The Scalpel, Not the Hammer: <span class="text-copper">Scope as the Cure</span>
+      </h1>
+
+      <p
+        class="text-xl md:text-2xl text-stone-600 dark:text-stone-300 mb-8 border-l-4 border-copper pl-6 italic animate-slide-up animation-delay-100"
+      >
+        {description}
+      </p>
+
+      <div
+        class="flex items-center gap-4 text-stone-500 font-medium animate-fade-in animation-delay-200"
+      >
+        <div
+          class="w-10 h-10 rounded-full bg-stone-200 dark:bg-stone-700 flex items-center justify-center text-stone-600 dark:text-stone-300 font-bold border-2 border-white dark:border-stone-800 shadow-sm"
+        >
+          V
+        </div>
+        <div>
+          <div class="text-stone-900 dark:text-stone-200 leading-none mb-1">
+            Vario <span class="text-stone-500 dark:text-stone-400 font-normal">aka</span> <span class="text-copper font-normal">Mnehmos</span>
+          </div>
+          <time datetime={pubDate.toISOString()} class="text-sm">
+            {
+              pubDate.toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })
+            }
+          </time>
+        </div>
+      </div>
+    </header>
+
+    <!-- Hook -->
+    <div
+      class="bg-stone-900 text-stone-300 p-8 rounded-3xl mb-16 relative overflow-hidden group animate-fade-in hover:shadow-2xl transition-shadow border border-white/10"
+    >
+      <div
+        class="absolute top-0 right-0 p-4 opacity-20 pointer-events-none group-hover:opacity-40 transition-opacity"
+      >
+        <svg class="w-32 h-32" fill="currentColor" viewBox="0 0 24 24"
+          ><path
+            d="M14.06 9.02l.92.92L5.92 19H5v-.92l9.06-9.06M17.66 3c-.25 0-.51.1-.7.29l-1.83 1.83 3.75 3.75 1.83-1.83c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.2-.2-.45-.29-.71-.29zm-3.6 3.19L3 17.25V21h3.75L17.81 9.94l-3.75-3.75z"
+          ></path></svg
+        >
+      </div>
+      <h3 class="text-white font-bold mb-4 flex items-center gap-2">
+        <span class="text-copper">🔪</span> The Compression Trap
+      </h3>
+      <p class="relative z-10 leading-relaxed text-lg">
+        Someone asks: "How do I reduce tokens in MCP interactions?"<br /><br />
+        The instinct is to <strong class="text-white">compress</strong>—custom DSLs, terse syntax, 
+        encoded commands. But compression treats symptoms. <strong class="text-copper">Scope treats the disease.</strong>
+      </p>
+    </div>
+
+    <!-- The Problem -->
+    <section
+      class="prose prose-stone dark:prose-invert prose-lg max-w-none mb-20 scroll-reveal"
+    >
+      <h2 class="font-display text-copper text-3xl font-bold mb-6">
+        The Hammer Approach
+      </h2>
+      <p>
+        I recently saw a proposal for a "Command Language" to reduce MCP token usage. 
+        The idea: define a compact DSL that LLMs translate user requests into.
+      </p>
+
+      <div class="my-12 not-prose">
+        <div
+          class="bg-white dark:bg-stone-800 border-2 border-stone-900 dark:border-stone-700 rounded-xl p-6 md:p-8 font-mono text-sm md:text-base shadow-[8px_8px_0px_0px_rgba(28,25,23,1)] dark:shadow-[8px_8px_0px_0px_rgba(255,255,255,0.1)] transition-colors"
+        >
+          <div
+            class="border-b-2 border-stone-200 dark:border-stone-600 pb-4 mb-4 text-center font-bold text-stone-900 dark:text-stone-100"
+          >
+            THE "COMMAND LANGUAGE" APPROACH
+          </div>
+          <div class="text-stone-600 dark:text-stone-400 space-y-4">
+            <div class="bg-stone-100 dark:bg-stone-900 p-4 rounded-lg">
+              <span class="text-copper font-bold">System Prompt:</span>
+              <p class="mt-2 text-sm">
+                "You <strong>MUST NOT</strong> answer user questions directly using your own knowledge.
+                You <strong>MUST</strong> translate all user requests into valid commands of the defined language.
+                Correctness is mandatory."
+              </p>
+            </div>
+            <div class="bg-stone-100 dark:bg-stone-900 p-4 rounded-lg">
+              <span class="text-green-400 font-bold">User:</span>
+              <p class="mt-2 text-sm">"Calculate nutrition for 1 cup peanut butter, 1/2 cup sugar, 1 egg"</p>
+            </div>
+            <div class="bg-stone-100 dark:bg-stone-900 p-4 rounded-lg">
+              <span class="text-blue-400 font-bold">LLM Output:</span>
+              <pre class="mt-2 text-xs overflow-x-auto">{`nutrition_facts(
+  recipe(
+    ingredient("peanut butter", "1 cup"),
+    ingredient("sugar", "1/2 cup"),
+    ingredient("egg", "1")
+  ),
+  "50 g"
+)`}</pre>
+            </div>
+          </div>
+          <div class="mt-6 text-center text-xs text-yellow-400 uppercase tracking-widest font-bold">
+            Fewer tokens? Maybe. Fewer problems? No.
+          </div>
+        </div>
+      </div>
+
+      <p>
+        This is the hammer. It <em>looks</em> efficient. Compact syntax. Structured output. 
+        But watch what happens:
+      </p>
+
+      <ul>
+        <li><strong>The LLM stops reasoning.</strong> "MUST NOT answer using own knowledge" lobotomizes it.</li>
+        <li><strong>Ambiguity becomes failure.</strong> What brand of peanut butter? The DSL has no space for clarification.</li>
+        <li><strong>Errors cascade.</strong> One typo in the DSL = unparseable output = retry = <em>more</em> tokens.</li>
+        <li><strong>You're parsing twice.</strong> User → LLM → DSL → Server. Why not User → LLM → Tool?</li>
+      </ul>
+    </section>
+
+    <!-- The Scalpel -->
+    <section class="mb-20 scroll-reveal">
+      <div
+        class="bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 p-8 md:p-12 rounded-4xl shadow-sm relative overflow-hidden transition-colors"
+      >
+        <div
+          class="absolute -right-20 -top-20 w-64 h-64 bg-copper/5 rounded-full blur-3xl"
+        >
+        </div>
+        <h2 class="font-display text-copper text-4xl font-bold mb-4">
+          The Scalpel Approach
+        </h2>
+        <p
+          class="text-lg text-stone-600 dark:text-stone-300 mb-8 leading-relaxed"
+        >
+          Token efficiency doesn't come from <em>compressing</em> what you say.
+          It comes from <strong>not saying things you don't need to say</strong>.
+        </p>
+
+        <div class="grid md:grid-cols-2 gap-8">
+          <div
+            class="bg-stone-50 dark:bg-stone-950 p-6 rounded-2xl border border-stone-100 dark:border-stone-800 h-full"
+          >
+            <h4
+              class="font-bold text-stone-900 dark:text-stone-100 mb-3 flex items-center gap-2"
+            >
+              <span
+                class="w-8 h-8 rounded-full bg-red-500/10 text-red-400 flex items-center justify-center text-sm font-mono"
+                >🔨</span
+              >
+              Hammer: Compress Everything
+            </h4>
+            <p
+              class="text-sm text-stone-500 dark:text-stone-400 leading-relaxed"
+            >
+              Define a DSL. Train the model to use it. Parse the output.
+              Handle edge cases. Retry failures. Debug syntax errors.
+              Token count: lower per message, higher overall.
+            </p>
+          </div>
+          <div
+            class="bg-stone-50 dark:bg-stone-950 p-6 rounded-2xl border border-stone-100 dark:border-stone-800 h-full"
+          >
+            <h4
+              class="font-bold text-stone-900 dark:text-stone-100 mb-3 flex items-center gap-2"
+            >
+              <span
+                class="w-8 h-8 rounded-full bg-green-500/10 text-green-400 flex items-center justify-center text-sm font-mono"
+                >🔪</span
+              >
+              Scalpel: Constrain Scope
+            </h4>
+            <p
+              class="text-sm text-stone-500 dark:text-stone-400 leading-relaxed"
+            >
+              Give the model exactly the tools it needs. Nothing more.
+              Rich schemas with validation. Fuzzy matching for tolerance.
+              One tool call. Done.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Three Principles -->
+    <section
+      class="prose prose-stone dark:prose-invert prose-lg max-w-none mb-20 scroll-reveal"
+    >
+      <h2 class="font-display text-copper text-3xl font-bold mb-6">
+        Three Principles of Surgical Scoping
+      </h2>
+
+      <h3>1. Tool Scope: One Job, Done Well</h3>
+      <p>
+        The hammer approach creates generic tools and relies on the LLM to compose them correctly.
+        The scalpel approach creates <strong>specific tools that do one thing completely</strong>.
+      </p>
+
+      <div class="my-8 not-prose">
+        <div class="grid md:grid-cols-2 gap-4">
+          <div class="bg-red-500/5 dark:bg-red-500/10 p-4 rounded-xl border border-red-500/20">
+            <h4 class="font-bold text-red-400 mb-2 text-sm">❌ Generic Tools (Token Heavy)</h4>
+            <div class="bg-stone-950 rounded-lg p-3 font-mono text-xs text-stone-400 overflow-x-auto">
+              <pre>{`// 3 calls, 3 round trips
+ingredient("peanut butter")
+ingredient("sugar") 
+ingredient("egg")
+recipe([...ingredients])
+nutrition_facts(recipe, "50g")`}</pre>
+            </div>
+          </div>
+          <div class="bg-green-500/5 dark:bg-green-500/10 p-4 rounded-xl border border-green-500/20">
+            <h4 class="font-bold text-green-400 mb-2 text-sm">✓ Surgical Tool (Token Light)</h4>
+            <div class="bg-stone-950 rounded-lg p-3 font-mono text-xs text-stone-400 overflow-x-auto">
+              <pre>{`// 1 call, complete operation
+analyze_recipe({
+  ingredients: [
+    {name: "peanut butter", amount: "1 cup"},
+    {name: "sugar", amount: "0.5 cup"},
+    {name: "egg", amount: "1"}
+  ],
+  serving_size: "50g"
+})`}</pre>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <p>
+        The surgical tool does the <em>complete job</em>. The model doesn't need to understand
+        composition—the tool handles it. Fewer decisions = fewer tokens = fewer errors.
+      </p>
+
+      <h3>2. Schema Scope: Validation at the Boundary</h3>
+      <p>
+        DSL approaches put validation <em>after</em> output—parse the text, check syntax, retry failures.
+        Surgical scoping puts validation <em>in the schema</em>—the model can't generate invalid output.
+      </p>
+
+      <div class="my-8 not-prose">
+        <div class="bg-stone-950 rounded-xl p-6 font-mono text-sm text-stone-300 overflow-x-auto border-l-4 border-copper">
+          <pre>{`// Schema-as-validation: Invalid states are impossible
+{
+  name: "analyze_recipe",
+  description: \`Analyze nutritional content of a recipe.
+  
+  INGREDIENTS:
+  - name: Fuzzy-matched against database (Levenshtein < 3)
+  - amount: Number with unit enum
+  - If unknown: provide nutritional_override OR accept database estimate
+  
+  SERVING_SIZE: Number + unit. Converted server-side.
+  
+  RETURNS: Complete nutritional breakdown.\`,
+  
+  inputSchema: {
+    ingredients: [{
+      name: z.string(),
+      amount: z.number(),
+      unit: z.enum(["g", "ml", "cup", "tbsp", "tsp", "oz"]),
+      nutritional_override: z.optional(NutritionFacts)
+    }],
+    serving_size: z.string().regex(/^\\d+(\\.\\d+)?\\s*(g|ml|oz)$/)
+  }
+}`}</pre>
+        </div>
+      </div>
+
+      <p>
+        The model sees this schema once. Context caching kicks in. Every subsequent call
+        benefits from the cached schema understanding. DSL instructions? Re-parsed every time.
+      </p>
+
+      <h3>3. Agent Scope: Workspace Boundaries</h3>
+      <p>
+        Token bloat in multi-agent systems comes from <strong>scope creep</strong>—agents doing more
+        than their assigned task, reading files they don't need, considering options outside their domain.
+      </p>
+
+      <div class="my-8 not-prose">
+        <div class="bg-white dark:bg-stone-800 border-2 border-stone-900 dark:border-stone-700 rounded-xl p-6 shadow-lg transition-colors">
+          <div class="text-center font-bold text-stone-900 dark:text-stone-100 mb-6">
+            SCOPE CONSTRAINTS IN MULTI-AGENT DELEGATION
+          </div>
+          <div class="bg-stone-950 rounded-lg p-4 font-mono text-xs text-stone-400 overflow-x-auto">
+            <pre>{`{
+  task_id: "implement_auth_validation",
+  assigned_to: "green-phase",
+  
+  // THE SCALPEL: Explicit boundaries
+  workspace_path: "src/auth/",
+  file_patterns: ["*.ts", "!*.test.ts"],
+  
+  // What you CAN touch
+  in_scope: [
+    "src/auth/validateToken.ts",
+    "src/auth/types.ts"
+  ],
+  
+  // What you CANNOT touch
+  out_of_scope: [
+    "src/auth/*.test.ts",  // Red phase owns tests
+    "src/database/*",       // Different domain
+    "src/api/*"             // Different domain
+  ],
+  
+  // Stop condition
+  acceptance_criteria: [
+    "All tests in tests/auth/validateToken.test.ts pass",
+    "No modifications outside workspace_path"
+  ]
+}`}</pre>
+          </div>
+        </div>
+      </div>
+
+      <p>
+        When an agent knows <em>exactly</em> what files it can touch, it doesn't waste tokens
+        exploring irrelevant code. It doesn't "helpfully" refactor adjacent modules.
+        It does its job and stops.
+      </p>
+    </section>
+
+    <!-- The Fuzzy Middle -->
+    <section class="mb-20 scroll-reveal">
+      <div
+        class="relative bg-stone-900 rounded-4xl p-8 md:p-12 overflow-hidden text-stone-300"
+      >
+        <div
+          class="absolute inset-0 bg-linear-to-b from-stone-800/50 to-stone-900 pointer-events-none"
+        >
+        </div>
+        <div class="absolute top-0 right-0 p-8 opacity-10">
+          <svg class="w-64 h-64" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"></path>
+          </svg>
+        </div>
+
+        <div class="relative z-10">
+          <h2
+            class="font-display text-3xl md:text-4xl font-bold text-white mb-6"
+          >
+            Fuzzy Matching: Scope with Tolerance
+          </h2>
+          <p class="text-lg leading-relaxed mb-8">
+            Rigid scope creates brittle systems. The scalpel is precise, but it needs
+            <strong class="text-copper">tolerance for imperfection</strong>.
+          </p>
+
+          <div class="space-y-4">
+            <div class="bg-stone-950 p-4 rounded-xl border border-stone-800">
+              <div class="text-red-400 font-mono font-bold mb-2 text-sm">❌ Rigid (DSL Approach)</div>
+              <p class="text-sm text-stone-400">
+                <code>"KRAFT Smooth Peanut Butter"</code> → Not found. Error. Retry.
+                The LLM guesses a different spelling. Still wrong. Negotiation loop begins.
+              </p>
+            </div>
+            <div class="bg-stone-950 p-4 rounded-xl border border-stone-800">
+              <div class="text-green-400 font-mono font-bold mb-2 text-sm">✓ Fuzzy (Scalpel Approach)</div>
+              <p class="text-sm text-stone-400">
+                <code>"KRAFT Smooth Peanut Butter"</code> → Levenshtein match → 
+                <code>"kraft_peanut_butter_smooth"</code> (confidence: 0.94).
+                Proceeds automatically. No retry.
+              </p>
+            </div>
+            <div class="bg-stone-950 p-4 rounded-xl border border-stone-800">
+              <div class="text-blue-400 font-mono font-bold mb-2 text-sm">✓ Improvisation (Advanced Scalpel)</div>
+              <p class="text-sm text-stone-400">
+                <code>"Grandma's homemade peanut butter"</code> → Not in database → 
+                Model provides <code>nutritional_override</code> from context or asks user.
+                Server validates plausibility. Novel input accepted.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Errors as Guidance -->
+    <section
+      class="prose prose-stone dark:prose-invert prose-lg max-w-none mb-20 scroll-reveal"
+    >
+      <h2 class="font-display text-copper text-3xl font-bold mb-6">
+        Errors as Scalpel Guidance
+      </h2>
+      <p>
+        The Command Language proposal asks: "Can the MCP request user disambiguation through 
+        a structured error response?" This is the wrong question.
+      </p>
+      <p>
+        <strong>Errors shouldn't negotiate. They should educate.</strong>
+      </p>
+
+      <div class="my-12 not-prose">
+        <div class="grid md:grid-cols-2 gap-6">
+          <div class="bg-red-500/5 dark:bg-red-500/10 p-6 rounded-2xl border border-red-500/20">
+            <h4 class="font-bold text-red-400 mb-4">❌ Negotiation Loop</h4>
+            <div class="bg-stone-950 rounded-lg p-4 font-mono text-xs text-stone-400 space-y-2">
+              <div><span class="text-blue-400">Server:</span> "Ingredient not found"</div>
+              <div><span class="text-green-400">LLM:</span> "Did you mean peanut butter?"</div>
+              <div><span class="text-blue-400">Server:</span> "Multiple matches"</div>
+              <div><span class="text-green-400">LLM:</span> "Which one? A, B, or C?"</div>
+              <div><span class="text-yellow-400">User:</span> "B"</div>
+              <div><span class="text-green-400">LLM:</span> → retry with B</div>
+              <div class="text-red-400 pt-2 border-t border-stone-700">5 round trips. Token explosion.</div>
+            </div>
+          </div>
+          <div class="bg-green-500/5 dark:bg-green-500/10 p-6 rounded-2xl border border-green-500/20">
+            <h4 class="font-bold text-green-400 mb-4">✓ Guiding Error</h4>
+            <div class="bg-stone-950 rounded-lg p-4 font-mono text-xs text-stone-400 overflow-x-auto">
+              <pre>{`{
+  error: "INGREDIENT_AMBIGUOUS",
+  input: "peanut butter",
+  suggestions: [
+    {id: "pb_001", name: "Generic", conf: 0.95},
+    {id: "pb_kraft", name: "KRAFT", conf: 0.87}
+  ],
+  hint: "Re-call with id, or provide 
+         nutritional_override for custom",
+  auto_selected: "pb_001"  // Default if confident
+}`}</pre>
+            </div>
+            <div class="text-green-400 pt-2 text-xs">
+              1 error. Self-corrects. Done.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <p>
+        The error tells the model <em>exactly how to fix it</em>. Better yet, if confidence 
+        is high enough, it auto-selects and proceeds. The model doesn't need to retry—
+        it learns from the error shape and adjusts future calls.
+      </p>
+    </section>
+
+    <!-- Batch: The Composite Scalpel -->
+    <section
+      class="bg-stone-100 dark:bg-stone-900 rounded-4xl p-8 md:p-12 mb-20 scroll-reveal transition-colors"
+    >
+      <h2
+        class="font-display text-3xl font-bold text-stone-900 dark:text-stone-100 mb-8"
+      >
+        Batch Operations: The Composite Scalpel
+      </h2>
+      <p class="text-lg text-stone-600 dark:text-stone-400 mb-8">
+        Sometimes you need to do 20 things. The hammer approach: 20 calls. 
+        The DSL approach: compress 20 calls into terse syntax.
+        The scalpel approach: <strong>one batch call</strong>.
+      </p>
+
+      <div class="bg-white dark:bg-stone-950 p-6 rounded-2xl shadow-sm border border-stone-200 dark:border-stone-800 mb-8">
+        <div class="grid md:grid-cols-3 gap-4 text-center">
+          <div class="p-4">
+            <div class="text-4xl font-bold text-red-400 mb-2">20</div>
+            <div class="text-sm text-stone-500">Individual Calls</div>
+          </div>
+          <div class="p-4">
+            <div class="text-4xl font-bold text-yellow-400 mb-2">1</div>
+            <div class="text-sm text-stone-500">DSL Call (still parsed)</div>
+          </div>
+          <div class="p-4">
+            <div class="text-4xl font-bold text-green-400 mb-2">1</div>
+            <div class="text-sm text-stone-500">Batch Call (native)</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-stone-950 rounded-xl p-6 font-mono text-sm text-stone-300 overflow-x-auto">
+        <pre>{`// Real example from ooda.mcp
+batch_read_files({
+  paths: [
+    "src/auth/validateToken.ts",
+    "src/auth/types.ts", 
+    "tests/auth/validateToken.test.ts"
+  ]
+})
+
+// Returns all three in one response
+// No DSL. No parsing. Native tool schema.
+// 20 reads → 1 call. Token savings: ~95%`}</pre>
+      </div>
+    </section>
+
+    <!-- The Real Equation -->
+    <section
+      class="prose prose-stone dark:prose-invert prose-lg max-w-none mb-20 scroll-reveal"
+    >
+      <h2 class="font-display text-copper text-3xl font-bold mb-6">
+        The Real Token Equation
+      </h2>
+
+      <div class="my-12 not-prose">
+        <div class="bg-white dark:bg-stone-800 border-2 border-stone-900 dark:border-stone-700 rounded-xl p-8 shadow-lg transition-colors">
+          <div class="text-center mb-8">
+            <div class="font-mono text-2xl text-copper mb-2">
+              Tokens = Scope × Iterations × Verbosity
+            </div>
+            <div class="text-stone-500 text-sm">Not just verbosity. Scope and iterations matter more.</div>
+          </div>
+          
+          <div class="grid md:grid-cols-3 gap-6">
+            <div class="text-center p-4 bg-stone-50 dark:bg-stone-900 rounded-xl">
+              <div class="text-3xl mb-2">📐</div>
+              <div class="font-bold text-stone-900 dark:text-stone-100 mb-1">Scope</div>
+              <div class="text-sm text-stone-500">Constrain what the agent considers</div>
+            </div>
+            <div class="text-center p-4 bg-stone-50 dark:bg-stone-900 rounded-xl">
+              <div class="text-3xl mb-2">🔄</div>
+              <div class="font-bold text-stone-900 dark:text-stone-100 mb-1">Iterations</div>
+              <div class="text-sm text-stone-500">Reduce retries with fuzzy + guiding errors</div>
+            </div>
+            <div class="text-center p-4 bg-stone-50 dark:bg-stone-900 rounded-xl">
+              <div class="text-3xl mb-2">💬</div>
+              <div class="font-bold text-stone-900 dark:text-stone-100 mb-1">Verbosity</div>
+              <div class="text-sm text-stone-500">Native schemas vs. DSL overhead</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <p>
+        DSLs attack verbosity. But scope and iterations often dominate. A 50% reduction in 
+        message size means nothing if you retry 3 times. A terse DSL is worthless if the 
+        agent reads 10 files it doesn't need.
+      </p>
+
+      <p>
+        <strong>The scalpel cuts all three:</strong>
+      </p>
+
+      <ul>
+        <li><strong>Scope:</strong> Workspace boundaries, file patterns, explicit in/out of scope</li>
+        <li><strong>Iterations:</strong> Fuzzy matching, guiding errors, auto-selection</li>
+        <li><strong>Verbosity:</strong> Batch operations, composite tools, schema caching</li>
+      </ul>
+    </section>
+
+    <!-- Summary -->
+    <section class="mb-20 scroll-reveal">
+      <div class="bg-stone-950 rounded-xl p-8 border-l-4 border-copper">
+        <h2 class="font-display text-white text-3xl font-bold mb-6">
+          The Scalpel Philosophy
+        </h2>
+        <div class="text-stone-300 space-y-4 text-lg leading-relaxed">
+          <p>
+            <strong class="text-copper">1. Don't compress. Constrain.</strong><br />
+            The best token reduction is not saying things you don't need to say.
+          </p>
+          <p>
+            <strong class="text-copper">2. Specificity over generality.</strong><br />
+            One tool that does the complete job beats five tools the model must compose.
+          </p>
+          <p>
+            <strong class="text-copper">3. Schema over syntax.</strong><br />
+            Put validation in the schema. Context caching does the rest.
+          </p>
+          <p>
+            <strong class="text-copper">4. Tolerance over rigidity.</strong><br />
+            Fuzzy matching and guiding errors eliminate retry loops.
+          </p>
+          <p>
+            <strong class="text-copper">5. Batch over iteration.</strong><br />
+            20 operations → 1 call. Native, not encoded.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer Meta -->
+    <footer
+      class="text-center pt-16 border-t border-stone-200 dark:border-stone-800"
+    >
+      <p class="text-stone-500 mb-8 max-w-md mx-auto">
+        These patterns emerged from building MCP servers that survive real-world LLM interactions—
+        where token budgets are finite and retry loops are expensive.
+      </p>
+      <div class="flex justify-center gap-6">
+        <a
+          href="https://github.com/Mnehmos"
+          class="text-stone-400 hover:text-copper transition-colors"
+        >
+          <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"
+            ><path
+              d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.111.825-.261.825-.579 0-.285-.011-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.22 0 4.609-2.807 5.627-5.479 5.921.43.372.823 1.102.823 2.222 0 1.606-.015 2.896-.015 3.286 0 .321.222.696.832.57C20.565 21.795 24 17.31 24 12c0-6.63-5.37-12-12-12z"
+            ></path></svg
+          >
+        </a>
+      </div>
+    </footer>
+  </article>
+
+  <!-- Global Animations -->
+  <style is:global>
+    @keyframes fade-in {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+    @keyframes slide-up {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .animate-fade-in {
+      animation: fade-in 1s ease-out forwards;
+    }
+    .animate-slide-up {
+      opacity: 0;
+      animation: slide-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    .animation-delay-100 {
+      animation-delay: 0.1s;
+    }
+    .animation-delay-200 {
+      animation-delay: 0.2s;
+    }
+
+    .scroll-reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .scroll-reveal.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+
+  <script>
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: "0px 0px -50px 0px",
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("active");
+        }
+      });
+    }, observerOptions);
+
+    document
+      .querySelectorAll(".scroll-reveal")
+      .forEach((el) => observer.observe(el));
+  </script>
+</BaseLayout>
