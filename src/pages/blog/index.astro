@@ -19,6 +19,19 @@ const collectionPosts = await getCollection("blog", ({ data }) => !data.draft);
 // 5. If converting a Markdown post, DELETE the original .md file to prevent collisions.
 const manualPosts = [
   {
+    slug: "from-chatbot-to-organism",
+    data: {
+      title: "From Chatbot to Organism: Building an Agentic Nervous System",
+      description:
+        "Your LLM is a brain in a jar. High intelligence, zero agency. Here's how we're building a nervous system to give it sensation, reflex, memory, and action—organized into coherent loops.",
+      pubDate: new Date("2025-12-31"),
+      tags: ["architecture", "multi-agent", "mcp", "nervous-system", "tooling"],
+      draft: false,
+      lesson:
+        "Organisms have nervous systems—integrated hierarchies that coordinate sensation, cognition, and action. Map tools to layers: Somatic (action), Autonomic (memory), Reflex (validation), Central (planning). Start toolless, add capabilities progressively.",
+    },
+  },
+  {
     slug: "scalpel-not-hammer",
     data: {
       title: "The Scalpel, Not the Hammer: Scope as the Cure for Token Bloat",
