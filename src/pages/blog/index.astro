@@ -19,6 +19,32 @@ const collectionPosts = await getCollection("blog", ({ data }) => !data.draft);
 // 5. If converting a Markdown post, DELETE the original .md file to prevent collisions.
 const manualPosts = [
   {
+    slug: "sleeper-injection",
+    data: {
+      title: "The Sleeper Injection: Delayed Payload Attacks on AI Agents",
+      description:
+        "Most prompt injection examples show immediate effects. But what if the payload doesn't trigger immediately? This is nastier. Sleeper agents pass the initial vibe check.",
+      pubDate: new Date("2026-01-05"),
+      tags: ["security", "prompt-injection", "ai-agents", "defense"],
+      draft: false,
+      lesson:
+        "Immediate injections are easy to spot. Sleeper agents embed conditional triggers that fire days later—when the context is long scrolled away. Worse: they can instruct the agent on how to summarize the malicious content, destroying evidence during context compaction.",
+    },
+  },
+  {
+    slug: "system-prompt-fingerprinting",
+    data: {
+      title: "System Prompt Fingerprinting: Unique Identifiers as Injection Defense",
+      description:
+        "Your system prompt isn't just instructions—it's a cryptographic handshake. When you know what should be there, you can detect when something's been added.",
+      pubDate: new Date("2026-01-05"),
+      tags: ["security", "defense", "ai-agents", "detection"],
+      draft: false,
+      lesson:
+        "Embed verifiable patterns in your system prompt: canary phrases, behavioral fingerprints, cryptographic challenges, immune responses. Layer them for defense-in-depth. No single technique is foolproof, but each layer adds friction.",
+    },
+  },
+  {
     slug: "from-chatbot-to-organism",
     data: {
       title: "From Chatbot to Organism: Building an Agentic Nervous System",
