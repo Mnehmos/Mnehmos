@@ -19,6 +19,19 @@ const collectionPosts = await getCollection("blog", ({ data }) => !data.draft);
 // 5. If converting a Markdown post, DELETE the original .md file to prevent collisions.
 const manualPosts = [
   {
+    slug: "trust-through-transparency",
+    data: {
+      title: "Trust Through Transparency: What D&D Taught Me About Blockchain",
+      description:
+        "A white paper on multi-party trust in transparent state systems - from self-play combat testing to distributed consensus theory.",
+      pubDate: new Date("2026-01-12"),
+      tags: ["AI", "blockchain", "game-theory", "RPG", "architecture", "research", "white-paper"],
+      draft: false,
+      lesson:
+        "Trust evolved through freedom of agency, not constraint. When the AI played both DM and players with full database visibility, it chose fair mechanics—not because it was constrained, but because transparency made cooperation the natural choice.",
+    },
+  },
+  {
     slug: "database-driven-dungeon-mastering",
     data: {
       title: "Database-Driven Dungeon Mastering: When AI Plays Both Sides",

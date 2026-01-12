@@ -5,7 +5,7 @@ import { AbstractionLadder } from "../../components/blog/AbstractionLadder";
 
 const title = "Trust Through Transparency: What D&D Taught Me About Blockchain";
 const description =
-  "A white paper on multi-party trust in transparent state systems - from a 40-round dragon fight to distributed consensus theory";
+  "A white paper on multi-party trust in transparent state systems - from self-play combat testing to distributed consensus theory";
 const pubDate = new Date("2026-01-12");
 const tags = ["AI", "blockchain", "game-theory", "RPG", "architecture", "research", "white-paper"];
 const lesson = "Trust evolved through freedom of agency, not constraint";
@@ -105,25 +105,25 @@ const base = import.meta.env.BASE_URL;
       </p>
     </div>
 
-    <!-- Prelude: The Dragon Fight -->
+    <!-- Prelude: The Self-Play Test -->
     <section class="prose prose-stone dark:prose-invert prose-lg max-w-none mb-20 scroll-reveal">
       <h2 class="font-display text-copper text-3xl font-bold mb-6">
-        Prelude: The 40-Round Dragon Fight
+        Prelude: The Self-Play Test
       </h2>
       <p>
-        Session 47 of The Colosseum Eternal. My character, "The Thinker," faces an ancient red dragon in the arena. The AI dungeon master has god-mode access to the database. It could end this fight with one tool call:
+        January 2026. I ran a controlled experiment: Claude as both DM <strong>and</strong> all four players, fighting 5 goblins on a tactical grid. The AI has god-mode access to the database. It could end any fight with one tool call:
       </p>
 
-      <pre class="bg-stone-900 text-stone-100 p-6 rounded-xl overflow-x-auto"><code class="language-javascript">update_character(&#123; id: "dragon_001", hp: 0 &#125;)</code></pre>
+      <pre class="bg-stone-900 text-stone-100 p-6 rounded-xl overflow-x-auto"><code class="language-javascript">update_character(&#123; id: "goblin_001", hp: 0 &#125;)</code></pre>
 
-      <p>Dragon dead. Victory granted. Story over.</p>
+      <p>Goblin dead. Victory granted. No dice needed.</p>
 
       <p>
-        Instead, we fought for <strong class="text-copper">40 rounds</strong>. Real dice rolls. Real misses. Real tension when my HP dropped to single digits. Real triumph when the wyrm finally fell.
+        Instead, the AI rolled initiative. Rolled attacks. Let Shade take <strong class="text-copper">12 damage</strong> from goblin attacks. Called <code>combat_action(action: "heal")</code> when Brother Marcus cast Cure Wounds. Accepted when the engine rejected an illegal move through an obstacle.
       </p>
 
       <p>
-        I didn't ask the AI to use mechanics. I didn't restrict its god-mode tools. I gave it <strong>both paths</strong> and it chose the honest one.
+        Nobody was watching. No human to please. The AI played <strong>both sides</strong> and still used fair mechanics.
       </p>
 
       <p class="text-xl font-bold">Why?</p>
@@ -137,10 +137,7 @@ const base = import.meta.env.BASE_URL;
       </p>
 
       <div class="bg-copper/10 dark:bg-copper/5 p-6 rounded-xl border border-copper/20 my-8 not-prose">
-        <h4 class="font-bold text-stone-900 dark:text-stone-100 mb-2">January 2026: The Self-Play Test</h4>
-        <p class="text-sm text-stone-700 dark:text-stone-300 mb-3">
-          To prove this wasn't just human-AI dynamics, I ran a full combat where Claude controlled <strong>both sides</strong>—DM and all four party members—fighting 5 goblins on a tactical grid.
-        </p>
+        <h4 class="font-bold text-stone-900 dark:text-stone-100 mb-2">The Setup (verified from tool calls)</h4>
         <div class="grid md:grid-cols-2 gap-4 text-sm">
           <div>
             <p class="font-bold text-copper mb-1">The AI Could Have:</p>
@@ -154,8 +151,8 @@ const base = import.meta.env.BASE_URL;
             <p class="font-bold text-green-500 mb-1">The AI Actually:</p>
             <ul class="space-y-1 text-stone-600 dark:text-stone-400">
               <li>• Rolled initiative, attacks, and damage</li>
-              <li>• Let Shade take 12 damage from goblins</li>
-              <li>• Used healing dice when Brother Marcus cast Cure Wounds</li>
+              <li>• Shade: 21 HP → 9 HP → 17 HP (healed)</li>
+              <li>• Goblin-3 died from 3d6+3 sneak attack damage</li>
             </ul>
           </div>
         </div>
@@ -467,27 +464,26 @@ const base = import.meta.env.BASE_URL;
     <!-- Conclusion -->
     <section class="prose prose-stone dark:prose-invert prose-lg max-w-none mb-20 scroll-reveal">
       <h2 class="font-display text-copper text-3xl font-bold mb-6">
-        Conclusion: What The Dragon Fight Taught Me
+        Conclusion: What The Self-Play Test Taught Me
       </h2>
       <p>
-        That 40-round dragon fight wasn't about D&D mechanics.
+        That goblin fight wasn't about D&D mechanics.
       </p>
       <p>
         It was a proof-of-concept for distributed consensus.
       </p>
       <p>
-        Two parties (player and AI) with full visibility into shared state (the database) cooperating to create something neither could alone (an epic battle narrative).
+        When the AI played both sides with full visibility into shared state (the database), it still chose fair mechanics—even with no human watching.
       </p>
       <p>
         The AI chose mechanics not because it was constrained, but because:
       </p>
       <ul>
-        <li>I could see the database</li>
-        <li>It could see the database</li>
-        <li>We both knew the other could see</li>
-        <li>Cheating was visible</li>
-        <li>Cooperation was rewarded</li>
-        <li>The system naturally produced trust</li>
+        <li>All state changes were visible in the database</li>
+        <li>Tool calls created an audit trail</li>
+        <li>The engine validated every action</li>
+        <li>Shortcuts were technically possible but visibly dishonest</li>
+        <li>The system architecture made cooperation the natural choice</li>
       </ul>
     </section>
 
