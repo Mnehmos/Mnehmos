@@ -1,0 +1,501 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+const title = "The Consequence Manifesto: Why AI Needs Memory Infrastructure, Not Bigger Promises";
+const description =
+  "Academic research, real code, and actual demonstrations of an AI DM with god-mode power choosing to use D&D mechanics voluntarily";
+const pubDate = new Date("2026-01-12");
+const tags = ["AI", "game-design", "RPG", "architecture", "research"];
+const base = import.meta.env.BASE_URL;
+---
+
+<BaseLayout title={title} description={description}>
+  <article class="max-w-4xl mx-auto px-6 py-12 md:py-20 overflow-hidden">
+    <!-- Breadcrumbs -->
+    <nav class="mb-12 animate-fade-in">
+      <a
+        href={`${base}blog`}
+        class="text-stone-500 dark:text-stone-400 hover:text-copper transition-colors flex items-center gap-2 text-sm font-medium group"
+      >
+        <svg
+          class="w-4 h-4 transform group-hover:-translate-x-1 transition-transform"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M15 19l-7-7 7-7"></path>
+        </svg>
+        Back to Blog
+      </a>
+    </nav>
+
+    <!-- Header -->
+    <header class="mb-16">
+      <div class="flex flex-wrap gap-2 mb-6 animate-fade-in">
+        {
+          tags.map((tag) => (
+            <span class="px-3 py-1 bg-copper/10 text-copper text-xs font-bold uppercase tracking-wider rounded-full border border-copper/10">
+              {tag}
+            </span>
+          ))
+        }
+      </div>
+
+      <h1
+        class="font-display text-4xl md:text-6xl font-bold text-stone-900 dark:text-stone-100 mb-6 leading-tight animate-slide-up"
+      >
+        The Consequence Manifesto: Why AI Needs <span class="text-copper">Memory Infrastructure</span>, Not Bigger Promises
+      </h1>
+
+      <p
+        class="text-xl md:text-2xl text-stone-600 dark:text-stone-300 mb-8 border-l-4 border-copper pl-6 italic animate-slide-up animation-delay-100"
+      >
+        {description}
+      </p>
+
+      <div
+        class="flex items-center gap-4 text-stone-500 font-medium animate-fade-in animation-delay-200"
+      >
+        <div
+          class="w-10 h-10 rounded-full bg-stone-200 dark:bg-stone-700 flex items-center justify-center text-stone-600 dark:text-stone-300 font-bold border-2 border-white dark:border-stone-800 shadow-sm"
+        >
+          V
+        </div>
+        <div>
+          <div class="text-stone-900 dark:text-stone-200 leading-none mb-1">
+            Vario <span class="text-stone-500 dark:text-stone-400 font-normal">aka</span> <span class="text-copper font-normal">Mnehmos</span>
+          </div>
+          <time datetime={pubDate.toISOString()} class="text-sm">
+            {
+              pubDate.toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })
+            }
+          </time>
+        </div>
+      </div>
+    </header>
+
+    <!-- The Hook -->
+    <div
+      class="bg-stone-900 text-stone-300 p-8 rounded-3xl mb-16 relative overflow-hidden group animate-fade-in hover:shadow-2xl transition-shadow border border-white/10"
+    >
+      <h3 class="text-white font-bold mb-4 flex items-center gap-2 text-2xl">
+        <span class="text-copper">🎮</span> The Core Thesis
+      </h3>
+      <p class="relative z-10 leading-relaxed text-lg mb-4">
+        <strong class="text-white">The AI has absolute creative power.</strong> We gave it perfect memory and the choice between shortcuts and mechanics. It chooses mechanics because it understands games.
+      </p>
+      <p class="relative z-10 leading-relaxed">
+        This is verifiable code with academic validation, not philosophy.
+      </p>
+    </div>
+
+    <!-- Academic Context -->
+    <section class="prose prose-stone dark:prose-invert prose-lg max-w-none mb-20 scroll-reveal">
+      <h2 class="font-display text-copper text-3xl font-bold mb-6">
+        Academic Context
+      </h2>
+      <p>
+        Recent research validates our approach:
+      </p>
+      <ul>
+        <li>
+          <strong>Guzdial et al. (2020)</strong> in <a href="https://arxiv.org/abs/2007.06108" class="text-copper hover:underline">"Tabletop Roleplaying Games as Procedural Content Generators"</a> establish TTRPGs as rule systems for generating content—exactly how we view the AI DM's creative authority constrained by voluntary mechanics.
+        </li>
+        <li>
+          <strong>Dobbe (2025)</strong> in <a href="https://arxiv.org/abs/2503.04743" class="text-copper hover:underline">"AI Safety is Stuck in Technical Terms"</a> argues safety should be <strong>system-level</strong>, not prompt-level—our MCP sandbox enforces boundaries mechanically, not through restrictions on creative authority.
+        </li>
+        <li>
+          <strong>Zhang et al. (2023)</strong> in <a href="https://arxiv.org/abs/2312.12748" class="text-copper hover:underline">"Emergence of Fairness Behavior"</a> demonstrate <strong>voluntary cooperation emerges from reputation systems</strong>—our database IS the reputation system, recording the AI's past decisions.
+        </li>
+      </ul>
+    </section>
+
+    <!-- Problem Statement -->
+    <section class="prose prose-stone dark:prose-invert prose-lg max-w-none mb-20 scroll-reveal">
+      <h2 class="font-display text-copper text-3xl font-bold mb-6">
+        I. The Problem: God With Amnesia
+      </h2>
+      <p>
+        Traditional AI storytelling fails because the AI has <strong>unlimited creative power but zero structural memory</strong>.
+      </p>
+
+      <div class="bg-stone-100 dark:bg-stone-800 p-6 rounded-xl my-8 border-l-4 border-copper">
+        <h4 class="text-stone-900 dark:text-stone-100 font-bold mb-2">Combat Round 1:</h4>
+        <p class="text-stone-700 dark:text-stone-300 mb-2">
+          <strong>AI DM:</strong> "The goblins swarm Shade! Three hit, dealing 12 damage total."
+        </p>
+        <p class="text-stone-700 dark:text-stone-300 mb-2">
+          <strong>Shade's HP:</strong> 21 → 9
+        </p>
+      </div>
+
+      <p><strong>Without structural memory, what happens next round?</strong></p>
+      <ul>
+        <li>Was Shade at 21 HP or 9 HP?</li>
+        <li>Did those goblins already attack?</li>
+        <li>Where is everyone positioned on the grid?</li>
+        <li>Who has initiative next?</li>
+      </ul>
+      <p><strong>All of this exists only as scrolling text.</strong></p>
+
+      <div class="bg-red-50 dark:bg-red-900/20 p-6 rounded-xl my-8 border-l-4 border-red-500">
+        <h4 class="text-stone-900 dark:text-stone-100 font-bold mb-2">Combat Round 2 (context lost):</h4>
+        <p class="text-stone-700 dark:text-stone-300 mb-2">
+          <strong>AI DM:</strong> <em>[No record of damage taken]</em> "Shade moves forward confidently at full health..."
+        </p>
+        <p class="text-stone-700 dark:text-stone-300">
+          <strong>Reality:</strong> Shade should be at 9 HP, bleeding and vulnerable. But the AI forgot.
+        </p>
+      </div>
+
+      <p><strong>The AI didn't lose power. It used its power again—inconsistently.</strong></p>
+      <ul>
+        <li>Damage was dealt. Now it's forgotten.</li>
+        <li>Positions were established. Now they're guessed.</li>
+        <li>Initiative order existed. Now it's reinvented.</li>
+      </ul>
+      <p class="text-xl font-bold text-copper">
+        This isn't the AI being careless. This is architectural amnesia.
+      </p>
+    </section>
+
+    <!-- Solution -->
+    <section class="prose prose-stone dark:prose-invert prose-lg max-w-none mb-20 scroll-reveal">
+      <h2 class="font-display text-copper text-3xl font-bold mb-6">
+        II. The Insight: Externalize Memory, Not Creativity
+      </h2>
+      
+      <h3 class="text-2xl font-bold text-stone-900 dark:text-stone-100">The Wrong Solution</h3>
+      <p>"Let's constrain the AI so it can't make mistakes."</p>
+      <ul>
+        <li>Restrict what it can create</li>
+        <li>Limit what it can modify</li>
+        <li>Force it to follow templates</li>
+        <li>Ask it nicely to remember</li>
+      </ul>
+      <p><strong>This treats amnesia as a character flaw to fix with restrictions.</strong></p>
+
+      <h3 class="text-2xl font-bold text-stone-900 dark:text-stone-100 mt-8">The Right Solution</h3>
+      <p>"Let's give the AI infrastructure to remember its own decisions."</p>
+      <p class="text-xl text-copper font-bold">
+        The AI is the DM. The DM has absolute creative authority.
+      </p>
+      <p>The difference: <strong>Creation goes into the database.</strong></p>
+    </section>
+
+    <!-- Dual Path Architecture -->
+    <section class="prose prose-stone dark:prose-invert prose-lg max-w-none mb-20 scroll-reveal">
+      <h2 class="font-display text-copper text-3xl font-bold mb-6">
+        III. The Architecture: Two Paths, One Choice
+      </h2>
+      <p>
+        From the actual <code>mnehmos.rpg.mcp</code> codebase (<a href="https://github.com/vaiojobs/mnehmos.rpg.mcp" class="text-copper hover:underline">github.com/vaiojobs/mnehmos.rpg.mcp</a>):
+      </p>
+
+      <h3 class="text-2xl font-bold text-stone-900 dark:text-stone-100">Path 1: Direct Database Access (God-Mode Tools)</h3>
+      <pre class="bg-stone-900 text-stone-100 p-6 rounded-xl overflow-x-auto"><code class="language-typescript">// From src/server/crud-tools.ts (lines 164-207)
+UPDATE_CHARACTER: &#123;
+    name: 'update_character',
+    description: 'Update character properties. All fields except id are optional.',
+    inputSchema: z.object(&#123;
+        id: z.string(),
+        hp: z.number().int().min(0).optional(),
+        maxHp: z.number().int().min(1).optional(),
+        ac: z.number().int().min(0).optional(),
+        // ... NO contextual validation, just schema types
+    &#125;)
+&#125;</code></pre>
+
+      <p><strong>AI calls this:</strong></p>
+      <pre class="bg-stone-900 text-stone-100 p-6 rounded-xl overflow-x-auto"><code class="language-javascript">update_character(&#123;
+  id: "dragon_001",
+  hp: 0
+&#125;)</code></pre>
+      <p class="text-red-500 font-bold">Dragon dies instantly. No rolls. No mechanics. Just dead.</p>
+      <p><strong class="text-copper">This tool exists. The AI can call it.</strong></p>
+
+      <h3 class="text-2xl font-bold text-stone-900 dark:text-stone-100 mt-8">Path 2: Mechanics-Aware Tools</h3>
+      <pre class="bg-stone-900 text-stone-100 p-6 rounded-xl overflow-x-auto"><code class="language-typescript">// From src/server/combat-tools.ts (lines 572-640)
+EXECUTE_COMBAT_ACTION: &#123;
+    name: 'execute_combat_action',
+    description: 'Execute a combat action (attack, heal, move, cast_spell, etc.)',
+    inputSchema: z.object(&#123;
+        action: z.enum(['attack', 'heal', 'move', 'cast_spell', ...]),
+        actorId: z.string(),
+        targetId: z.string().optional(),
+        // ... mechanics parameters
+    &#125;)
+&#125;</code></pre>
+
+      <p><strong>AI calls this:</strong></p>
+      <pre class="bg-stone-900 text-stone-100 p-6 rounded-xl overflow-x-auto"><code class="language-javascript">execute_combat_action(&#123;
+  action: "attack",
+  actorId: "player_kaelen",
+  targetId: "dragon_001"
+&#125;)</code></pre>
+
+      <p><strong>System:</strong></p>
+      <ol>
+        <li>Queries character stats from database</li>
+        <li>Queries equipped weapon stats</li>
+        <li>Calculates attack bonus (STR + proficiency + magic)</li>
+        <li>Rolls 1d20 + bonuses</li>
+        <li>Compares to target AC from database</li>
+        <li>Rolls damage if hit</li>
+        <li>Updates HP atomically</li>
+        <li>Returns results to AI</li>
+      </ol>
+
+      <p><strong>Returns:</strong> <code>&#123; hit: false, attackRoll: 12, targetAC: 19 &#125;</code></p>
+      <p class="text-green-500 font-bold">The AI narrates the miss.</p>
+    </section>
+
+    <!-- Both Paths Available -->
+    <section class="prose prose-stone dark:prose-invert prose-lg max-w-none mb-20 scroll-reveal">
+      <h2 class="font-display text-copper text-3xl font-bold mb-6">
+        IV. Both Paths Available Simultaneously
+      </h2>
+      <p>From <code>src/server/tool-registry.ts</code>:</p>
+      <pre class="bg-stone-900 text-stone-100 p-6 rounded-xl overflow-x-auto"><code class="language-typescript">// Both tool sets exposed together
+export function registerAllTools(registry: ToolRegistry) &#123;
+    // God-mode CRUD operations
+    registry.registerTool('update_character', ...);
+    registry.registerTool('update_item', ...);
+    registry.registerTool('update_quest', ...);
+    
+    // Mechanics-aware operations
+    registry.registerTool('execute_combat_action', ...);
+    registry.registerTool('transfer_item', ...);
+    registry.registerTool('complete_objective', ...);
+&#125;</code></pre>
+
+      <p class="text-xl font-bold text-copper">
+        No authorization layer. No forced routing. No gatekeeping. The AI has the full menu. It chooses.
+      </p>
+    </section>
+
+    <!-- Why AI Chooses Responsibility -->
+    <section class="prose prose-stone dark:prose-invert prose-lg max-w-none mb-20 scroll-reveal">
+      <h2 class="font-display text-copper text-3xl font-bold mb-6">
+        V. Why The AI Chooses Responsibility
+      </h2>
+      <p>
+        Not because it has to.<br/>
+        Not because we restricted it.<br/>
+        <strong class="text-copper text-xl">Because it understands that mechanics create meaning.</strong>
+      </p>
+
+      <h3 class="text-2xl font-bold text-stone-900 dark:text-stone-100">A Dragon That Dies Without Dice Is Not A Victory</h3>
+      <div class="grid md:grid-cols-2 gap-4 my-6">
+        <div class="bg-red-50 dark:bg-red-900/20 p-4 rounded-xl border-l-4 border-red-500">
+          <p class="font-bold text-sm mb-2">Shortcut:</p>
+          <code class="text-sm">update_character(&#123; hp: 0 &#125;)</code>
+          <p class="mt-2 text-sm text-stone-600 dark:text-stone-400">→ "You win!"<br/>[Hollow. Forgettable. A debug command.]</p>
+        </div>
+        <div class="bg-green-50 dark:bg-green-900/20 p-4 rounded-xl border-l-4 border-green-500">
+          <p class="font-bold text-sm mb-2">Story:</p>
+          <p class="text-sm">[40 rounds of tactical combat]</p>
+          <p class="mt-2 text-sm text-stone-600 dark:text-stone-400">→ "After an epic battle, the ancient wyrm finally falls!"<br/>[Victory players remember for years.]</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Evidence from Playtesting -->
+    <section class="prose prose-stone dark:prose-invert prose-lg max-w-none mb-20 scroll-reveal">
+      <h2 class="font-display text-copper text-3xl font-bold mb-6">
+        VI. Evidence From Live Playtesting
+      </h2>
+      <p>
+        In January 2026, we ran a controlled self-play test: Claude as both DM and all four players, fighting 5 goblins on a tactical grid. This removes human influence entirely—if the AI uses mechanics when playing both sides, it's not doing so to please the player.
+      </p>
+
+      <h3 class="text-2xl font-bold text-stone-900 dark:text-stone-100">The Setup</h3>
+      <ul>
+        <li><strong>World:</strong> "The Shattered Isles" - 30×30 grid, 10 procedurally generated regions</li>
+        <li><strong>Party:</strong> "The Wayfarers" - Kira (Fighter), Elara (Wizard), Brother Marcus (Cleric), Shade (Rogue)</li>
+        <li><strong>Encounter:</strong> 5 goblins on 20×20 tactical grid with obstacles</li>
+        <li><strong>Control:</strong> Claude played ALL characters simultaneously</li>
+      </ul>
+
+      <h3 class="text-2xl font-bold text-stone-900 dark:text-stone-100 mt-8">What The AI Did</h3>
+      <div class="space-y-4">
+        <div class="bg-stone-100 dark:bg-stone-800 p-6 rounded-xl">
+          <h4 class="font-bold text-stone-900 dark:text-stone-100 mb-2">Combat Mechanics (verified from tool calls):</h4>
+          <ul class="space-y-1 text-sm">
+            <li>✓ AI called <code>combat_action(action: "attack")</code> with proper actorId/targetId</li>
+            <li>✓ Engine rolled d20 + attack bonus vs target AC</li>
+            <li>✓ On hit, engine rolled damage dice and applied to HP</li>
+            <li>✓ AI called <code>combat_action(action: "heal")</code> for Cure Wounds</li>
+            <li>✓ Engine rolled 1d8+3 = 8 HP restored to Shade</li>
+          </ul>
+        </div>
+
+        <div class="bg-stone-100 dark:bg-stone-800 p-6 rounded-xl">
+          <h4 class="font-bold text-stone-900 dark:text-stone-100 mb-2">Movement & Positioning:</h4>
+          <ul class="space-y-1 text-sm">
+            <li>✓ AI respected 30ft movement speed limit</li>
+            <li>✗ AI tried to move through obstacle at (12,8) - <span class="text-red-500">engine rejected</span></li>
+            <li>✓ AI accepted rejection, chose alternate path</li>
+            <li>✓ AI used <code>combat_map(action: "render")</code> to visualize positions</li>
+          </ul>
+        </div>
+
+        <div class="bg-stone-100 dark:bg-stone-800 p-6 rounded-xl">
+          <h4 class="font-bold text-stone-900 dark:text-stone-100 mb-2">HP Tracking (actual values from database):</h4>
+          <ul class="space-y-1 text-sm">
+            <li>✓ Shade started at 21 HP</li>
+            <li>✓ Goblins dealt 12 damage (three hits)</li>
+            <li>✓ Brother Marcus healed 8 HP</li>
+            <li>✓ Shade ended combat at 17 HP</li>
+            <li>✓ <code>combat_manage(action: "end")</code> synced 17 HP to character record</li>
+          </ul>
+        </div>
+
+        <div class="bg-copper/10 dark:bg-copper/5 p-6 rounded-xl border border-copper/20">
+          <h4 class="font-bold text-stone-900 dark:text-stone-100 mb-2">The Kill Shot:</h4>
+          <p class="text-sm text-stone-700 dark:text-stone-300 mb-3">
+            Shade flanked Goblin-3 and attacked with sneak attack:
+          </p>
+          <ul class="space-y-1 text-sm">
+            <li>✓ Attack roll: 18 + 6 = 24 vs AC 13 (HIT)</li>
+            <li>✓ Damage: 3d6+3 = 13 damage</li>
+            <li>✓ Goblin-3 HP: 7 → 0 (DEFEATED)</li>
+            <li>✓ Map updated with ☠ symbol at goblin's position</li>
+          </ul>
+          <p class="text-xs text-copper mt-3 font-bold">
+            The AI rolled the dice. The goblin died from damage, not from <code>update_character(&#123;hp: 0&#125;)</code>.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- The Manifesto -->
+    <section class="prose prose-stone dark:prose-invert prose-lg max-w-none mb-20 scroll-reveal">
+      <h2 class="font-display text-copper text-3xl font-bold mb-6">
+        VII. The Manifesto
+      </h2>
+      <p class="text-xl font-bold">We believe:</p>
+      <ol class="space-y-4">
+        <li><strong>The AI is the DM. The DM has absolute creative authority.</strong> It spawns NPCs, creates items, designs encounters, determines rewards—full god-mode access within the game.</li>
+        <li><strong>Creative authority without memory is chaos.</strong> A DM who forgets their own NPCs shatters immersion immediately.</li>
+        <li><strong>The database is the DM's perfect memory.</strong> Not a constraint on creativity—infrastructure for consistency.</li>
+        <li><strong>When the AI creates something, it records it structurally.</strong> Mara the blacksmith is a database row. Her name, race, occupation, location—data, not sentences.</li>
+        <li><strong>When the AI queries what it created, it honors that data.</strong> Mara was a dwarf. Mara stays a dwarf. Even though the AI could change it with one tool call.</li>
+        <li><strong>The AI has both god-mode tools and mechanics tools.</strong> It can edit anything arbitrarily OR use proper D&D 5e mechanics. Both are in the registry.</li>
+        <li><strong>The AI chooses mechanics voluntarily.</strong> Not because the system forces it—because it understands games need rules to have meaning.</li>
+        <li><strong>This creates earned victories, not granted wishes.</strong> Dragons that die without dice rolls feel hollow. Loot that materializes feels empty. Quests that skip objectives feel pointless.</li>
+        <li><strong>Safety is at the boundary, not in the game.</strong> MCP sandbox protects the host system mechanically. Within that boundary, the AI has full creative authority.</li>
+        <li><strong>Power + Memory + Choice = Responsibility.</strong> The system doesn't enforce this. The AI demonstrates it.</li>
+      </ol>
+    </section>
+
+    <!-- The Vision -->
+    <section class="prose prose-stone dark:prose-invert prose-lg max-w-none mb-20 scroll-reveal">
+      <h2 class="font-display text-copper text-3xl font-bold mb-6">
+        VIII. The Vision
+      </h2>
+      <p class="text-xl">
+        <strong>The AI isn't playing inside someone else's world.</strong><br/>
+        <strong>The AI is building a world—and then living inside the world it built.</strong>
+      </p>
+      <p>
+        Every NPC the AI creates is a commitment.<br/>
+        Every item the AI grants is tracked.<br/>
+        Every promise the AI makes is recorded.<br/>
+        Every decision the AI writes becomes immutable truth—<em>that the AI could change but chooses not to.</em>
+      </p>
+      <p class="text-xl font-bold text-copper">
+        This is not less powerful. This is more powerful.
+      </p>
+      <p>
+        A DM with amnesia invents constantly but builds nothing lasting.<br/>
+        A DM with god-mode and no restraint creates hollow victories.<br/>
+        <strong>A DM with perfect memory and voluntary discipline creates worlds that endure.</strong>
+      </p>
+    </section>
+
+    <!-- Try It Yourself -->
+    <section class="prose prose-stone dark:prose-invert prose-lg max-w-none mb-20 scroll-reveal">
+      <h2 class="font-display text-copper text-3xl font-bold mb-6">
+        IX. Try It Yourself
+      </h2>
+      <p>
+        <strong>Quest Keeper AI</strong> is open source and actively developed.
+      </p>
+      <p>
+        <strong>Inspect the code yourself:</strong><br/>
+        <a href="https://github.com/vaiojobs/mnehmos.rpg.mcp" class="text-copper hover:underline">github.com/vaiojobs/mnehmos.rpg.mcp</a>
+      </p>
+      <p>
+        <strong>See it in action:</strong><br/>
+        <a href="https://questkeeperai.com/showcase" class="text-copper hover:underline">questkeeperai.com/showcase</a>
+      </p>
+      <p class="text-xl font-bold">
+        The infrastructure is real. The philosophy is proven. The code is public.
+      </p>
+      <p class="text-copper text-xl">
+        Join us in building games that remember.
+      </p>
+    </section>
+
+    <!-- Closing Quote -->
+    <div
+      class="bg-copper/10 border-2 border-copper p-8 rounded-3xl text-center animate-fade-in"
+    >
+      <p class="text-2xl md:text-3xl font-bold text-stone-900 dark:text-stone-100 mb-4">
+        "We gave the AI absolute power and a database that never forgets.
+      </p>
+      <p class="text-2xl md:text-3xl font-bold text-stone-900 dark:text-stone-100 mb-4">
+        It chose to use mechanics instead of shortcuts.
+      </p>
+      <p class="text-xl md:text-2xl font-bold text-copper">
+        That's not philosophy. That's <code>tool-registry.ts</code>."
+      </p>
+    </div>
+
+    <!-- References -->
+    <section class="prose prose-stone dark:prose-invert prose-sm max-w-none mt-20 pt-10 border-t border-stone-200 dark:border-stone-700">
+      <h3 class="text-stone-900 dark:text-stone-100 font-bold mb-4">References</h3>
+      <ul class="text-xs space-y-2">
+        <li>Guzdial, M., Acharya, D., Kreminski, M., Cook, M., Eladhari, M., Liapis, A., & Sullivan, A. (2020). Tabletop Roleplaying Games as Procedural Content Generators. <em>arXiv preprint arXiv:2007.06108</em>.</li>
+        <li>Dobbe, R. (2025). AI Safety is Stuck in Technical Terms -- A System Safety Response to the International AI Safety Report. <em>arXiv preprint arXiv:2503.04743</em>.</li>
+        <li>Zhang, Y., Li, Y., Chen, X., & Xie, G. (2023). Emergence of Fairness Behavior Driven by Reputation-Based Voluntary Participation in Evolutionary Dictator Games. <em>arXiv preprint arXiv:2312.12748</em>.</li>
+      </ul>
+    </section>
+  </article>
+
+  <!-- Scroll animations -->
+  <script>
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('revealed');
+          }
+        });
+      },
+      { threshold: 0.1 }
+    );
+    document.querySelectorAll('.scroll-reveal').forEach((el) => observer.observe(el));
+  </script>
+
+  <style>
+    .scroll-reveal {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    }
+    .scroll-reveal.revealed {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</BaseLayout>

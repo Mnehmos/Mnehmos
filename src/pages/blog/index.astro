@@ -19,6 +19,19 @@ const collectionPosts = await getCollection("blog", ({ data }) => !data.draft);
 // 5. If converting a Markdown post, DELETE the original .md file to prevent collisions.
 const manualPosts = [
   {
+    slug: "database-driven-dungeon-mastering",
+    data: {
+      title: "Database-Driven Dungeon Mastering: When AI Plays Both Sides",
+      description:
+        "What happens when you let an AI run a full D&D combat—as both DM and all four players? I playtested my RPG engine to see if database-backed state could maintain coherent narrative across dice, movement, and mayhem.",
+      pubDate: new Date("2026-01-11"),
+      tags: ["mcp", "rpg", "database", "ai-agents", "self-play"],
+      draft: false,
+      lesson:
+        "The AI isn't smart—the database is. When Claude played both DM and players in a goblin fight, it still used dice rolls, tracked HP, and accepted when obstacles blocked movement. Database constraints enforced fairness even in self-play.",
+    },
+  },
+  {
     slug: "sleeper-injection",
     data: {
       title: "The Sleeper Injection: Delayed Payload Attacks on AI Agents",

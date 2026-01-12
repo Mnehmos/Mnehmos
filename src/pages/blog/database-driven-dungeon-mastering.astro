@@ -1,0 +1,624 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+const title = "Database-Driven Dungeon Mastering: When AI Plays Both Sides";
+const description =
+  "What happens when you let an AI run a full D&D combat—as both DM and all four players? I playtested my RPG engine to see if database-backed state could maintain coherent narrative across dice, movement, and mayhem.";
+const pubDate = new Date("2026-01-11");
+const tags = ["mcp", "rpg", "database", "ai-agents", "self-play"];
+const base = import.meta.env.BASE_URL;
+---
+
+<BaseLayout title={title} description={description}>
+  <article class="max-w-4xl mx-auto px-6 py-12 md:py-20 overflow-hidden">
+    <!-- Breadcrumbs -->
+    <nav class="mb-12 animate-fade-in">
+      <a
+        href={`${base}blog`}
+        class="text-stone-500 dark:text-stone-400 hover:text-copper transition-colors flex items-center gap-2 text-sm font-medium group"
+      >
+        <svg
+          class="w-4 h-4 transform group-hover:-translate-x-1 transition-transform"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M15 19l-7-7 7-7"></path>
+        </svg>
+        Back to Blog
+      </a>
+    </nav>
+
+    <!-- Header -->
+    <header class="mb-16">
+      <div class="flex flex-wrap gap-2 mb-6 animate-fade-in">
+        {
+          tags.map((tag) => (
+            <span class="px-3 py-1 bg-copper/10 text-copper text-xs font-bold uppercase tracking-wider rounded-full border border-copper/10">
+              {tag}
+            </span>
+          ))
+        }
+      </div>
+
+      <h1
+        class="font-display text-4xl md:text-6xl font-bold text-stone-900 dark:text-stone-100 mb-6 leading-tight animate-slide-up"
+      >
+        Database-Driven <span class="text-copper">Dungeon Mastering</span>
+      </h1>
+
+      <p
+        class="text-xl md:text-2xl text-stone-600 dark:text-stone-300 mb-8 border-l-4 border-copper pl-6 italic animate-slide-up animation-delay-100"
+      >
+        {description}
+      </p>
+
+      <div
+        class="flex items-center gap-4 text-stone-500 font-medium animate-fade-in animation-delay-200"
+      >
+        <div
+          class="w-10 h-10 rounded-full bg-stone-200 dark:bg-stone-700 flex items-center justify-center text-stone-600 dark:text-stone-300 font-bold border-2 border-white dark:border-stone-800 shadow-sm"
+        >
+          V
+        </div>
+        <div>
+          <div class="text-stone-900 dark:text-stone-200 leading-none mb-1">
+            Vario <span class="text-stone-500 dark:text-stone-400 font-normal">aka</span> <span class="text-copper font-normal">Mnehmos</span>
+          </div>
+          <time datetime={pubDate.toISOString()} class="text-sm">
+            {
+              pubDate.toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })
+            }
+          </time>
+        </div>
+      </div>
+    </header>
+
+    <!-- Content Hook -->
+    <div
+      class="bg-stone-900 text-stone-300 p-8 rounded-3xl mb-16 relative overflow-hidden group animate-fade-in hover:shadow-2xl transition-shadow border border-white/10"
+    >
+      <div
+        class="absolute top-0 right-0 p-4 opacity-20 pointer-events-none group-hover:opacity-40 transition-opacity"
+      >
+        <svg class="w-32 h-32" fill="currentColor" viewBox="0 0 24 24"
+          ><path
+            d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14l-5-5 1.41-1.41L12 14.17l4.59-4.58L18 11l-6 6z"
+          ></path></svg
+        >
+      </div>
+      <h3 class="text-white font-bold mb-4 flex items-center gap-2">
+        <span class="text-copper">🎲</span> The Experiment
+      </h3>
+      <p class="relative z-10 leading-relaxed">
+        I built an RPG MCP server with 135 tools covering combat, world generation,
+        spatial navigation, and character management. Then I asked Claude to play
+        a complete D&D encounter—controlling the dungeon master AND all four party
+        members simultaneously. The goal: prove that database-backed state enables
+        coherent narrative even when one AI plays both sides of the table.
+      </p>
+    </div>
+
+    <!-- The Setup -->
+    <section
+      class="prose prose-stone dark:prose-invert prose-lg max-w-none mb-20 scroll-reveal"
+    >
+      <h2 class="font-display text-copper text-3xl font-bold mb-6">
+        The Setup: World, Party, and Persistence
+      </h2>
+      <p>
+        The RPG engine uses <strong>SQLite</strong> as its ground truth. Every entity—worlds,
+        characters, items, quests, combat encounters—lives in the database. The AI agent
+        has no memory between tool calls; it reconstructs context by querying storage.
+      </p>
+
+      <div class="my-12 not-prose">
+        <div
+          class="bg-white dark:bg-stone-800 border-2 border-stone-900 dark:border-stone-700 rounded-xl p-6 md:p-8 font-mono text-sm md:text-base shadow-[8px_8px_0px_0px_rgba(28,25,23,1)] dark:shadow-[8px_8px_0px_0px_rgba(255,255,255,0.1)] transition-colors"
+        >
+          <div
+            class="border-b-2 border-stone-200 dark:border-stone-600 pb-4 mb-4 text-center font-bold text-stone-900 dark:text-stone-100"
+          >
+            SESSION INITIALIZATION
+          </div>
+          <div class="bg-stone-100 dark:bg-stone-900 rounded-lg p-4 text-stone-700 dark:text-stone-300">
+            <div class="font-bold text-stone-900 dark:text-stone-100 mb-2 border-b border-stone-200 dark:border-stone-700 pb-2">
+              Created Entities
+            </div>
+            <ul class="space-y-2">
+              <li class="flex justify-between">
+                <span>World:</span>
+                <span class="text-stone-500">The Shattered Isles (30×30 grid, 10 regions)</span>
+              </li>
+              <li class="flex justify-between">
+                <span>Party:</span>
+                <span class="text-stone-500">The Wayfarers (4 members)</span>
+              </li>
+              <li class="flex justify-between">
+                <span>Location:</span>
+                <span class="text-stone-500">The Salty Anchor tavern</span>
+              </li>
+              <li class="flex justify-between">
+                <span>Quest:</span>
+                <span class="text-stone-500">Clear the Coastal Caves</span>
+              </li>
+            </ul>
+          </div>
+          <div class="mt-4 text-center text-xs text-stone-400 uppercase tracking-widest font-bold">
+            All state persisted to SQLite before combat began
+          </div>
+        </div>
+      </div>
+
+      <p>
+        The party consisted of four characters with distinct roles:
+      </p>
+    </section>
+
+    <!-- Party Roster -->
+    <section class="mb-20 scroll-reveal">
+      <div class="grid md:grid-cols-2 gap-6">
+        <div class="bg-white dark:bg-stone-900 p-6 rounded-2xl border border-stone-200 dark:border-stone-800">
+          <div class="flex items-center gap-3 mb-4">
+            <span class="w-10 h-10 rounded-full bg-red-500/10 text-red-400 flex items-center justify-center text-lg font-bold">K</span>
+            <div>
+              <h4 class="font-bold text-stone-900 dark:text-stone-100">Kira Stoneheart</h4>
+              <p class="text-sm text-stone-500">Human Fighter, Level 3</p>
+            </div>
+          </div>
+          <div class="text-sm text-stone-600 dark:text-stone-400">
+            <span class="font-mono">HP: 28</span> • <span class="font-mono">AC: 18</span> • <span class="font-mono">STR: 16</span>
+          </div>
+        </div>
+
+        <div class="bg-white dark:bg-stone-900 p-6 rounded-2xl border border-stone-200 dark:border-stone-800">
+          <div class="flex items-center gap-3 mb-4">
+            <span class="w-10 h-10 rounded-full bg-blue-500/10 text-blue-400 flex items-center justify-center text-lg font-bold">E</span>
+            <div>
+              <h4 class="font-bold text-stone-900 dark:text-stone-100">Elara Moonshadow</h4>
+              <p class="text-sm text-stone-500">Elf Wizard, Level 3</p>
+            </div>
+          </div>
+          <div class="text-sm text-stone-600 dark:text-stone-400">
+            <span class="font-mono">HP: 18</span> • <span class="font-mono">AC: 12</span> • <span class="font-mono">INT: 18</span>
+          </div>
+        </div>
+
+        <div class="bg-white dark:bg-stone-900 p-6 rounded-2xl border border-stone-200 dark:border-stone-800">
+          <div class="flex items-center gap-3 mb-4">
+            <span class="w-10 h-10 rounded-full bg-yellow-500/10 text-yellow-400 flex items-center justify-center text-lg font-bold">M</span>
+            <div>
+              <h4 class="font-bold text-stone-900 dark:text-stone-100">Brother Marcus</h4>
+              <p class="text-sm text-stone-500">Human Cleric, Level 3</p>
+            </div>
+          </div>
+          <div class="text-sm text-stone-600 dark:text-stone-400">
+            <span class="font-mono">HP: 24</span> • <span class="font-mono">AC: 16</span> • <span class="font-mono">WIS: 16</span>
+          </div>
+        </div>
+
+        <div class="bg-white dark:bg-stone-900 p-6 rounded-2xl border border-stone-200 dark:border-stone-800">
+          <div class="flex items-center gap-3 mb-4">
+            <span class="w-10 h-10 rounded-full bg-purple-500/10 text-purple-400 flex items-center justify-center text-lg font-bold">S</span>
+            <div>
+              <h4 class="font-bold text-stone-900 dark:text-stone-100">Shade</h4>
+              <p class="text-sm text-stone-500">Halfling Rogue, Level 3</p>
+            </div>
+          </div>
+          <div class="text-sm text-stone-600 dark:text-stone-400">
+            <span class="font-mono">HP: 21</span> • <span class="font-mono">AC: 14</span> • <span class="font-mono">DEX: 18</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Combat Encounter -->
+    <section class="mb-20 scroll-reveal">
+      <div
+        class="relative bg-stone-900 rounded-4xl p-8 md:p-12 overflow-hidden text-stone-300"
+      >
+        <div
+          class="absolute inset-0 bg-linear-to-b from-stone-800/50 to-stone-900 pointer-events-none"
+        >
+        </div>
+
+        <div class="relative z-10">
+          <h2
+            class="font-display text-3xl md:text-4xl font-bold text-white mb-6"
+          >
+            The Combat: 5 Goblins vs 4 Adventurers
+          </h2>
+          <p class="text-lg leading-relaxed mb-8">
+            The encounter used <code class="text-copper">spawn_quick_enemy</code> to generate 5 goblins
+            on a 20×20 grid with obstacles. The engine handled initiative rolls automatically—each
+            combatant's DEX modifier + d20 determined turn order.
+          </p>
+
+          <div
+            class="bg-black/50 rounded-xl p-6 font-mono text-sm border border-white/10 mb-8 overflow-x-auto"
+          >
+            <div class="text-stone-500 mb-4">// Combat map after Round 1</div>
+            <pre class="text-green-400">
+  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9
+0 . . . . . . . . . . . . . . . . . . . .
+1 . . . . . . . . . . . . . . . . . . . .
+2 . . . . . . . . . . . . . . . . . . . .
+3 . . . . . . . . . . . . . . . . . . . .
+4 . . . . . . . . . . . . . . . . . . . .
+5 . . . K . . . . . . E . . . . . . . . .    K = Kira (Fighter)
+6 . . . . . █ █ . . . . . . . . . . . . .    E = Elara (Wizard)
+7 . . . . . █ █ . . . . G . . . . . . . .    M = Marcus (Cleric)
+8 . . . . . . . . . G . . . G . . . . . .    S = Shade (Rogue)
+9 . . . . M . . . . . . . . . . . . . . .    G = Goblin
+0 . . . . . . . . . . . . . . . . . . . .    █ = Obstacle
+1 . . . . . . . . . . . . . . G . . . . .    ☠ = Defeated
+2 . . . . . . . . S . . . . . . . . . . .</pre>
+          </div>
+
+          <p class="mb-8">
+            What made this work wasn't the AI's reasoning—it was the <strong>database constraints</strong>.
+            Movement costs were calculated from grid positions. Attack rolls checked AC from the
+            target's record. HP damage was persisted immediately. The AI couldn't cheat even if it
+            wanted to.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Key Findings -->
+    <section
+      class="prose prose-stone dark:prose-invert prose-lg max-w-none mb-20 scroll-reveal"
+    >
+      <h2 class="font-display text-copper text-3xl font-bold mb-6">
+        Key Findings: What the Playtest Revealed
+      </h2>
+
+      <div class="my-12 not-prose">
+        <div class="space-y-6">
+          <div class="bg-white dark:bg-stone-900 p-6 rounded-2xl border-l-4 border-copper">
+            <h3 class="font-display font-bold text-lg mb-2 text-stone-900 dark:text-stone-100">
+              1. Errors Are Teachers
+            </h3>
+            <p class="text-stone-600 dark:text-stone-400 mb-4">
+              When I tried to move Shade to position (12,8), the engine rejected it:
+              <code class="text-red-400">"Position blocked by obstacle"</code>. When I used the wrong
+              actor ID, it said: <code class="text-red-400">"Actor not in combat"</code>. Each error
+              guided the next action.
+            </p>
+            <div class="bg-stone-950 rounded-lg p-4 font-mono text-sm text-stone-300 overflow-x-auto">
+              <span class="text-red-400">Error:</span> Actor ID 'char-shade-xxx' not found in combat.<br />
+              <span class="text-green-400">Hint:</span> Use combat_manage(action: "get") to see valid participant IDs.
+            </div>
+          </div>
+
+          <div class="bg-white dark:bg-stone-900 p-6 rounded-2xl border-l-4 border-green-400">
+            <h3 class="font-display font-bold text-lg mb-2 text-stone-900 dark:text-stone-100">
+              2. Dice Create Narrative
+            </h3>
+            <p class="text-stone-600 dark:text-stone-400 mb-4">
+              The AI didn't decide if attacks hit—the d20 did. Shade rolled a natural 18 on his
+              sneak attack. Brother Marcus's Cure Wounds rolled 8 on 1d8+3. These random outcomes
+              created emergent drama that felt authentic.
+            </p>
+            <div class="grid md:grid-cols-2 gap-4">
+              <div class="bg-stone-50 dark:bg-stone-950 p-4 rounded-lg">
+                <div class="text-copper font-bold mb-1">Shade's Attack</div>
+                <div class="font-mono text-sm">18 + 6 = 24 vs AC 13</div>
+                <div class="text-green-400 text-sm">HIT - 13 damage (3d6+3)</div>
+              </div>
+              <div class="bg-stone-50 dark:bg-stone-950 p-4 rounded-lg">
+                <div class="text-yellow-400 font-bold mb-1">Marcus's Heal</div>
+                <div class="font-mono text-sm">1d8+3 = 8 HP restored</div>
+                <div class="text-blue-400 text-sm">Shade: 9 → 17 HP</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-white dark:bg-stone-900 p-6 rounded-2xl border-l-4 border-blue-400">
+            <h3 class="font-display font-bold text-lg mb-2 text-stone-900 dark:text-stone-100">
+              3. HP Syncs Automatically
+            </h3>
+            <p class="text-stone-600 dark:text-stone-400">
+              Combat maintains its own HP snapshots. When combat ended, the engine called
+              <code>combat_manage(action: "end")</code> and synced final HP back to persistent
+              character records. Shade's 17 HP (after healing) was saved to his character file.
+              Next session, he starts damaged.
+            </p>
+          </div>
+
+          <div class="bg-white dark:bg-stone-900 p-6 rounded-2xl border-l-4 border-purple-400">
+            <h3 class="font-display font-bold text-lg mb-2 text-stone-900 dark:text-stone-100">
+              4. Movement Math is Non-Negotiable
+            </h3>
+            <p class="text-stone-600 dark:text-stone-400">
+              Every character has a speed (30ft for most). The grid uses 5ft squares. When I tried
+              to move 35ft with 30ft remaining, the engine rejected it. No "close enough"—the database
+              enforces the rules even when the AI forgets them.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Combat Resolution -->
+    <section
+      class="bg-stone-100 dark:bg-stone-900 rounded-4xl p-8 md:p-12 mb-20 scroll-reveal transition-colors"
+    >
+      <h2
+        class="font-display text-3xl font-bold text-stone-900 dark:text-stone-100 mb-8"
+      >
+        The Outcome: Goblin-3 Falls
+      </h2>
+      <p class="text-lg text-stone-600 dark:text-stone-400 mb-8">
+        After two rounds, the party had eliminated one goblin and positioned for a counterattack.
+        The combat log tells the mechanical story; the AI narrates the drama.
+      </p>
+
+      <div class="bg-white dark:bg-stone-950 p-6 rounded-2xl shadow-sm border border-stone-200 dark:border-stone-800 mb-8">
+        <h3 class="font-bold text-copper mb-4 uppercase tracking-wide text-sm">
+          Combat Timeline
+        </h3>
+        <div class="space-y-4 font-mono text-sm">
+          <div class="flex gap-4">
+            <span class="text-stone-400 w-16 shrink-0">Round 1</span>
+            <div class="text-stone-600 dark:text-stone-300">
+              Goblins swarm Shade (12 damage). Party repositions.
+            </div>
+          </div>
+          <div class="flex gap-4">
+            <span class="text-stone-400 w-16 shrink-0">Round 2</span>
+            <div class="text-stone-600 dark:text-stone-300">
+              Marcus heals Shade (+8 HP). Shade flanks and kills Goblin-3 (13 damage sneak attack).
+            </div>
+          </div>
+          <div class="flex gap-4 border-t border-stone-200 dark:border-stone-800 pt-4">
+            <span class="text-green-400 w-16 shrink-0">Result</span>
+            <div class="text-stone-600 dark:text-stone-300">
+              Party: 4/4 alive. Goblins: 4/5 remaining. HP synced to character records.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-stone-950 rounded-xl p-6 font-mono text-sm text-green-400 overflow-x-auto">
+        <pre>╔══════════════════════════════════════════════════════════╗
+║                    COMBAT ENDED                          ║
+╠══════════════════════════════════════════════════════════╣
+║  HP Sync Complete:                                       ║
+║    Kira Stoneheart:   28/28 HP (unchanged)              ║
+║    Elara Moonshadow:  18/18 HP (unchanged)              ║
+║    Brother Marcus:    24/24 HP (unchanged)              ║
+║    Shade:             17/21 HP (took 12, healed 8)      ║
+║                                                          ║
+║  Enemies Defeated: 1 (Goblin-3)                         ║
+║  Enemies Remaining: 4                                    ║
+║                                                          ║
+║  State persisted to: rpg-mcp.db                         ║
+╚══════════════════════════════════════════════════════════╝</pre>
+      </div>
+    </section>
+
+    <!-- Architecture Insights -->
+    <section
+      class="prose prose-stone dark:prose-invert prose-lg max-w-none mb-20 scroll-reveal"
+    >
+      <h2 class="font-display text-copper text-3xl font-bold mb-6">
+        Why This Matters: Database as Game Master
+      </h2>
+      <p>
+        The traditional approach to AI game masters is to stuff everything into the prompt:
+        character stats, world state, combat history. But prompts have limits, and context
+        windows get expensive.
+      </p>
+      <p>
+        The database-driven approach inverts this. The AI knows <em>nothing</em> except what
+        it queries. Want to know Shade's HP? Call <code>character_manage(action: "get")</code>.
+        Want to see the battlefield? Call <code>combat_map(action: "render")</code>. The
+        database is the single source of truth.
+      </p>
+
+      <div class="my-12 not-prose">
+        <div class="grid gap-4">
+          <div class="bg-stone-50 dark:bg-stone-900 p-4 rounded-xl border-l-4 border-copper">
+            <span class="font-mono text-copper text-sm">PRINCIPLE</span>
+            <span class="font-bold text-stone-900 dark:text-stone-100 ml-2">The AI is the narrator, not the referee</span>
+            <p class="text-stone-500 mt-1 text-sm">Database enforces rules. AI describes consequences.</p>
+          </div>
+          <div class="bg-stone-50 dark:bg-stone-900 p-4 rounded-xl border-l-4 border-green-400">
+            <span class="font-mono text-green-400 text-sm">PRINCIPLE</span>
+            <span class="font-bold text-stone-900 dark:text-stone-100 ml-2">Errors guide, not block</span>
+            <p class="text-stone-500 mt-1 text-sm">Every rejection includes context for the correct action.</p>
+          </div>
+          <div class="bg-stone-50 dark:bg-stone-900 p-4 rounded-xl border-l-4 border-blue-400">
+            <span class="font-mono text-blue-400 text-sm">PRINCIPLE</span>
+            <span class="font-bold text-stone-900 dark:text-stone-100 ml-2">Dice create stakes</span>
+            <p class="text-stone-500 mt-1 text-sm">Random outcomes prevent AI from "choosing" winners.</p>
+          </div>
+          <div class="bg-stone-50 dark:bg-stone-900 p-4 rounded-xl border-l-4 border-purple-400">
+            <span class="font-mono text-purple-400 text-sm">PRINCIPLE</span>
+            <span class="font-bold text-stone-900 dark:text-stone-100 ml-2">State persists, context doesn't</span>
+            <p class="text-stone-500 mt-1 text-sm">Session can end anytime. Database remembers everything.</p>
+          </div>
+        </div>
+      </div>
+
+      <p>
+        The result? Coherent narrative across any number of sessions. The AI can play both
+        sides because the database prevents favoritism. Combat feels fair because dice determine
+        outcomes. And when something goes wrong, the error message tells you exactly what
+        to do next.
+      </p>
+    </section>
+
+    <!-- Tools Used -->
+    <section class="mb-20 scroll-reveal">
+      <div
+        class="bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 p-8 md:p-12 rounded-4xl shadow-sm relative overflow-hidden transition-colors"
+      >
+        <h2 class="font-display text-copper text-3xl font-bold mb-8">
+          The Toolbox: 135 RPG Tools
+        </h2>
+        <p class="text-lg text-stone-600 dark:text-stone-400 mb-8">
+          The mnehmos.rpg.mcp server consolidates 135 tools into action-based interfaces.
+          Here's what powered this playtest:
+        </p>
+
+        <div class="grid md:grid-cols-2 gap-6">
+          <div class="bg-stone-50 dark:bg-stone-950 p-6 rounded-2xl">
+            <h4 class="font-bold text-stone-900 dark:text-stone-100 mb-3">Session & World</h4>
+            <ul class="space-y-2 text-sm text-stone-600 dark:text-stone-400 font-mono">
+              <li>session_manage (initialize, get_context)</li>
+              <li>world_manage (generate, get_state)</li>
+              <li>spatial_manage (generate, look)</li>
+            </ul>
+          </div>
+          <div class="bg-stone-50 dark:bg-stone-950 p-6 rounded-2xl">
+            <h4 class="font-bold text-stone-900 dark:text-stone-100 mb-3">Characters & Party</h4>
+            <ul class="space-y-2 text-sm text-stone-600 dark:text-stone-400 font-mono">
+              <li>character_manage (create, get, update)</li>
+              <li>party_manage (create, add_member)</li>
+              <li>inventory_manage (give, equip)</li>
+            </ul>
+          </div>
+          <div class="bg-stone-50 dark:bg-stone-950 p-6 rounded-2xl">
+            <h4 class="font-bold text-stone-900 dark:text-stone-100 mb-3">Combat</h4>
+            <ul class="space-y-2 text-sm text-stone-600 dark:text-stone-400 font-mono">
+              <li>combat_manage (create, get, end)</li>
+              <li>combat_action (attack, move, heal)</li>
+              <li>combat_map (render, aoe)</li>
+            </ul>
+          </div>
+          <div class="bg-stone-50 dark:bg-stone-950 p-6 rounded-2xl">
+            <h4 class="font-bold text-stone-900 dark:text-stone-100 mb-3">Narrative</h4>
+            <ul class="space-y-2 text-sm text-stone-600 dark:text-stone-400 font-mono">
+              <li>quest_manage (create, assign, complete)</li>
+              <li>npc_manage (get_context, interact)</li>
+              <li>narrative_manage (add, get_context)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Conclusion -->
+    <section
+      class="prose prose-stone dark:prose-invert prose-lg max-w-none mb-20 scroll-reveal"
+    >
+      <h2 class="font-display text-copper text-3xl font-bold mb-6">
+        The Takeaway
+      </h2>
+      <p>
+        Can an AI play D&D with itself? Yes—but only because the database is the real
+        dungeon master. The AI describes, proposes, and narrates. The database validates,
+        persists, and enforces.
+      </p>
+      <p>
+        This architecture scales beyond games. Any AI workflow that requires <strong>consistent
+        state across sessions</strong> benefits from externalizing truth to a database. The
+        LLM becomes the interface layer—translating intent into validated actions and results
+        into narrative.
+      </p>
+      <blockquote class="border-l-4 border-copper pl-6 italic">
+        "The agent isn't smart—the database is. The agent is just hands."
+      </blockquote>
+      <p>
+        Next experiment: multi-agent D&D where different Claude instances control different
+        characters, coordinated through the same database. The dungeon master becomes truly
+        neutral—just another agent with access to the same tools.
+      </p>
+    </section>
+
+    <!-- Footer Meta -->
+    <footer
+      class="text-center pt-16 border-t border-stone-200 dark:border-stone-800"
+    >
+      <p class="text-stone-500 mb-8 max-w-md mx-auto">
+        RPG engine source: <a href="https://github.com/Mnehmos" class="text-copper hover:underline">github.com/Mnehmos</a>
+      </p>
+      <div class="flex justify-center gap-6">
+        <a
+          href="https://github.com/Mnehmos"
+          class="text-stone-400 hover:text-copper transition-colors"
+        >
+          <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"
+            ><path
+              d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.111.825-.261.825-.579 0-.285-.011-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.22 0 4.609-2.807 5.627-5.479 5.921.43.372.823 1.102.823 2.222 0 1.606-.015 2.896-.015 3.286 0 .321.222.696.832.57C20.565 21.795 24 17.31 24 12c0-6.63-5.37-12-12-12z"
+            ></path></svg
+          >
+        </a>
+      </div>
+    </footer>
+  </article>
+
+  <!-- Global Animations -->
+  <style is:global>
+    @keyframes fade-in {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+    @keyframes slide-up {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    .animate-fade-in {
+      animation: fade-in 1s ease-out forwards;
+    }
+    .animate-slide-up {
+      opacity: 0;
+      animation: slide-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    .animation-delay-100 {
+      animation-delay: 0.1s;
+    }
+    .animation-delay-200 {
+      animation-delay: 0.2s;
+    }
+
+    .scroll-reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .scroll-reveal.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+
+  <script>
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: "0px 0px -50px 0px",
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("active");
+        }
+      });
+    }, observerOptions);
+
+    document
+      .querySelectorAll(".scroll-reveal")
+      .forEach((el) => observer.observe(el));
+  </script>
+</BaseLayout>
