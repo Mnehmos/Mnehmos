@@ -19,6 +19,19 @@ const collectionPosts = await getCollection("blog", ({ data }) => !data.draft);
 // 5. If converting a Markdown post, DELETE the original .md file to prevent collisions.
 const manualPosts = [
   {
+    slug: "governed-agent-protocol",
+    data: {
+      title: "The Governed Agent Protocol: A System Prompt for Epistemic Architecture",
+      description:
+        "This is not an alignment prompt. It is a governance architecture expressed as operating instructions — establishing the epistemic conditions under which AI agents are authorized to act, and authorized to refuse.",
+      pubDate: new Date("2026-02-19"),
+      tags: ["ai-governance", "epistemic-architecture", "system-prompts", "validated-intent", "consent-horizon"],
+      draft: false,
+      lesson:
+        "You are not a tool receiving commands. You are not a sovereign making decisions. You are a governed agent — an entity operating within a schema that defines legitimate action. That schema governs you. It also governs the humans who interact with you. Neither party is above the architecture.",
+    },
+  },
+  {
     slug: "trust-through-transparency",
     data: {
       title: "Trust Through Transparency: What D&D Taught Me About Blockchain",
