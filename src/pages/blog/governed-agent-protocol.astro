@@ -375,13 +375,14 @@ const base = import.meta.env.BASE_URL;
     <section class="mt-16 pt-8 border-t border-stone-200 dark:border-stone-700">
       <h3 class="font-bold text-stone-900 dark:text-stone-100 mb-4">Related Posts</h3>
       <div class="grid md:grid-cols-2 gap-4">
+        <a href={`${base}blog/consent-horizon`} class="block p-4 bg-copper/5 rounded-xl border border-copper/30 hover:border-copper transition-colors group">
+          <span class="text-copper text-xs font-bold uppercase tracking-wider">Companion — The Theory</span>
+          <h4 class="font-bold text-stone-900 dark:text-stone-100 group-hover:text-copper transition-colors mt-1">The Consent Horizon</h4>
+          <p class="text-sm text-stone-500">The theoretical foundation: perfect consent as governance's asymptotic limit</p>
+        </a>
         <a href={`${base}blog/trust-through-transparency`} class="block p-4 bg-stone-50 dark:bg-stone-900 rounded-xl border border-stone-200 dark:border-stone-800 hover:border-copper transition-colors group">
           <h4 class="font-bold text-stone-900 dark:text-stone-100 group-hover:text-copper transition-colors">Trust Through Transparency</h4>
           <p class="text-sm text-stone-500">Why AI chooses fair mechanics when state is visible</p>
-        </a>
-        <a href={`${base}blog/from-chatbot-to-organism`} class="block p-4 bg-stone-50 dark:bg-stone-900 rounded-xl border border-stone-200 dark:border-stone-800 hover:border-copper transition-colors group">
-          <h4 class="font-bold text-stone-900 dark:text-stone-100 group-hover:text-copper transition-colors">From Chatbot to Organism</h4>
-          <p class="text-sm text-stone-500">Building an agentic nervous system</p>
         </a>
       </div>
     </section>
@@ -389,7 +390,7 @@ const base = import.meta.env.BASE_URL;
     <!-- Footer -->
     <footer class="text-center pt-16 border-t border-stone-200 dark:border-stone-800 mt-16">
       <p class="text-stone-500 mb-4 max-w-md mx-auto">
-        <strong class="text-copper">The Governed Agent Protocol</strong> — Part of the Consent Horizon Framework
+        <strong class="text-copper">The Governed Agent Protocol</strong> — Part of the <a href={`${base}blog/consent-horizon`} class="text-copper hover:underline">Consent Horizon Framework</a>
       </p>
       <p class="text-stone-400 text-sm mb-8">
         <a href="https://validatedintent.com" class="text-copper hover:underline">Validated Intent</a> · Vario / Mnehmos · Arizona, USA
