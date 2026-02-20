@@ -19,6 +19,19 @@ const collectionPosts = await getCollection("blog", ({ data }) => !data.draft);
 // 5. If converting a Markdown post, DELETE the original .md file to prevent collisions.
 const manualPosts = [
   {
+    slug: "ai-demand-signal-military-spending",
+    data: {
+      title: "The Real AI Demand Signal Is Military Spending, Not Consumer Hype",
+      description:
+        "The $635-690 billion hyperscaler capex surge isn't a speculative bubble — it's a generational rearmament cycle. Six threads of evidence trace the convergence of defense AI, energy infrastructure, and demographic decline.",
+      pubDate: new Date("2026-02-20"),
+      tags: ["ai-investment", "defense-tech", "geopolitics", "ukraine", "energy", "research"],
+      draft: false,
+      lesson:
+        "An adversary with a $25 billion budget employing autonomous systems can decimate a military with an $800 billion budget without them. That asymmetry makes AI investment existential for established powers, not speculative.",
+    },
+  },
+  {
     slug: "governed-agent-protocol",
     data: {
       title: "The Governed Agent Protocol: A System Prompt for Epistemic Architecture",

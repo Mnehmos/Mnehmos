@@ -1,0 +1,825 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { ThreadMap } from "../../components/blog/ThreadMap";
+import { BudgetIceberg } from "../../components/blog/BudgetIceberg";
+import { DroneExplosion } from "../../components/blog/DroneExplosion";
+import { TechTransferTimeline } from "../../components/blog/TechTransferTimeline";
+
+const title = "The Real AI Demand Signal Is Military Spending, Not Consumer Hype";
+const description =
+  "The $635-690 billion hyperscaler capex surge isn't a speculative bubble — it's a generational rearmament cycle. Six threads of evidence trace the convergence of defense AI, energy infrastructure, and demographic decline.";
+const pubDate = new Date("2026-02-20");
+const tags = [
+  "ai-investment",
+  "defense-tech",
+  "geopolitics",
+  "ukraine",
+  "energy",
+  "research",
+];
+const lesson =
+  "An adversary with a $25 billion budget employing autonomous systems can decimate an $800 billion military without them. That asymmetry makes AI investment existential for established powers, not speculative.";
+const base = import.meta.env.BASE_URL;
+---
+
+<BaseLayout title={title} description={description}>
+  <article class="max-w-4xl mx-auto px-6 py-12 md:py-20 overflow-hidden">
+    <!-- Breadcrumbs -->
+    <nav class="mb-12 animate-fade-in">
+      <a
+        href={`${base}blog`}
+        class="text-stone-500 dark:text-stone-400 hover:text-copper transition-colors flex items-center gap-2 text-sm font-medium group"
+      >
+        <svg
+          class="w-4 h-4 transform group-hover:-translate-x-1 transition-transform"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M15 19l-7-7 7-7"></path>
+        </svg>
+        Back to Blog
+      </a>
+    </nav>
+
+    <!-- Header -->
+    <header class="mb-16">
+      <div class="flex flex-wrap gap-2 mb-6 animate-fade-in">
+        {
+          tags.map((tag) => (
+            <span class="px-3 py-1 bg-copper/10 text-copper text-xs font-bold uppercase tracking-wider rounded-full border border-copper/10">
+              {tag}
+            </span>
+          ))
+        }
+      </div>
+
+      <h1
+        class="font-display text-4xl md:text-6xl font-bold text-stone-900 dark:text-stone-100 mb-6 leading-tight animate-slide-up"
+      >
+        The Real AI <span class="text-copper">Demand Signal</span> Is Military
+        Spending
+      </h1>
+
+      <p
+        class="text-xl md:text-2xl text-stone-600 dark:text-stone-300 mb-4 animate-slide-up animation-delay-100"
+      >
+        Not consumer hype. Not enterprise SaaS. Not chatbot subscriptions.
+      </p>
+
+      <div
+        class="flex items-center gap-4 text-sm text-stone-400 animate-slide-up animation-delay-200"
+      >
+        <time datetime={pubDate.toISOString()}>
+          {
+            pubDate.toLocaleDateString("en-US", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })
+          }
+        </time>
+        <span>·</span>
+        <span>Research Analysis</span>
+        <span>·</span>
+        <span>~25 min read</span>
+      </div>
+    </header>
+
+    <!-- Hook -->
+    <section class="mb-20 scroll-reveal">
+      <div
+        class="bg-stone-900 dark:bg-stone-950 rounded-3xl p-8 md:p-12 border border-stone-800"
+      >
+        <p
+          class="text-stone-300 text-lg md:text-xl leading-relaxed mb-6 font-medium"
+        >
+          The global surge in AI investment — projected at <span
+            class="text-copper font-bold">$635–690 billion</span
+          > in hyperscaler capex alone in 2026 — is not a speculative bubble.
+          It's a generational rearmament cycle driven by defense imperatives.
+        </p>
+        <p class="text-stone-400 leading-relaxed mb-6">
+          The Pentagon's first-ever standalone AI and autonomy budget line in
+          FY2026 totals $13.4 billion. Comprehensive analysis places actual U.S.
+          defense AI spending at $25.2 billion. Ukraine's 500+ drone
+          manufacturers are producing millions of autonomous systems annually.
+          The established post-WWII power structure accounts for the overwhelming
+          majority of global AI investment.
+        </p>
+        <p class="text-stone-400 leading-relaxed">
+          The historical pattern is unmistakable: every transformative civilian
+          technology — the internet, GPS, semiconductors, nuclear energy, radar,
+          jet engines — <span class="text-white font-semibold"
+            >originated in military spending</span
+          >. AI is following the same trajectory.
+        </p>
+      </div>
+    </section>
+
+    <!-- Thread Map -->
+    <section class="mb-20 scroll-reveal">
+      <ThreadMap client:visible />
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!-- THREAD 1: Pentagon AI -->
+    <!-- ═══════════════════════════════════════════════════ -->
+    <section class="mb-20 scroll-reveal">
+      <div class="flex items-center gap-3 mb-8">
+        <span
+          class="text-xs font-mono font-bold px-3 py-1.5 rounded-full bg-copper/15 text-copper border border-copper/20"
+          >Thread 1</span
+        >
+        <h2
+          class="font-display text-3xl md:text-4xl font-bold text-stone-900 dark:text-stone-100"
+        >
+          The Pentagon's Hidden AI Budget
+        </h2>
+      </div>
+
+      <div class="prose-custom space-y-6 text-stone-600 dark:text-stone-300">
+        <p class="text-lg leading-relaxed">
+          The U.S. Department of Defense's publicly reported AI/ML budget tells
+          only a fraction of the story. The narrow official spending line grew
+          from $874 million in FY2022 to $1.8 billion in FY2024-25. Headlines
+          cite this number. It is misleading by an order of magnitude.
+        </p>
+      </div>
+
+      <!-- Budget Iceberg Component -->
+      <BudgetIceberg client:visible />
+
+      <div class="prose-custom space-y-6 text-stone-600 dark:text-stone-300">
+        <p class="leading-relaxed">
+          The programs behind these numbers are not theoretical. <strong
+            class="text-stone-900 dark:text-stone-100"
+            >Project Maven</strong
+          >, now operating as the Maven Smart System under Palantir Technologies,
+          is deployed to every major combatant command with a contract ceiling of
+          approximately $1.275 billion through 2029. As Navy Vice Admiral Karl
+          Thomas stated: "Everyone is using Maven." NATO adopted a variant within
+          30 days of signing.
+        </p>
+
+        <p class="leading-relaxed">
+          The <strong class="text-stone-900 dark:text-stone-100"
+            >Replicator Initiative</strong
+          >, launched with the explicit goal of countering China's mass
+          advantage, received approximately $1 billion across FY2024-25.
+          Seventy-five percent of suppliers are non-traditional defense
+          contractors. The <strong class="text-stone-900 dark:text-stone-100"
+            >Collaborative Combat Aircraft</strong
+          > program — AI-controlled fighter drones paired with manned aircraft — plans
+          at least 1,000 units at $30 million each, within a five-year budget of $28.5
+          billion. Both Anduril and General Atomics achieved first flights in 2025.
+        </p>
+
+        <p class="leading-relaxed">
+          DARPA's budget reached $4.37 billion requested for FY2025, with
+          approximately 70% of all programs now incorporating AI. Its new
+          director was formerly the chief engineer of Project Maven — a personnel
+          decision that signals priorities.
+        </p>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!-- THREAD 2: Energy -->
+    <!-- ═══════════════════════════════════════════════════ -->
+    <section class="mb-20 scroll-reveal">
+      <div class="flex items-center gap-3 mb-8">
+        <span
+          class="text-xs font-mono font-bold px-3 py-1.5 rounded-full bg-amber-500/15 text-amber-600 dark:text-amber-400 border border-amber-500/20"
+          >Thread 2</span
+        >
+        <h2
+          class="font-display text-3xl md:text-4xl font-bold text-stone-900 dark:text-stone-100"
+        >
+          Energy as Strategic Commodity
+        </h2>
+      </div>
+
+      <div class="prose-custom space-y-6 text-stone-600 dark:text-stone-300">
+        <p class="text-lg leading-relaxed">
+          U.S. data centers consumed 183 TWh in 2024 — more than 4% of total
+          U.S. electricity. By 2030, the IEA projects 426 TWh — a 133% increase
+          that will account for almost half of all U.S. electricity demand
+          growth. By then, the U.S. economy will consume more electricity for
+          data processing than for all energy-intensive manufacturing combined,
+          including aluminum production.
+        </p>
+
+        <p class="leading-relaxed">
+          The aggregate capital expenditure of the five largest tech companies is
+          scaling at a rate never seen in corporate history. For 2026, Microsoft,
+          Amazon, Alphabet, Meta, and Oracle collectively plan $635–690 billion —
+          a 67-74% year-over-year increase. Approximately 75% is directly tied to
+          AI infrastructure. These figures approach 94% of the companies'
+          operating cash flows.
+        </p>
+      </div>
+
+      <!-- Energy stats grid -->
+      <div class="grid sm:grid-cols-3 gap-4 my-10">
+        <div
+          class="p-6 rounded-2xl bg-amber-500/5 border border-amber-500/15 text-center"
+        >
+          <div
+            class="font-display text-3xl font-black text-amber-600 dark:text-amber-400 mb-2"
+          >
+            $1.6B
+          </div>
+          <p class="text-xs text-stone-500 dark:text-stone-400">
+            Three Mile Island Unit 1 restart for Microsoft (835 MW, 20-year PPA)
+          </p>
+        </div>
+        <div
+          class="p-6 rounded-2xl bg-amber-500/5 border border-amber-500/15 text-center"
+        >
+          <div
+            class="font-display text-3xl font-black text-amber-600 dark:text-amber-400 mb-2"
+          >
+            5 GW
+          </div>
+          <p class="text-xs text-stone-500 dark:text-stone-400">
+            Amazon's target with X-energy advanced reactors by 2039
+          </p>
+        </div>
+        <div
+          class="p-6 rounded-2xl bg-amber-500/5 border border-amber-500/15 text-center"
+        >
+          <div
+            class="font-display text-3xl font-black text-amber-600 dark:text-amber-400 mb-2"
+          >
+            5 GW
+          </div>
+          <p class="text-xs text-stone-500 dark:text-stone-400">
+            Meta's Louisiana "Hyperion" campus — three new gas plants, 3× all of
+            New Orleans
+          </p>
+        </div>
+      </div>
+
+      <div class="prose-custom space-y-6 text-stone-600 dark:text-stone-300">
+        <p class="leading-relaxed">
+          The convergence is now formalized in executive orders. Biden's January
+          2025 order directed DOD and DOE to identify federal land sites for AI
+          data centers with clean energy. Trump's July 2025 order expanded this.
+          In July 2025, DOE selected four primary sites including Savannah River
+          and Oak Ridge — both historically military/nuclear facilities. Oklo's
+          contract for a microreactor at <strong
+            class="text-stone-900 dark:text-stone-100"
+            >Eielson Air Force Base</strong
+          > represents the first concrete military-AI-energy co-location. Energy
+          Secretary Chris Wright: "Energy security is national security, and
+          electricity is the strategic commodity that is the building block for
+          AI."
+        </p>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!-- THREAD 3: Cooling -->
+    <!-- ═══════════════════════════════════════════════════ -->
+    <section class="mb-20 scroll-reveal">
+      <div class="flex items-center gap-3 mb-8">
+        <span
+          class="text-xs font-mono font-bold px-3 py-1.5 rounded-full bg-blue-500/15 text-blue-600 dark:text-blue-400 border border-blue-500/20"
+          >Thread 3</span
+        >
+        <h2
+          class="font-display text-3xl md:text-4xl font-bold text-stone-900 dark:text-stone-100"
+        >
+          Cooling Determines Who Can Scale
+        </h2>
+      </div>
+
+      <div class="prose-custom space-y-6 text-stone-600 dark:text-stone-300">
+        <p class="text-lg leading-relaxed">
+          Traditional enterprise racks operated at 5-15 kW. NVIDIA's current
+          GB200 NVL72 rack operates at 120-132 kW. The Rubin platform
+          (2026-27) targets 250-900 kW per rack. The physics are absolute: air
+          thermal conductivity is 0.024 W/m·K, making it insufficient above
+          approximately 30 kW per rack. Liquid cooling is 3,000 times more
+          efficient at heat transfer.
+        </p>
+
+        <p class="leading-relaxed">
+          SemiAnalysis assessed that most data center infrastructures cannot
+          support 120 kW per rack even with direct-to-chip liquid cooling —
+          meaning the majority of existing facilities cannot run current NVIDIA
+          hardware at design specifications. Retrofitting costs $200,000-300,000
+          per rack for 100 kW infrastructure. CDU lead times are 12-18 months.
+        </p>
+      </div>
+
+      <!-- GPU Power progression -->
+      <div
+        class="my-10 p-6 rounded-2xl bg-blue-500/5 border border-blue-500/15"
+      >
+        <h4
+          class="font-display text-sm font-bold text-blue-600 dark:text-blue-400 mb-4 uppercase tracking-wider"
+        >
+          GPU Power Consumption Curve
+        </h4>
+        <div class="space-y-3">
+          {
+            [
+              { gpu: "A100", year: "2020", tdp: "400W", pct: 16 },
+              { gpu: "H100", year: "2022", tdp: "700W", pct: 28 },
+              { gpu: "B200", year: "2025", tdp: "1,000-1,200W", pct: 48 },
+              {
+                gpu: "GB200 Superchip",
+                year: "2025",
+                tdp: "2,700W",
+                pct: 78,
+              },
+              {
+                gpu: "Rubin (projected)",
+                year: "2026-27",
+                tdp: "2,300W/GPU",
+                pct: 92,
+              },
+            ].map((g) => (
+              <div class="flex items-center gap-3">
+                <span class="text-xs font-mono text-stone-400 w-20 shrink-0 text-right">
+                  {g.year}
+                </span>
+                <div class="flex-1 bg-stone-200 dark:bg-stone-800 rounded-full h-6 relative overflow-hidden">
+                  <div
+                    class="absolute inset-y-0 left-0 rounded-full bg-blue-500/40 transition-all duration-700"
+                    style={`width: ${g.pct}%`}
+                  />
+                  <div class="relative flex items-center justify-between px-3 h-full">
+                    <span class="text-xs font-bold text-stone-700 dark:text-stone-200">
+                      {g.gpu}
+                    </span>
+                    <span class="text-xs font-mono font-bold text-blue-600 dark:text-blue-400">
+                      {g.tdp}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            ))
+          }
+        </div>
+        <p class="text-xs text-stone-400 mt-4">
+          Average AI rack cost: $3.9M (2025) vs $500K for traditional racks. The
+          GB200 NVL72 weighs 1.36 tons.
+        </p>
+      </div>
+
+      <div class="prose-custom space-y-6 text-stone-600 dark:text-stone-300">
+        <p class="leading-relaxed">
+          Military electronics face the same thermal wall. The shift from SWaP
+          (Size, Weight, and Power) to SWaP-C (adding Cooling) as a design
+          constraint reflects this reality. Cooling doesn't just determine who
+          can train frontier models — it determines who can <em>deploy</em> them in
+          the field.
+        </p>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!-- THREAD 4: Ukraine -->
+    <!-- ═══════════════════════════════════════════════════ -->
+    <section class="mb-20 scroll-reveal">
+      <div class="flex items-center gap-3 mb-8">
+        <span
+          class="text-xs font-mono font-bold px-3 py-1.5 rounded-full bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20"
+          >Thread 4</span
+        >
+        <h2
+          class="font-display text-3xl md:text-4xl font-bold text-stone-900 dark:text-stone-100"
+        >
+          Ukraine's Autonomous Warfare Ecosystem
+        </h2>
+      </div>
+
+      <div class="prose-custom space-y-6 text-stone-600 dark:text-stone-300">
+        <p class="text-lg leading-relaxed">
+          Ukraine's drone ecosystem scaled from 7 manufacturers before the
+          full-scale invasion to approximately 500 as of 2025. Production reached
+          2.2 million UAVs in 2024, targeting 4.5 million for 2025. They created
+          the world's first dedicated military branch for drone warfare — the
+          Unmanned Systems Forces — and the world's first unmanned surface
+          vehicle brigade. They are outproducing all of NATO combined.
+        </p>
+      </div>
+
+      <!-- Drone Explosion Component -->
+      <DroneExplosion client:visible />
+
+      <div class="prose-custom space-y-6 text-stone-600 dark:text-stone-300">
+        <p class="leading-relaxed">
+          Mykhailo Fedorov, appointed Defense Minister in January 2026 at age
+          35, has announced a strategy to become "the world's first agentic
+          state." Private investment in Ukrainian defense startups grew from $5
+          million in 2023 to over $105 million across 50+ startups in 2025.
+          Ukrainian companies are already opening production facilities in
+          Slovakia, Denmark, UK, Finland, and Germany. Zelensky proposed a $50
+          billion, 5-year framework to produce up to 10 million drones annually
+          for U.S. procurement.
+        </p>
+
+        <p class="leading-relaxed">
+          A country with no traditional navy has sunk warships with $250,000
+          drones and forced Russia to relocate its Black Sea Fleet. A naval drone
+          shot down a helicopter. A larger variant reportedly shot down two
+          fighter jets. The doctrinal implications are being studied by every
+          major military on earth.
+        </p>
+      </div>
+
+      <!-- Quote callout -->
+      <div
+        class="my-10 p-6 rounded-2xl bg-emerald-500/5 border border-emerald-500/15"
+      >
+        <blockquote
+          class="text-emerald-700 dark:text-emerald-300 text-lg font-medium leading-relaxed"
+        >
+          "Our mission is to enable remote operation as much as possible and
+          eventually implement autonomy. That's the next stage of warfare."
+        </blockquote>
+        <p class="text-stone-400 text-sm mt-3">
+          — Mykhailo Fedorov, Ukraine's Minister of Defense
+        </p>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!-- THREAD 5: Power Shift -->
+    <!-- ═══════════════════════════════════════════════════ -->
+    <section class="mb-20 scroll-reveal">
+      <div class="flex items-center gap-3 mb-8">
+        <span
+          class="text-xs font-mono font-bold px-3 py-1.5 rounded-full bg-violet-500/15 text-violet-600 dark:text-violet-400 border border-violet-500/20"
+          >Thread 5</span
+        >
+        <h2
+          class="font-display text-3xl md:text-4xl font-bold text-stone-900 dark:text-stone-100"
+        >
+          Preventing Their Own Decline
+        </h2>
+      </div>
+
+      <div class="prose-custom space-y-6 text-stone-600 dark:text-stone-300">
+        <p class="text-lg leading-relaxed">
+          The United States attracted $109.1 billion in private AI investment in
+          2024 — nearly 12x China and 24x the UK. Three of five UN Security
+          Council permanent members are the top three global AI investors. This
+          is not coincidence. It is the established post-WWII power structure
+          investing to maintain its position.
+        </p>
+
+        <p class="leading-relaxed">
+          The demographic driver makes this existential. Japan's population is
+          forecast to drop from 125 million to 86 million by 2075. China's
+          fertility rate is approximately 1.0. PwC projects that by 2050, the E7
+          economies could be double the size of the G7. The U.S. Army's own Mad
+          Scientist Laboratory states explicitly: "An aging population and
+          slowing growth in younger age groups will provide fewer eligible
+          soldiers... the military will need to embrace robotics and artificial
+          intelligence."
+        </p>
+      </div>
+
+      <!-- Tech Transfer Timeline -->
+      <TechTransferTimeline client:visible />
+
+      <div class="prose-custom space-y-6 text-stone-600 dark:text-stone-300">
+        <p class="leading-relaxed">
+          The CHIPS Acts worldwide — $52.7 billion (U.S.), €69 billion (EU),
+          $25.7 billion (Japan) — are defense procurement wearing civilian
+          clothes. The first U.S. CHIPS Act grant went to BAE Systems, a defense
+          contractor. Intel received a separate $3 billion for the "Secure
+          Enclave" defense program. Taiwan produces 60% of the world's
+          semiconductors and 90% of the most advanced chips — a disruption from
+          Chinese blockade would cause $2.5 trillion in annual losses. The entire
+          semiconductor reshoring strategy treats chip localization as a defense
+          imperative above all else.
+        </p>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!-- THREAD 6: The People -->
+    <!-- ═══════════════════════════════════════════════════ -->
+    <section class="mb-20 scroll-reveal">
+      <div class="flex items-center gap-3 mb-8">
+        <span
+          class="text-xs font-mono font-bold px-3 py-1.5 rounded-full bg-red-500/15 text-red-600 dark:text-red-400 border border-red-500/20"
+          >Thread 6</span
+        >
+        <h2
+          class="font-display text-3xl md:text-4xl font-bold text-stone-900 dark:text-stone-100"
+        >
+          The People Building It
+        </h2>
+      </div>
+
+      <div class="prose-custom space-y-6 text-stone-600 dark:text-stone-300">
+        <p class="text-lg leading-relaxed">
+          Former Chairman of the Joint Chiefs General Mark Milley: "Ten to
+          fifteen years from now, my guess is 25% to a third of the U.S.
+          military will be robotic." Deputy Secretary Hicks framed the shift as
+          moving from platforms that are "large, exquisite, expensive, and few"
+          to those that are "small, smart, cheap, and many."
+        </p>
+      </div>
+
+      <!-- People cards -->
+      <div class="grid sm:grid-cols-2 gap-4 my-10">
+        <div
+          class="p-5 rounded-2xl border border-stone-200 dark:border-stone-700 bg-white dark:bg-stone-900/50"
+        >
+          <div class="flex items-start justify-between mb-3">
+            <div>
+              <h4
+                class="font-display font-bold text-stone-900 dark:text-stone-100"
+              >
+                Palmer Luckey
+              </h4>
+              <p class="text-xs text-stone-400">Anduril · $30.5B valuation</p>
+            </div>
+            <span class="text-xs font-mono text-red-500 font-bold">Age 33</span
+            >
+          </div>
+          <p class="text-stone-600 dark:text-stone-300 text-sm leading-relaxed">
+            "The war games say we're gonna run out of munitions in eight days in
+            a fight with China." Revenue doubled to ~$1B in 2024. Founders Fund
+            wrote a $1B check — the largest in the firm's history.
+          </p>
+        </div>
+
+        <div
+          class="p-5 rounded-2xl border border-stone-200 dark:border-stone-700 bg-white dark:bg-stone-900/50"
+        >
+          <div class="flex items-start justify-between mb-3">
+            <div>
+              <h4
+                class="font-display font-bold text-stone-900 dark:text-stone-100"
+              >
+                Alex Karp
+              </h4>
+              <p class="text-xs text-stone-400">
+                Palantir · $324B market cap
+              </p>
+            </div>
+            <span class="text-xs font-mono text-red-500 font-bold"
+              >+341% in 2024</span
+            >
+          </div>
+          <p class="text-stone-600 dark:text-stone-300 text-sm leading-relaxed">
+            "Our project is to make America so strong we never fight. That's very
+            different than being almost strong enough, so you always fight."
+            Signed a $10B, 10-year Army Enterprise Agreement.
+          </p>
+        </div>
+
+        <div
+          class="p-5 rounded-2xl border border-stone-200 dark:border-stone-700 bg-white dark:bg-stone-900/50"
+        >
+          <div class="flex items-start justify-between mb-3">
+            <div>
+              <h4
+                class="font-display font-bold text-stone-900 dark:text-stone-100"
+              >
+                Brandon Tseng
+              </h4>
+              <p class="text-xs text-stone-400">
+                Shield AI · Former Navy SEAL
+              </p>
+            </div>
+            <span class="text-xs font-mono text-red-500 font-bold"
+              >$5.3B val</span
+            >
+          </div>
+          <p class="text-stone-600 dark:text-stone-300 text-sm leading-relaxed">
+            "An adversary with a $25 billion budget that effectively employs
+            drones and autonomy will decimate a military with an $800 billion
+            budget without them."
+          </p>
+        </div>
+
+        <div
+          class="p-5 rounded-2xl border border-stone-200 dark:border-stone-700 bg-white dark:bg-stone-900/50"
+        >
+          <div class="flex items-start justify-between mb-3">
+            <div>
+              <h4
+                class="font-display font-bold text-stone-900 dark:text-stone-100"
+              >
+                Trae Stephens
+              </h4>
+              <p class="text-xs text-stone-400">
+                Anduril co-founder · Founders Fund
+              </p>
+            </div>
+            <span class="text-xs font-mono text-red-500 font-bold"
+              >Billionaire 2025</span
+            >
+          </div>
+          <p class="text-stone-600 dark:text-stone-300 text-sm leading-relaxed">
+            "Pacifism as an idea is only possible inside of a governing system
+            with a monopoly on violence." Defense VC grew from ~$2.6B (2022) to
+            $28B+ by September 2025.
+          </p>
+        </div>
+      </div>
+
+      <div class="prose-custom space-y-6 text-stone-600 dark:text-stone-300">
+        <p class="leading-relaxed">
+          Global military expenditure reached $2,718 billion in 2024 — up 9.4%,
+          the steepest year-on-year rise since the end of the Cold War. EU
+          defense spending exceeded the 2% GDP guideline for the first time.
+          Germany approved a €1 trillion defense package. Poland targets 5% of
+          GDP by 2026. All European countries increased spending in 2024 except
+          Malta.
+        </p>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!-- CONCLUSION -->
+    <!-- ═══════════════════════════════════════════════════ -->
+    <section class="mb-20 scroll-reveal">
+      <h2
+        class="font-display text-3xl md:text-4xl font-bold text-stone-900 dark:text-stone-100 mb-8"
+      >
+        A Structural Realignment, Not a Bubble
+      </h2>
+
+      <div class="prose-custom space-y-6 text-stone-600 dark:text-stone-300">
+        <p class="text-lg leading-relaxed">
+          The demand signal for AI is not primarily consumer chatbots or
+          enterprise productivity tools. It is a $2.7 trillion global military
+          expenditure base that is accelerating, not decelerating. The energy
+          buildout, nuclear renaissance, and cooling infrastructure investments
+          are not being driven by ad revenue or SaaS subscriptions — they are
+          driven by compute requirements that defense and intelligence
+          applications demand at any cost.
+        </p>
+
+        <p class="leading-relaxed">
+          Three novel insights emerge. First, the <strong
+            class="text-stone-900 dark:text-stone-100"
+            >demographic thesis is underappreciated</strong
+          > — aging populations in the U.S., Europe, Japan, South Korea, and China
+          make AI and robotics not merely advantageous but necessary to maintain military
+          capability. Second, <strong class="text-stone-900 dark:text-stone-100"
+            >Ukraine's emergence as a defense tech exporter</strong
+          > could reshape global power dynamics within 25 years — it has the
+          manufacturing base, the combat-tested doctrine, and the Western
+          relationships. Third, the <strong
+            class="text-stone-900 dark:text-stone-100"
+            >semiconductor strategies being pursued globally</strong
+          > are defense procurement programs wearing civilian clothes, as the first
+          CHIPS Act grant to BAE Systems made explicit.
+        </p>
+      </div>
+
+      <!-- Final quote -->
+      <div
+        class="mt-12 bg-stone-900 dark:bg-stone-950 rounded-3xl p-8 md:p-12 border border-stone-800"
+      >
+        <blockquote class="text-stone-300 text-lg md:text-xl leading-relaxed">
+          "The real risk is not that AI spending is a bubble. It is that it might
+          not be enough."
+        </blockquote>
+        <div class="mt-6 pt-6 border-t border-stone-700">
+          <p class="text-stone-400 text-sm leading-relaxed">
+            Whether this represents a "last gasp" or a successful consolidation
+            of power depends on execution. The E7 economies are projected to
+            double the G7 by 2040-2050 regardless. But if established powers can
+            build AI capabilities that serve as force multipliers for declining
+            populations — and if Ukraine demonstrates that small nations with
+            advanced technology can defeat larger conventional forces — then the
+            investment thesis holds.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!-- RELATED POSTS -->
+    <!-- ═══════════════════════════════════════════════════ -->
+    <section class="mb-12 scroll-reveal">
+      <h3
+        class="font-display text-lg font-bold text-stone-900 dark:text-stone-100 mb-6"
+      >
+        Related Posts
+      </h3>
+      <div class="grid sm:grid-cols-2 gap-4">
+        <a
+          href={`${base}blog/ukraine-ooda`}
+          class="group p-5 rounded-2xl border border-stone-200 dark:border-stone-700 hover:border-copper transition-all duration-200 bg-white dark:bg-stone-900/50"
+        >
+          <span class="text-copper text-xs font-bold uppercase tracking-wider"
+            >Architecture</span
+          >
+          <h4
+            class="font-display font-bold text-stone-900 dark:text-stone-100 mt-2 group-hover:text-copper transition-colors"
+          >
+            What Ukraine's Drones Taught Me About Building AI Systems
+          </h4>
+        </a>
+        <a
+          href={`${base}blog/governed-agent-protocol`}
+          class="group p-5 rounded-2xl border border-stone-200 dark:border-stone-700 hover:border-copper transition-all duration-200 bg-white dark:bg-stone-900/50"
+        >
+          <span class="text-copper text-xs font-bold uppercase tracking-wider"
+            >Governance</span
+          >
+          <h4
+            class="font-display font-bold text-stone-900 dark:text-stone-100 mt-2 group-hover:text-copper transition-colors"
+          >
+            The Governed Agent Protocol
+          </h4>
+        </a>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer
+      class="pt-12 border-t border-stone-200 dark:border-stone-800 text-center scroll-reveal"
+    >
+      <p class="text-stone-400 text-sm">
+        Research compiled February 2026. All figures sourced from publicly
+        available documents, defense publications, and independent analysis.
+      </p>
+    </footer>
+  </article>
+
+  <!-- Scroll Reveal Script -->
+  <script>
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: "0px 0px -50px 0px",
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("revealed");
+          observer.unobserve(entry.target);
+        }
+      });
+    }, observerOptions);
+
+    document.querySelectorAll(".scroll-reveal").forEach((el) => {
+      observer.observe(el);
+    });
+  </script>
+
+  <style>
+    .scroll-reveal {
+      opacity: 0;
+      transform: translateY(20px);
+      transition:
+        opacity 0.6s ease,
+        transform 0.6s ease;
+    }
+    .scroll-reveal.revealed {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .animate-fade-in {
+      animation: fadeIn 0.5s ease forwards;
+    }
+    .animate-slide-up {
+      animation: slideUp 0.6s ease forwards;
+    }
+    .animation-delay-100 {
+      animation-delay: 0.1s;
+      opacity: 0;
+    }
+    .animation-delay-200 {
+      animation-delay: 0.2s;
+      opacity: 0;
+    }
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(16px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</BaseLayout>
