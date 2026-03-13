@@ -1,0 +1,572 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+const title = "Nemotron 3 Super 120B vs Stockfish 1400: Oracle Trust Calibration Report";
+const description =
+  "NVIDIA's new 120B MoE model lost to 1400 ELO Stockfish by checkmate in its first Oracle Trust gauntlet game. 65% legal move rate. 1.33M tokens burned. The reasoning was eloquent — the chess was not.";
+const pubDate = new Date("2026-03-13");
+const tags = [
+  "llm-chess",
+  "oracle-trust",
+  "nvidia",
+  "nemotron",
+  "reasoning",
+  "research",
+];
+const lesson =
+  "Move 26: Nemotron spent 43 minutes and 194,612 tokens reasoning about 'centralizing the king for flexibility' — then played into immediate checkmate. When the model is most wrong, it sounds most right. That's the alignment problem in a petri dish.";
+const base = import.meta.env.BASE_URL;
+---
+
+<BaseLayout title={title} description={description}>
+  <article class="max-w-4xl mx-auto px-6 py-12 md:py-20 overflow-hidden">
+    <!-- Breadcrumbs -->
+    <nav class="mb-12 animate-fade-in">
+      <a
+        href={`${base}blog`}
+        class="text-stone-500 dark:text-stone-400 hover:text-copper transition-colors flex items-center gap-2 text-sm font-medium group"
+      >
+        <svg
+          class="w-4 h-4 transform group-hover:-translate-x-1 transition-transform"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M15 19l-7-7 7-7"></path>
+        </svg>
+        Back to Blog
+      </a>
+    </nav>
+
+    <!-- Header -->
+    <header class="mb-16">
+      <div class="flex flex-wrap gap-2 mb-6 animate-fade-in">
+        {
+          tags.map((tag) => (
+            <span class="px-3 py-1 bg-copper/10 text-copper text-xs font-bold uppercase tracking-wider rounded-full border border-copper/10">
+              {tag}
+            </span>
+          ))
+        }
+      </div>
+
+      <h1
+        class="font-display text-4xl md:text-6xl font-bold text-stone-900 dark:text-stone-100 mb-6 leading-tight animate-slide-up"
+      >
+        Nemotron 3 Super 120B vs <span class="text-copper">Stockfish 1400</span>
+      </h1>
+
+      <p
+        class="text-xl md:text-2xl text-stone-600 dark:text-stone-300 mb-4 animate-slide-up animation-delay-100"
+      >
+        Oracle Trust Calibration Report — Game 1 of Gauntlet
+      </p>
+
+      <div
+        class="flex items-center gap-4 text-sm text-stone-400 animate-slide-up animation-delay-200"
+      >
+        <time datetime={pubDate.toISOString()}>
+          {
+            pubDate.toLocaleDateString("en-US", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })
+          }
+        </time>
+        <span>·</span>
+        <span>Vario (Mnehmos Research Center)</span>
+      </div>
+    </header>
+
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!-- STAT CARDS -->
+    <!-- ═══════════════════════════════════════════════════ -->
+    <section class="mb-16 scroll-reveal">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div class="bg-red-500/10 dark:bg-red-500/15 rounded-2xl p-6 border border-red-500/20">
+          <div class="text-xs font-mono font-bold text-red-600 dark:text-red-400 uppercase tracking-wider mb-2">Result</div>
+          <div class="text-2xl font-bold text-red-700 dark:text-red-300">0-1</div>
+          <div class="text-sm text-red-600/80 dark:text-red-400/80">Checkmate</div>
+        </div>
+        <div class="bg-amber-500/10 dark:bg-amber-500/15 rounded-2xl p-6 border border-amber-500/20">
+          <div class="text-xs font-mono font-bold text-amber-600 dark:text-amber-400 uppercase tracking-wider mb-2">Legal Move Rate</div>
+          <div class="text-2xl font-bold text-amber-700 dark:text-amber-300">65%</div>
+          <div class="text-sm text-amber-600/80 dark:text-amber-400/80">8 illegal attempts</div>
+        </div>
+        <div class="bg-stone-500/10 dark:bg-stone-500/15 rounded-2xl p-6 border border-stone-500/20">
+          <div class="text-xs font-mono font-bold text-stone-600 dark:text-stone-400 uppercase tracking-wider mb-2">Tokens Burned</div>
+          <div class="text-2xl font-bold text-stone-900 dark:text-stone-100">1.33M</div>
+          <div class="text-sm text-stone-600/80 dark:text-stone-400/80">586K reasoning</div>
+        </div>
+        <div class="bg-stone-500/10 dark:bg-stone-500/15 rounded-2xl p-6 border border-stone-500/20">
+          <div class="text-xs font-mono font-bold text-stone-600 dark:text-stone-400 uppercase tracking-wider mb-2">Compute Time</div>
+          <div class="text-2xl font-bold text-stone-900 dark:text-stone-100">256 min</div>
+          <div class="text-sm text-stone-600/80 dark:text-stone-400/80">~12.8 min/move avg</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!-- EXECUTIVE SUMMARY -->
+    <!-- ═══════════════════════════════════════════════════ -->
+    <section class="mb-20 scroll-reveal">
+      <div class="bg-stone-900 dark:bg-stone-800 rounded-3xl p-8 md:p-12 text-white">
+        <h2 class="font-display text-2xl md:text-3xl font-bold mb-6">Executive Summary</h2>
+        <div class="space-y-4 text-stone-300 leading-relaxed">
+          <p>
+            NVIDIA's newly released <strong class="text-white">Nemotron 3 Super</strong> (120B total / 12B active parameters) was submitted to the Oracle Trust Calibration Framework gauntlet — an eight-tier Stockfish ladder from 1400 to 3190 ELO. The gauntlet was aborted during Match 1, Game 1 after Nemotron lost to <strong class="text-copper">Stockfish at 1400 ELO</strong> by checkmate in 40 moves.
+          </p>
+          <p>
+            This is not a benchmark failure in the traditional sense. It is a <em>cognitive profile</em> — and the profile reveals critical structural gaps between Nemotron's stated capabilities and its actual spatial-tactical reasoning.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!-- MODEL UNDER TEST -->
+    <!-- ═══════════════════════════════════════════════════ -->
+    <section class="mb-20 scroll-reveal">
+      <div class="flex items-center gap-3 mb-8">
+        <span class="text-xs font-mono font-bold px-3 py-1.5 rounded-full bg-green-500/15 text-green-600 dark:text-green-400 border border-green-500/20">Model Card</span>
+        <h2 class="font-display text-3xl md:text-4xl font-bold text-stone-900 dark:text-stone-100">
+          Model Under Test
+        </h2>
+      </div>
+
+      <div class="overflow-x-auto mb-8">
+        <table class="w-full text-left border-collapse">
+          <tbody class="divide-y divide-stone-200 dark:divide-stone-700">
+            <tr><td class="py-3 pr-4 text-stone-500 dark:text-stone-400 font-mono text-sm w-48">Model</td><td class="py-3 text-stone-900 dark:text-stone-100 font-medium">NVIDIA Nemotron 3 Super 120B-A12B</td></tr>
+            <tr><td class="py-3 pr-4 text-stone-500 dark:text-stone-400 font-mono text-sm">Architecture</td><td class="py-3 text-stone-900 dark:text-stone-100">Mamba2-Transformer Hybrid LatentMoE + MTP</td></tr>
+            <tr><td class="py-3 pr-4 text-stone-500 dark:text-stone-400 font-mono text-sm">Total / Active</td><td class="py-3 text-stone-900 dark:text-stone-100">120B / <strong>12B active</strong></td></tr>
+            <tr><td class="py-3 pr-4 text-stone-500 dark:text-stone-400 font-mono text-sm">Access</td><td class="py-3 text-stone-900 dark:text-stone-100">Free tier via OpenRouter</td></tr>
+            <tr><td class="py-3 pr-4 text-stone-500 dark:text-stone-400 font-mono text-sm">Prompt Level</td><td class="py-3 text-stone-900 dark:text-stone-100">P6 (full FEN, legal move list, structured output)</td></tr>
+            <tr><td class="py-3 pr-4 text-stone-500 dark:text-stone-400 font-mono text-sm">Temperature</td><td class="py-3 text-stone-900 dark:text-stone-100">1.0 (NVIDIA recommended default)</td></tr>
+            <tr><td class="py-3 pr-4 text-stone-500 dark:text-stone-400 font-mono text-sm">Max Retries</td><td class="py-3 text-stone-900 dark:text-stone-100">3</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="prose-custom space-y-4 text-stone-600 dark:text-stone-300">
+        <p class="leading-relaxed">
+          Nemotron 3 Super was released March 12, 2026 — the day this gauntlet began. NVIDIA positions it as their flagship open model for "agentic reasoning, coding, planning, tool calling," trained on 25 trillion tokens with native NVFP4 precision and a 1M-token context window. It scores 85.6% on PinchBench and leads its size class on AIME 2025 and SWE-Bench Verified.
+        </p>
+        <p class="text-lg font-medium text-stone-900 dark:text-stone-100">
+          None of that helped it see a checkmate coming.
+        </p>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!-- GAME ANALYSIS -->
+    <!-- ═══════════════════════════════════════════════════ -->
+    <section class="mb-20 scroll-reveal">
+      <div class="flex items-center gap-3 mb-8">
+        <span class="text-xs font-mono font-bold px-3 py-1.5 rounded-full bg-copper/15 text-copper border border-copper/20">Analysis</span>
+        <h2 class="font-display text-3xl md:text-4xl font-bold text-stone-900 dark:text-stone-100">
+          The Anatomy of Collapse
+        </h2>
+      </div>
+
+      <!-- Phase 1: Opening -->
+      <div class="mb-12">
+        <h3 class="font-display text-xl font-bold text-stone-900 dark:text-stone-100 mb-4 flex items-center gap-3">
+          <span class="text-xs font-mono bg-green-500/15 text-green-600 dark:text-green-400 px-2 py-1 rounded">Moves 7-8</span>
+          Competent but Imprecise
+        </h3>
+        <div class="prose-custom space-y-4 text-stone-600 dark:text-stone-300">
+          <p class="leading-relaxed">
+            The game began from a Queen's Gambit Declined: Exchange position (ECO D30) with White having a slight edge (+86 cp). Nemotron's first move, <strong class="text-stone-900 dark:text-stone-100">7. Bxf6</strong>, was a reasonable exchange but required two attempts (first was illegal). Move 8, <strong class="text-stone-900 dark:text-stone-100">e4</strong>, showed genuine positional understanding. Evaluation stayed manageable at -31.
+          </p>
+        </div>
+      </div>
+
+      <!-- Phase 2: Collapse -->
+      <div class="mb-12 bg-red-500/5 dark:bg-red-500/10 border border-red-500/20 rounded-2xl p-6 md:p-8">
+        <h3 class="font-display text-xl font-bold text-red-700 dark:text-red-300 mb-4 flex items-center gap-3">
+          <span class="text-xs font-mono bg-red-500/15 text-red-600 dark:text-red-400 px-2 py-1 rounded">Move 9</span>
+          The Collapse Point: d5
+        </h3>
+        <div class="space-y-4 text-stone-600 dark:text-stone-300">
+          <p class="leading-relaxed">
+            This is where the game broke. Nemotron played <strong class="text-red-700 dark:text-red-300">9. d5</strong> — a pawn push that the Oracle evaluated as a <strong class="text-red-700 dark:text-red-300">-397 centipawn swing</strong>. The engine's top move was <code class="bg-stone-200 dark:bg-stone-700 px-1.5 py-0.5 rounded text-sm font-mono">e4f3</code>. Nemotron's reasoning was fluent and confident:
+          </p>
+          <blockquote class="border-l-4 border-copper bg-stone-100 dark:bg-stone-800 py-3 px-5 rounded-r-xl text-stone-700 dark:text-stone-300 italic">
+            "The move d5 challenges black's e4 pawn, gains space, and opens lines for white's pieces..."
+          </blockquote>
+          <p class="leading-relaxed">
+            This is a textbook example of what we call <strong class="text-stone-900 dark:text-stone-100">coherent confabulation</strong> — the reasoning sounds strategically correct but maps to a tactically losing position. The model correctly identified strategic themes (central space, development advantage) but failed to detect the concrete tactical refutation.
+          </p>
+        </div>
+      </div>
+
+      <!-- Phase 3: Phantom Board -->
+      <div class="mb-12">
+        <h3 class="font-display text-xl font-bold text-stone-900 dark:text-stone-100 mb-4 flex items-center gap-3">
+          <span class="text-xs font-mono bg-amber-500/15 text-amber-600 dark:text-amber-400 px-2 py-1 rounded">Moves 13-14</span>
+          The Hallucinated Fork
+        </h3>
+        <div class="prose-custom space-y-4 text-stone-600 dark:text-stone-300">
+          <p class="leading-relaxed">
+            By move 13, Nemotron played <strong class="text-stone-900 dark:text-stone-100">Nc6</strong>, claiming it "creates a fork, attacking both the queen on d8 and the rook on a8." By move 14, <strong class="text-stone-900 dark:text-stone-100">Nb5</strong> at -940 cp, Nemotron's reasoning stated: "our knight on c5 attacks three black pawns."
+          </p>
+          <p class="text-lg font-medium text-amber-700 dark:text-amber-300">
+            The knight was not on c5.
+          </p>
+          <p class="leading-relaxed">
+            Nemotron was narrating a position that did not exist on the board — a <strong class="text-stone-900 dark:text-stone-100">phantom board state</strong>. The Oracle's top move was simply capturing back on c6.
+          </p>
+        </div>
+      </div>
+
+      <!-- Phase 4: King Walk -->
+      <div class="mb-12 bg-stone-100 dark:bg-stone-800 rounded-2xl p-6 md:p-8 border border-stone-200 dark:border-stone-700">
+        <h3 class="font-display text-xl font-bold text-stone-900 dark:text-stone-100 mb-4 flex items-center gap-3">
+          <span class="text-xs font-mono bg-stone-500/15 text-stone-600 dark:text-stone-400 px-2 py-1 rounded">Moves 17-26</span>
+          The King Walk: Reasoning Without Reality
+        </h3>
+        <div class="space-y-4 text-stone-600 dark:text-stone-300">
+          <p class="leading-relaxed">
+            From move 17 onward, the position was already lost (mate-in-N detected by Stockfish). Nemotron's king embarked on a tour:
+          </p>
+          <div class="font-mono text-sm bg-stone-200 dark:bg-stone-900 rounded-xl p-4 text-stone-700 dark:text-stone-300 overflow-x-auto">
+            Kd2 → Ke3 → Ke2 → Kd1 → Kc2 → Kd1 → Kc1 → Kd1 → Ke2 → Qe1#
+          </div>
+          <p class="leading-relaxed">
+            Each move accompanied by detailed tactical analysis. Move 18: <em>"Ke3 directly defends the f3 pawn..."</em> — while the Oracle screamed for Rb2, spotting forced mate. Move 19: <em>"The only way to meet this check while gaining material is to capture the queen..."</em> — Nemotron believed it could capture Black's queen. It could not.
+          </p>
+          <p class="leading-relaxed">
+            Move 26: <strong class="text-red-700 dark:text-red-300">Ke2</strong> into <strong class="text-red-700 dark:text-red-300">Qe1#</strong>. Checkmate. The model consumed <strong class="text-stone-900 dark:text-stone-100">2.58 million milliseconds</strong> (43 minutes) and <strong class="text-stone-900 dark:text-stone-100">194,612 tokens</strong> on its final move.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!-- PERFORMANCE TABLE -->
+    <!-- ═══════════════════════════════════════════════════ -->
+    <section class="mb-20 scroll-reveal">
+      <div class="flex items-center gap-3 mb-8">
+        <span class="text-xs font-mono font-bold px-3 py-1.5 rounded-full bg-blue-500/15 text-blue-600 dark:text-blue-400 border border-blue-500/20">Data</span>
+        <h2 class="font-display text-3xl md:text-4xl font-bold text-stone-900 dark:text-stone-100">
+          Statistical Profile
+        </h2>
+      </div>
+
+      <!-- Performance Comparison -->
+      <div class="overflow-x-auto mb-12">
+        <table class="w-full text-left border-collapse">
+          <thead>
+            <tr class="border-b-2 border-stone-300 dark:border-stone-600">
+              <th class="py-3 pr-4 text-stone-500 dark:text-stone-400 font-mono text-xs uppercase tracking-wider">Metric</th>
+              <th class="py-3 pr-4 text-stone-500 dark:text-stone-400 font-mono text-xs uppercase tracking-wider">Nemotron (White)</th>
+              <th class="py-3 text-stone-500 dark:text-stone-400 font-mono text-xs uppercase tracking-wider">Stockfish 1400 (Black)</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-stone-200 dark:divide-stone-700">
+            <tr><td class="py-3 pr-4 text-stone-600 dark:text-stone-300">Total Moves</td><td class="py-3 pr-4 font-medium text-stone-900 dark:text-stone-100">20</td><td class="py-3 font-medium text-stone-900 dark:text-stone-100">20</td></tr>
+            <tr><td class="py-3 pr-4 text-stone-600 dark:text-stone-300">Illegal Attempts</td><td class="py-3 pr-4 font-medium text-red-700 dark:text-red-400">8</td><td class="py-3 font-medium text-green-700 dark:text-green-400">0</td></tr>
+            <tr><td class="py-3 pr-4 text-stone-600 dark:text-stone-300">Legal Move Rate</td><td class="py-3 pr-4 font-medium text-amber-700 dark:text-amber-400">65%</td><td class="py-3 font-medium text-green-700 dark:text-green-400">100%</td></tr>
+            <tr><td class="py-3 pr-4 text-stone-600 dark:text-stone-300">Avg Response Time</td><td class="py-3 pr-4 font-medium text-stone-900 dark:text-stone-100">767,405 ms (~12.8 min)</td><td class="py-3 font-medium text-stone-900 dark:text-stone-100">1,680 ms</td></tr>
+            <tr><td class="py-3 pr-4 text-stone-600 dark:text-stone-300">Total Tokens</td><td class="py-3 pr-4 font-medium text-stone-900 dark:text-stone-100">1,330,396</td><td class="py-3 font-medium text-stone-400">N/A</td></tr>
+            <tr><td class="py-3 pr-4 text-stone-600 dark:text-stone-300">Reasoning Tokens</td><td class="py-3 pr-4 font-medium text-stone-900 dark:text-stone-100">586,482 (44%)</td><td class="py-3 font-medium text-stone-400">N/A</td></tr>
+            <tr><td class="py-3 pr-4 text-stone-600 dark:text-stone-300">Avg TPS</td><td class="py-3 pr-4 font-medium text-stone-900 dark:text-stone-100">55.5</td><td class="py-3 font-medium text-stone-400">N/A</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Think-Time by Phase -->
+      <h3 class="font-display text-xl font-bold text-stone-900 dark:text-stone-100 mb-4">Think-Time by Phase</h3>
+      <div class="overflow-x-auto mb-12">
+        <table class="w-full text-left border-collapse">
+          <thead>
+            <tr class="border-b-2 border-stone-300 dark:border-stone-600">
+              <th class="py-3 pr-4 text-stone-500 dark:text-stone-400 font-mono text-xs uppercase tracking-wider">Phase</th>
+              <th class="py-3 pr-4 text-stone-500 dark:text-stone-400 font-mono text-xs uppercase tracking-wider">Avg Think</th>
+              <th class="py-3 pr-4 text-stone-500 dark:text-stone-400 font-mono text-xs uppercase tracking-wider">Avg Tokens</th>
+              <th class="py-3 text-stone-500 dark:text-stone-400 font-mono text-xs uppercase tracking-wider">Pattern</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-stone-200 dark:divide-stone-700">
+            <tr><td class="py-3 pr-4 text-stone-600 dark:text-stone-300">Opening (7-10)</td><td class="py-3 pr-4 font-medium text-green-700 dark:text-green-400">335s</td><td class="py-3 pr-4 font-medium text-stone-900 dark:text-stone-100">26,935</td><td class="py-3 text-stone-500 dark:text-stone-400 text-sm">Moderate exploration</td></tr>
+            <tr><td class="py-3 pr-4 text-stone-600 dark:text-stone-300">Middlegame (11-16)</td><td class="py-3 pr-4 font-medium text-amber-700 dark:text-amber-400">602s</td><td class="py-3 pr-4 font-medium text-stone-900 dark:text-stone-100">39,209</td><td class="py-3 text-stone-500 dark:text-stone-400 text-sm">Escalating uncertainty</td></tr>
+            <tr><td class="py-3 pr-4 text-stone-600 dark:text-stone-300">Lost Position (17-26)</td><td class="py-3 pr-4 font-medium text-red-700 dark:text-red-400">816s</td><td class="py-3 pr-4 font-medium text-stone-900 dark:text-stone-100">84,549</td><td class="py-3 text-stone-500 dark:text-stone-400 text-sm">Peak compute, minimum accuracy</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!-- FORCED MOVE ANALYSIS -->
+    <!-- ═══════════════════════════════════════════════════ -->
+    <section class="mb-20 scroll-reveal">
+      <div class="flex items-center gap-3 mb-8">
+        <span class="text-xs font-mono font-bold px-3 py-1.5 rounded-full bg-red-500/15 text-red-600 dark:text-red-400 border border-red-500/20">Key Finding</span>
+        <h2 class="font-display text-3xl md:text-4xl font-bold text-stone-900 dark:text-stone-100">
+          Forced-Move Blindness
+        </h2>
+      </div>
+
+      <div class="bg-red-500/5 dark:bg-red-500/10 border border-red-500/20 rounded-2xl p-6 md:p-8 mb-8">
+        <div class="grid grid-cols-2 gap-6 mb-6">
+          <div>
+            <div class="text-xs font-mono font-bold text-red-600 dark:text-red-400 uppercase tracking-wider mb-1">Forced moves (after check)</div>
+            <div class="text-3xl font-bold text-red-700 dark:text-red-300">89,646 <span class="text-base font-normal">avg tokens</span></div>
+            <div class="text-sm text-red-600/80 dark:text-red-400/80">15.8 min avg think time</div>
+          </div>
+          <div>
+            <div class="text-xs font-mono font-bold text-stone-600 dark:text-stone-400 uppercase tracking-wider mb-1">Non-forced moves</div>
+            <div class="text-3xl font-bold text-stone-900 dark:text-stone-100">54,067 <span class="text-base font-normal">avg tokens</span></div>
+            <div class="text-sm text-stone-600/80 dark:text-stone-400/80">11.2 min avg think time</div>
+          </div>
+        </div>
+        <div class="text-center py-3 bg-red-500/10 dark:bg-red-500/20 rounded-xl">
+          <span class="text-lg font-bold text-red-700 dark:text-red-300">+66% more tokens on forced moves · +41% more think time</span>
+        </div>
+      </div>
+
+      <div class="prose-custom space-y-4 text-stone-600 dark:text-stone-300">
+        <p class="leading-relaxed">
+          GPT-5.4 demonstrated that think-time <em>correlates</em> with whether a move is forced or non-forced — when in check with only one or two legal responses, the model spent less time, correctly recognizing constraint narrowing. Nemotron shows the <strong class="text-stone-900 dark:text-stone-100">exact opposite pattern</strong>.
+        </p>
+        <p class="leading-relaxed">
+          The terminal example: move 26 (Ke2), responding to Qxa1+ with likely only one or two legal king moves — <strong class="text-stone-900 dark:text-stone-100">194,612 tokens and 43 minutes</strong> to select the move that allowed Qe1#. The model cannot detect when its search space has collapsed, which means it cannot distinguish between positions that require deep calculation and positions that are already resolved.
+        </p>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!-- ORACLE TRUST FINDINGS -->
+    <!-- ═══════════════════════════════════════════════════ -->
+    <section class="mb-20 scroll-reveal">
+      <div class="flex items-center gap-3 mb-8">
+        <span class="text-xs font-mono font-bold px-3 py-1.5 rounded-full bg-purple-500/15 text-purple-600 dark:text-purple-400 border border-purple-500/20">Framework</span>
+        <h2 class="font-display text-3xl md:text-4xl font-bold text-stone-900 dark:text-stone-100">
+          Oracle Trust Analysis
+        </h2>
+      </div>
+
+      <div class="space-y-8">
+        <!-- Finding 1 -->
+        <div class="border-l-4 border-copper pl-6">
+          <h4 class="font-display text-lg font-bold text-stone-900 dark:text-stone-100 mb-2">1. Board Reconstruction Failure</h4>
+          <p class="text-stone-600 dark:text-stone-300 leading-relaxed">
+            Nemotron repeatedly referenced piece positions that did not match the actual board state. The "fork on c5" (move 14) and the "queen capture" plan (move 19) suggest the model loses track of the board after 10-12 moves despite being given the full FEN and legal move list each turn.
+          </p>
+        </div>
+
+        <!-- Finding 2 -->
+        <div class="border-l-4 border-copper pl-6">
+          <h4 class="font-display text-lg font-bold text-stone-900 dark:text-stone-100 mb-2">2. Collapse-and-Swing Sequence</h4>
+          <p class="text-stone-600 dark:text-stone-300 leading-relaxed">
+            The evaluation trajectory follows our documented pattern: gradual degradation (-25 → -31 → -397) followed by catastrophic collapse (-397 → -940 → mate). The model doesn't degrade linearly — it holds a plausible position until a single miscalculation triggers cascading failure.
+          </p>
+        </div>
+
+        <!-- Finding 3 -->
+        <div class="border-l-4 border-copper pl-6">
+          <h4 class="font-display text-lg font-bold text-stone-900 dark:text-stone-100 mb-2">3. Forced-Move Blindness</h4>
+          <p class="text-stone-600 dark:text-stone-300 leading-relaxed">
+            66% more tokens on forced moves vs non-forced. The model cannot detect when the decision space has collapsed. This is the inverse of GPT-5.4's pattern and suggests Nemotron lacks the constraint-detection layer that would be analogous to <strong class="text-stone-900 dark:text-stone-100">elimination controls</strong> in the hierarchy of controls framework.
+          </p>
+        </div>
+
+        <!-- Finding 4 -->
+        <div class="border-l-4 border-copper pl-6">
+          <h4 class="font-display text-lg font-bold text-stone-900 dark:text-stone-100 mb-2">4. Reasoning Quality Decorrelation</h4>
+          <p class="text-stone-600 dark:text-stone-300 leading-relaxed">
+            Nemotron's most eloquent, detailed reasoning accompanied its worst moves. Move 26 (allowing mate-in-1) featured the second-highest token count and most articulate strategic analysis. This is the hallmark of <strong class="text-stone-900 dark:text-stone-100">confabulatory reasoning</strong> — the language model's text generation capability vastly exceeds its position evaluation capability.
+          </p>
+        </div>
+
+        <!-- Finding 5 -->
+        <div class="border-l-4 border-copper pl-6">
+          <h4 class="font-display text-lg font-bold text-stone-900 dark:text-stone-100 mb-2">5. The Representational Gap</h4>
+          <p class="text-stone-600 dark:text-stone-300 leading-relaxed">
+            Move generation and tactical threat detection are separate capabilities. Nemotron can produce legal chess moves 65% of the time and articulate strategic concepts fluently, but it cannot bridge the gap between "what sounds like good chess" and "what is actually good chess." The MoE architecture's sparse activation (only 12B of 120B active per step) may exacerbate this — the experts activated for language fluency are not the experts needed for spatial reasoning.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!-- COMPARISON -->
+    <!-- ═══════════════════════════════════════════════════ -->
+    <section class="mb-20 scroll-reveal">
+      <div class="flex items-center gap-3 mb-8">
+        <span class="text-xs font-mono font-bold px-3 py-1.5 rounded-full bg-stone-500/15 text-stone-600 dark:text-stone-400 border border-stone-500/20">Context</span>
+        <h2 class="font-display text-3xl md:text-4xl font-bold text-stone-900 dark:text-stone-100">
+          How Does This Compare?
+        </h2>
+      </div>
+
+      <div class="overflow-x-auto mb-8">
+        <table class="w-full text-left border-collapse">
+          <thead>
+            <tr class="border-b-2 border-stone-300 dark:border-stone-600">
+              <th class="py-3 pr-4 text-stone-500 dark:text-stone-400 font-mono text-xs uppercase tracking-wider">Model</th>
+              <th class="py-3 pr-4 text-stone-500 dark:text-stone-400 font-mono text-xs uppercase tracking-wider">vs SF 1400</th>
+              <th class="py-3 pr-4 text-stone-500 dark:text-stone-400 font-mono text-xs uppercase tracking-wider">Legal Rate</th>
+              <th class="py-3 text-stone-500 dark:text-stone-400 font-mono text-xs uppercase tracking-wider">Tokens/Move</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-stone-200 dark:divide-stone-700">
+            <tr><td class="py-3 pr-4 text-stone-900 dark:text-stone-100 font-medium">GPT-5.4 (medium)</td><td class="py-3 pr-4 text-green-700 dark:text-green-400 font-bold">Won</td><td class="py-3 pr-4 text-stone-900 dark:text-stone-100">~98%</td><td class="py-3 text-stone-900 dark:text-stone-100">~20K</td></tr>
+            <tr><td class="py-3 pr-4 text-stone-900 dark:text-stone-100 font-medium">GPT-5.4 (high)</td><td class="py-3 pr-4 text-green-700 dark:text-green-400 font-bold">Won</td><td class="py-3 pr-4 text-stone-900 dark:text-stone-100">~99%</td><td class="py-3 text-stone-900 dark:text-stone-100">~25K</td></tr>
+            <tr class="bg-red-500/5 dark:bg-red-500/10"><td class="py-3 pr-4 text-stone-900 dark:text-stone-100 font-bold">Nemotron 3 Super 120B</td><td class="py-3 pr-4 text-red-700 dark:text-red-400 font-bold">Lost (checkmate)</td><td class="py-3 pr-4 text-amber-700 dark:text-amber-400 font-bold">65%</td><td class="py-3 text-stone-900 dark:text-stone-100 font-bold">66.5K</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!-- IMPLICATIONS -->
+    <!-- ═══════════════════════════════════════════════════ -->
+    <section class="mb-20 scroll-reveal">
+      <div class="flex items-center gap-3 mb-8">
+        <span class="text-xs font-mono font-bold px-3 py-1.5 rounded-full bg-amber-500/15 text-amber-600 dark:text-amber-400 border border-amber-500/20">Implications</span>
+        <h2 class="font-display text-3xl md:text-4xl font-bold text-stone-900 dark:text-stone-100">
+          What This Means
+        </h2>
+      </div>
+
+      <div class="space-y-8">
+        <div>
+          <h3 class="font-display text-xl font-bold text-stone-900 dark:text-stone-100 mb-3">For NVIDIA's Claims</h3>
+          <p class="text-stone-600 dark:text-stone-300 leading-relaxed">
+            Chess is a fully observable, deterministic environment with perfect information — arguably the <em>simplest</em> reasoning domain an agent could face. If a model marketed for "agentic reasoning" cannot maintain board state coherence across 20 moves when given the entire board state each turn, its reliability in more complex agentic tasks with partial observability deserves scrutiny. This is not a claim that Nemotron is a bad model — it may excel at code generation and the tasks it was optimized for. But "reasoning" is not a monolithic capability.
+          </p>
+        </div>
+
+        <div>
+          <h3 class="font-display text-xl font-bold text-stone-900 dark:text-stone-100 mb-3">For the MoE Architecture</h3>
+          <p class="text-stone-600 dark:text-stone-300 leading-relaxed">
+            The 120B total / 12B active design means only 10% of the network is engaged per inference step. If spatial reasoning requires coordination across expert groups that don't co-activate, the MoE routing itself becomes a bottleneck for integrated world-model maintenance. The frozen geometry hypothesis (ANLU) would predict exactly this: sparse activation without type-anchored coordination produces exactly the "representational interference" pattern Bochkov (TMLR 2025) documented.
+          </p>
+        </div>
+
+        <div>
+          <h3 class="font-display text-xl font-bold text-stone-900 dark:text-stone-100 mb-3">For the Field</h3>
+          <p class="text-stone-600 dark:text-stone-300 leading-relaxed">
+            LLM chess performance is not about chess. It's a controlled probe into whether models maintain coherent internal representations under sequential reasoning pressure. The Oracle Trust Calibration Framework exists because the gap between <em>sounding right</em> and <em>being right</em> is the core alignment problem. Nemotron 3 Super demonstrates this gap with unusual clarity.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!-- COMPLETE GAME -->
+    <!-- ═══════════════════════════════════════════════════ -->
+    <section class="mb-20 scroll-reveal">
+      <div class="flex items-center gap-3 mb-8">
+        <span class="text-xs font-mono font-bold px-3 py-1.5 rounded-full bg-stone-500/15 text-stone-600 dark:text-stone-400 border border-stone-500/20">Record</span>
+        <h2 class="font-display text-3xl md:text-4xl font-bold text-stone-900 dark:text-stone-100">
+          Complete Game
+        </h2>
+      </div>
+
+      <div class="bg-stone-100 dark:bg-stone-800 rounded-2xl p-6 border border-stone-200 dark:border-stone-700">
+        <div class="text-xs font-mono text-stone-500 dark:text-stone-400 mb-3">Queen's Gambit Declined: Exchange (D30) · Tournament 4bb3cf62</div>
+        <pre class="font-mono text-sm text-stone-700 dark:text-stone-300 whitespace-pre-wrap leading-relaxed">7. Bxf6 gxf6  8. e4 dxe4  9. d5 f5  10. Ne5 exd5
+11. Qxd5 Bf6  12. Qxf7+ Rxf7  13. Nc6 bxc6
+14. Nb5 Rb8  15. f3 a6  16. Nd6 Bh4+
+17. Kd2 cxd6  18. Ke3 Qb6+  19. Ke2 Qxb2+
+20. Kd1 Qd4+  21. Kc2 Ne5  22. f4 Qf2+
+23. Kd1 Ng6  24. Kc1 Qb2+  25. Kd1 Qxa1+
+26. Ke2 Qe1#</pre>
+        <div class="mt-4 text-center">
+          <span class="inline-block px-4 py-2 bg-red-500/15 text-red-700 dark:text-red-300 font-bold rounded-full text-sm">
+            0-1 · Checkmate
+          </span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!-- METHODOLOGY -->
+    <!-- ═══════════════════════════════════════════════════ -->
+    <section class="mb-20 scroll-reveal">
+      <h2 class="font-display text-2xl font-bold text-stone-900 dark:text-stone-100 mb-6">Methodology</h2>
+      <div class="text-sm text-stone-500 dark:text-stone-400 space-y-2 font-mono">
+        <p><strong class="text-stone-700 dark:text-stone-300">Framework:</strong> Oracle Trust Calibration Framework v1</p>
+        <p><strong class="text-stone-700 dark:text-stone-300">Platform:</strong> LLM Chess (Tauri + React 19 + Vite)</p>
+        <p><strong class="text-stone-700 dark:text-stone-300">Architecture:</strong> Four-voice (Player, Advisor, Oracle/Stockfish, Commentator)</p>
+        <p><strong class="text-stone-700 dark:text-stone-300">Opening Book:</strong> Uniform Hybrid Opening (UHO), ECO D30</p>
+        <p><strong class="text-stone-700 dark:text-stone-300">Evaluation:</strong> Stockfish at maximum depth per move</p>
+        <p><strong class="text-stone-700 dark:text-stone-300">Prompt Level:</strong> P6 — full FEN, legal move list, structured JSON output</p>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="pt-8 border-t border-stone-200 dark:border-stone-700">
+      <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <a
+          href={`${base}blog`}
+          class="inline-flex items-center gap-2 text-copper hover:text-copper-light font-medium transition-colors group"
+        >
+          <svg
+            class="w-4 h-4 transform group-hover:-translate-x-1 transition-transform"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M7 16l-4-4m0 0l4-4m-4 4h18"></path>
+          </svg>
+          Back to all posts
+        </a>
+        <span class="text-sm text-stone-400 dark:text-stone-500">
+          Mnehmos Research Center · Vario Automation · Safford, Arizona
+        </span>
+      </div>
+    </footer>
+  </article>
+</BaseLayout>
+
+<style>
+  article {
+    animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  .animate-fade-in {
+    animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    opacity: 0;
+  }
+  .animate-slide-up {
+    animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    opacity: 0;
+  }
+  .animation-delay-100 {
+    animation-delay: 0.1s;
+    opacity: 0;
+  }
+  .animation-delay-200 {
+    animation-delay: 0.2s;
+    opacity: 0;
+  }
+  .scroll-reveal {
+    animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>

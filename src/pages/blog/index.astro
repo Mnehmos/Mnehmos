@@ -19,6 +19,19 @@ const collectionPosts = await getCollection("blog", ({ data }) => !data.draft);
 // 5. If converting a Markdown post, DELETE the original .md file to prevent collisions.
 const manualPosts = [
   {
+    slug: "nemotron-oracle-trust",
+    data: {
+      title: "Nemotron 3 Super 120B vs Stockfish 1400: Oracle Trust Calibration Report",
+      description:
+        "NVIDIA's new 120B MoE model lost to 1400 ELO Stockfish by checkmate in its first Oracle Trust gauntlet game. 65% legal move rate. 1.33M tokens burned. The reasoning was eloquent — the chess was not.",
+      pubDate: new Date("2026-03-13"),
+      tags: ["llm-chess", "oracle-trust", "nvidia", "nemotron", "reasoning", "research"],
+      draft: false,
+      lesson:
+        "Move 26: Nemotron spent 43 minutes and 194,612 tokens reasoning about 'centralizing the king for flexibility' — then played into immediate checkmate. When the model is most wrong, it sounds most right. That's the alignment problem in a petri dish.",
+    },
+  },
+  {
     slug: "ai-demand-signal-military-spending",
     data: {
       title: "The Real AI Demand Signal Is Military Spending, Not Consumer Hype",
