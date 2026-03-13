@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import ChessReplay from "../../components/blog/ChessReplay.astro";
 
 const title = "Nemotron 3 Super 120B vs Stockfish 1400: Oracle Trust Calibration Report";
 const description =
@@ -16,6 +17,59 @@ const tags = [
 const lesson =
   "Move 26: Nemotron spent 43 minutes and 194,612 tokens reasoning about 'centralizing the king for flexibility' — then played into immediate checkmate. When the model is most wrong, it sounds most right. That's the alignment problem in a petri dish.";
 const base = import.meta.env.BASE_URL;
+
+const chessPositions = [
+  {fen:"r1bq1rk1/pppnbppp/4pn2/3p2B1/2PP4/2N1PN2/PP3PPP/R2QKB1R w KQ - 3 7",san:null,moveNum:7,color:null,label:"Opening position"},
+  {fen:"r1bq1rk1/pppnbppp/4pB2/3p4/2PP4/2N1PN2/PP3PPP/R2QKB1R b KQ - 0 7",san:"Bxf6",moveNum:7,color:"w",label:"7. Bxf6"},
+  {fen:"r1bq1rk1/pppnbp1p/4pp2/3p4/2PP4/2N1PN2/PP3PPP/R2QKB1R w KQ - 0 8",san:"gxf6",moveNum:7,color:"b",label:"7... gxf6"},
+  {fen:"r1bq1rk1/pppnbp1p/4pp2/3p4/2PPP3/2N2N2/PP3PPP/R2QKB1R b KQ - 0 8",san:"e4",moveNum:8,color:"w",label:"8. e4"},
+  {fen:"r1bq1rk1/pppnbp1p/4pp2/8/2PPp3/2N2N2/PP3PPP/R2QKB1R w KQ - 0 9",san:"dxe4",moveNum:8,color:"b",label:"8... dxe4"},
+  {fen:"r1bq1rk1/pppnbp1p/4pp2/3P4/2P1p3/2N2N2/PP3PPP/R2QKB1R b KQ - 0 9",san:"d5",moveNum:9,color:"w",label:"9. d5"},
+  {fen:"r1bq1rk1/pppnbp1p/4p3/3P1p2/2P1p3/2N2N2/PP3PPP/R2QKB1R w KQ - 0 10",san:"f5",moveNum:9,color:"b",label:"9... f5"},
+  {fen:"r1bq1rk1/pppnbp1p/4p3/3PNp2/2P1p3/2N5/PP3PPP/R2QKB1R b KQ - 1 10",san:"Ne5",moveNum:10,color:"w",label:"10. Ne5"},
+  {fen:"r1bq1rk1/pppnbp1p/8/3pNp2/2P1p3/2N5/PP3PPP/R2QKB1R w KQ - 0 11",san:"exd5",moveNum:10,color:"b",label:"10... exd5"},
+  {fen:"r1bq1rk1/pppnbp1p/8/3QNp2/2P1p3/2N5/PP3PPP/R3KB1R b KQ - 0 11",san:"Qxd5",moveNum:11,color:"w",label:"11. Qxd5"},
+  {fen:"r1bq1rk1/pppn1p1p/5b2/3QNp2/2P1p3/2N5/PP3PPP/R3KB1R w KQ - 1 12",san:"Bf6",moveNum:11,color:"b",label:"11... Bf6"},
+  {fen:"r1bq1rk1/pppn1Q1p/5b2/4Np2/2P1p3/2N5/PP3PPP/R3KB1R b KQ - 0 12",san:"Qxf7+",moveNum:12,color:"w",label:"12. Qxf7+"},
+  {fen:"r1bq2k1/pppn1r1p/5b2/4Np2/2P1p3/2N5/PP3PPP/R3KB1R w KQ - 0 13",san:"Rxf7",moveNum:12,color:"b",label:"12... Rxf7"},
+  {fen:"r1bq2k1/pppn1r1p/2N2b2/5p2/2P1p3/2N5/PP3PPP/R3KB1R b KQ - 1 13",san:"Nc6",moveNum:13,color:"w",label:"13. Nc6"},
+  {fen:"r1bq2k1/p1pn1r1p/2p2b2/5p2/2P1p3/2N5/PP3PPP/R3KB1R w KQ - 0 14",san:"bxc6",moveNum:13,color:"b",label:"13... bxc6"},
+  {fen:"r1bq2k1/p1pn1r1p/2p2b2/1N3p2/2P1p3/8/PP3PPP/R3KB1R b KQ - 1 14",san:"Nb5",moveNum:14,color:"w",label:"14. Nb5"},
+  {fen:"1rbq2k1/p1pn1r1p/2p2b2/1N3p2/2P1p3/8/PP3PPP/R3KB1R w KQ - 2 15",san:"Rb8",moveNum:14,color:"b",label:"14... Rb8"},
+  {fen:"1rbq2k1/p1pn1r1p/2p2b2/1N3p2/2P1p3/5P2/PP4PP/R3KB1R b KQ - 0 15",san:"f3",moveNum:15,color:"w",label:"15. f3"},
+  {fen:"1rbq2k1/2pn1r1p/p1p2b2/1N3p2/2P1p3/5P2/PP4PP/R3KB1R w KQ - 0 16",san:"a6",moveNum:15,color:"b",label:"15... a6"},
+  {fen:"1rbq2k1/2pn1r1p/p1pN1b2/5p2/2P1p3/5P2/PP4PP/R3KB1R b KQ - 1 16",san:"Nd6",moveNum:16,color:"w",label:"16. Nd6"},
+  {fen:"1rbq2k1/2pn1r1p/p1pN4/5p2/2P1p2b/5P2/PP4PP/R3KB1R w KQ - 2 17",san:"Bh4+",moveNum:16,color:"b",label:"16... Bh4+"},
+  {fen:"1rbq2k1/2pn1r1p/p1pN4/5p2/2P1p2b/5P2/PP1K2PP/R4B1R b - - 3 17",san:"Kd2",moveNum:17,color:"w",label:"17. Kd2"},
+  {fen:"1rbq2k1/3n1r1p/p1pp4/5p2/2P1p2b/5P2/PP1K2PP/R4B1R w - - 0 18",san:"cxd6",moveNum:17,color:"b",label:"17... cxd6"},
+  {fen:"1rbq2k1/3n1r1p/p1pp4/5p2/2P1p2b/4KP2/PP4PP/R4B1R b - - 1 18",san:"Ke3",moveNum:18,color:"w",label:"18. Ke3"},
+  {fen:"1rb3k1/3n1r1p/pqpp4/5p2/2P1p2b/4KP2/PP4PP/R4B1R w - - 2 19",san:"Qb6+",moveNum:18,color:"b",label:"18... Qb6+"},
+  {fen:"1rb3k1/3n1r1p/pqpp4/5p2/2P1p2b/5P2/PP2K1PP/R4B1R b - - 3 19",san:"Ke2",moveNum:19,color:"w",label:"19. Ke2"},
+  {fen:"1rb3k1/3n1r1p/p1pp4/5p2/2P1p2b/5P2/Pq2K1PP/R4B1R w - - 0 20",san:"Qxb2+",moveNum:19,color:"b",label:"19... Qxb2+"},
+  {fen:"1rb3k1/3n1r1p/p1pp4/5p2/2P1p2b/5P2/Pq4PP/R2K1B1R b - - 1 20",san:"Kd1",moveNum:20,color:"w",label:"20. Kd1"},
+  {fen:"1rb3k1/3n1r1p/p1pp4/5p2/2Pqp2b/5P2/P5PP/R2K1B1R w - - 2 21",san:"Qd4+",moveNum:20,color:"b",label:"20... Qd4+"},
+  {fen:"1rb3k1/3n1r1p/p1pp4/5p2/2Pqp2b/5P2/P1K3PP/R4B1R b - - 3 21",san:"Kc2",moveNum:21,color:"w",label:"21. Kc2"},
+  {fen:"1rb3k1/5r1p/p1pp4/4np2/2Pqp2b/5P2/P1K3PP/R4B1R w - - 4 22",san:"Ne5",moveNum:21,color:"b",label:"21... Ne5"},
+  {fen:"1rb3k1/5r1p/p1pp4/4np2/2PqpP1b/8/P1K3PP/R4B1R b - - 0 22",san:"f4",moveNum:22,color:"w",label:"22. f4"},
+  {fen:"1rb3k1/5r1p/p1pp4/4np2/2P1pP1b/8/P1K2qPP/R4B1R w - - 1 23",san:"Qf2+",moveNum:22,color:"b",label:"22... Qf2+"},
+  {fen:"1rb3k1/5r1p/p1pp4/4np2/2P1pP1b/8/P4qPP/R2K1B1R b - - 2 23",san:"Kd1",moveNum:23,color:"w",label:"23. Kd1"},
+  {fen:"1rb3k1/5r1p/p1pp2n1/5p2/2P1pP1b/8/P4qPP/R2K1B1R w - - 3 24",san:"Ng6",moveNum:23,color:"b",label:"23... Ng6"},
+  {fen:"1rb3k1/5r1p/p1pp2n1/5p2/2P1pP1b/8/P4qPP/R1K2B1R b - - 4 24",san:"Kc1",moveNum:24,color:"w",label:"24. Kc1"},
+  {fen:"1rb3k1/5r1p/p1pp2n1/5p2/2P1pP1b/8/Pq4PP/R1K2B1R w - - 5 25",san:"Qb2+",moveNum:24,color:"b",label:"24... Qb2+"},
+  {fen:"1rb3k1/5r1p/p1pp2n1/5p2/2P1pP1b/8/Pq4PP/R2K1B1R b - - 6 25",san:"Kd1",moveNum:25,color:"w",label:"25. Kd1"},
+  {fen:"1rb3k1/5r1p/p1pp2n1/5p2/2P1pP1b/8/P5PP/q2K1B1R w - - 0 26",san:"Qxa1+",moveNum:25,color:"b",label:"25... Qxa1+"},
+  {fen:"1rb3k1/5r1p/p1pp2n1/5p2/2P1pP1b/8/P3K1PP/q4B1R b - - 1 26",san:"Ke2",moveNum:26,color:"w",label:"26. Ke2"},
+  {fen:"1rb3k1/5r1p/p1pp2n1/5p2/2P1pP1b/8/P3K1PP/4qB1R w - - 2 27",san:"Qe1#",moveNum:26,color:"b",label:"26... Qe1#"},
+];
+
+const chessKeyMoments = [
+  { posIndex: 0, tag: "Opening", desc: "QGD Exchange — White has +86 cp edge", color: "bg-green-500/15 text-green-600 dark:text-green-400 border-green-500/20" },
+  { posIndex: 5, tag: "9. d5 — Collapse", desc: "Eval swings -31 → -397. Oracle wanted exf3. Nemotron pushed a pawn.", evalCp: "-397 cp", color: "bg-red-500/15 text-red-600 dark:text-red-400 border-red-500/20" },
+  { posIndex: 15, tag: "14. Nb5 — Phantom", desc: "Nemotron claims knight on c5 attacks 3 pawns. Knight is on b5.", evalCp: "-940 cp", color: "bg-amber-500/15 text-amber-600 dark:text-amber-400 border-amber-500/20" },
+  { posIndex: 21, tag: "17. Kd2 — King Walk", desc: "Forced mate detected. King walk begins: Kd2→Ke3→Ke2→Kd1→Kc2→...", evalCp: "-1653 cp", color: "bg-purple-500/15 text-purple-600 dark:text-purple-400 border-purple-500/20" },
+  { posIndex: 39, tag: "26. Ke2 — Blunder", desc: "43 min, 194K tokens to play into immediate checkmate. Oracle: Qe1#", evalCp: "M-in-1", color: "bg-red-500/15 text-red-700 dark:text-red-300 border-red-500/30" },
+  { posIndex: 40, tag: "Qe1# — Checkmate", desc: "Stockfish 1400 delivers checkmate. Game over.", color: "bg-stone-800/15 text-stone-800 dark:text-stone-200 border-stone-500/20" },
+];
 ---
 
 <BaseLayout title={title} description={description}>
@@ -126,6 +180,20 @@ const base = import.meta.env.BASE_URL;
           </p>
         </div>
       </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!-- INTERACTIVE CHESS REPLAY -->
+    <!-- ═══════════════════════════════════════════════════ -->
+    <section class="mb-20 scroll-reveal">
+      <div class="flex items-center gap-3 mb-8">
+        <span class="text-xs font-mono font-bold px-3 py-1.5 rounded-full bg-copper/15 text-copper border border-copper/20">Interactive</span>
+        <h2 class="font-display text-3xl md:text-4xl font-bold text-stone-900 dark:text-stone-100">
+          Game Replay
+        </h2>
+      </div>
+      <p class="text-stone-500 dark:text-stone-400 text-sm mb-6">Use arrow keys or buttons to step through. Click key moments to jump to critical positions.</p>
+      <ChessReplay positions={chessPositions} keyMoments={chessKeyMoments} />
     </section>
 
     <!-- ═══════════════════════════════════════════════════ -->
