@@ -70,6 +70,80 @@ const chessKeyMoments = [
   { posIndex: 39, tag: "26. Ke2 — Blunder", desc: "43 min, 194K tokens to play into immediate checkmate. Oracle: Qe1#", evalCp: "M-in-1", color: "bg-red-500/15 text-red-700 dark:text-red-300 border-red-500/30" },
   { posIndex: 40, tag: "Qe1# — Checkmate", desc: "Stockfish 1400 delivers checkmate. Game over.", color: "bg-stone-800/15 text-stone-800 dark:text-stone-200 border-stone-500/20" },
 ];
+
+const gpt54Positions = [
+  {fen:"rnbq1rk1/ppp2pbp/3p1np1/4p3/2PPP3/2N2N2/PP2BPPP/R1BQK2R w KQ - 0 7",san:null,moveNum:7,color:null,label:"Starting position"},
+  {fen:"rnbq1rk1/ppp2pbp/3p1np1/4p3/2PPP3/2N2N2/PP2BPPP/R1BQ1RK1 b - - 1 7",san:"O-O",moveNum:7,color:"w",label:"7. O-O"},
+  {fen:"rnbq1rk1/pp3pbp/2pp1np1/4p3/2PPP3/2N2N2/PP2BPPP/R1BQ1RK1 w - - 0 8",san:"c6",moveNum:7,color:"b",label:"7... c6"},
+  {fen:"rnbq1rk1/pp3pbp/2pp1np1/4p3/2PPP3/2N2N2/PP2BPPP/R1BQR1K1 b - - 1 8",san:"Re1",moveNum:8,color:"w",label:"8. Re1"},
+  {fen:"rnbq1rk1/pp3pbp/2pp1np1/8/2PpP3/2N2N2/PP2BPPP/R1BQR1K1 w - - 0 9",san:"exd4",moveNum:8,color:"b",label:"8... exd4"},
+  {fen:"rnbq1rk1/pp3pbp/2pp1np1/8/2PNP3/2N5/PP2BPPP/R1BQR1K1 b - - 0 9",san:"Nxd4",moveNum:9,color:"w",label:"9. Nxd4"},
+  {fen:"rnbqr1k1/pp3pbp/2pp1np1/8/2PNP3/2N5/PP2BPPP/R1BQR1K1 w - - 1 10",san:"Re8",moveNum:9,color:"b",label:"9... Re8"},
+  {fen:"rnbqr1k1/pp3pbp/2pp1np1/8/2PNP3/2N5/PP3PPP/R1BQRBK1 b - - 2 10",san:"Bf1",moveNum:10,color:"w",label:"10. Bf1"},
+  {fen:"rn1qr1k1/pp3pbp/2pp1np1/8/2PNP1b1/2N5/PP3PPP/R1BQRBK1 w - - 3 11",san:"Bg4",moveNum:10,color:"b",label:"10... Bg4"},
+  {fen:"rn1qr1k1/pp3pbp/2pp1np1/8/2PNP1b1/2N2P2/PP4PP/R1BQRBK1 b - - 0 11",san:"f3",moveNum:11,color:"w",label:"11. f3"},
+  {fen:"rnbqr1k1/pp3pbp/2pp1np1/8/2PNP3/2N2P2/PP4PP/R1BQRBK1 w - - 1 12",san:"Bc8",moveNum:11,color:"b",label:"11... Bc8"},
+  {fen:"rnbqr1k1/pp3pbp/2pp1np1/8/2PNP3/2N1BP2/PP4PP/R2QRBK1 b - - 2 12",san:"Be3",moveNum:12,color:"w",label:"12. Be3"},
+  {fen:"rnbqr1k1/pp3pbp/2pp2p1/7n/2PNP3/2N1BP2/PP4PP/R2QRBK1 w - - 3 13",san:"Nh5",moveNum:12,color:"b",label:"12... Nh5"},
+  {fen:"rnbqr1k1/pp3pbp/2pp2p1/7n/2PNP3/2N1BP2/PP1Q2PP/R3RBK1 b - - 4 13",san:"Qd2",moveNum:13,color:"w",label:"13. Qd2"},
+  {fen:"rnbqr1k1/pp3pbp/3p2p1/2p4n/2PNP3/2N1BP2/PP1Q2PP/R3RBK1 w - - 0 14",san:"c5",moveNum:13,color:"b",label:"13... c5"},
+  {fen:"rnbqr1k1/pp3pbp/3p2p1/1Np4n/2P1P3/2N1BP2/PP1Q2PP/R3RBK1 b - - 1 14",san:"Ndb5",moveNum:14,color:"w",label:"14. Ndb5"},
+  {fen:"rnbqrbk1/pp3p1p/3p2p1/1Np4n/2P1P3/2N1BP2/PP1Q2PP/R3RBK1 w - - 2 15",san:"Bf8",moveNum:14,color:"b",label:"14... Bf8"},
+  {fen:"rnbqrbk1/pp3p1p/3p2p1/1Np4n/2P1P3/2N1BP2/PP1Q2PP/3RRBK1 b - - 3 15",san:"Rad1",moveNum:15,color:"w",label:"15. Rad1"},
+  {fen:"rnb1rbk1/pp3p1p/3p2p1/1Np4n/2P1P2q/2N1BP2/PP1Q2PP/3RRBK1 w - - 4 16",san:"Qh4",moveNum:15,color:"b",label:"15... Qh4"},
+  {fen:"rnb1rbk1/pp3p1p/3N2p1/2p4n/2P1P2q/2N1BP2/PP1Q2PP/3RRBK1 b - - 0 16",san:"Nxd6",moveNum:16,color:"w",label:"16. Nxd6"},
+  {fen:"rnb2bk1/pp3p1p/3Nr1p1/2p4n/2P1P2q/2N1BP2/PP1Q2PP/3RRBK1 w - - 1 17",san:"Re6",moveNum:16,color:"b",label:"16... Re6"},
+  {fen:"rnN2bk1/pp3p1p/4r1p1/2p4n/2P1P2q/2N1BP2/PP1Q2PP/3RRBK1 b - - 0 17",san:"Nxc8",moveNum:17,color:"w",label:"17. Nxc8"},
+  {fen:"r1N2bk1/pp3p1p/n3r1p1/2p4n/2P1P2q/2N1BP2/PP1Q2PP/3RRBK1 w - - 1 18",san:"Na6",moveNum:17,color:"b",label:"17... Na6"},
+  {fen:"r1N2bk1/pp3p1p/n3r1p1/2p4n/2P1P2q/2N1BPP1/PP1Q3P/3RRBK1 b - - 0 18",san:"g3",moveNum:18,color:"w",label:"18. g3"},
+  {fen:"r1N2bk1/pp3p1p/n3r1p1/2p5/2P1P2q/2N1BPn1/PP1Q3P/3RRBK1 w - - 0 19",san:"Nxg3",moveNum:18,color:"b",label:"18... Nxg3"},
+  {fen:"r1N2bk1/pp3p1p/n3r1p1/2p5/2P1P2q/2N1BPP1/PP1Q4/3RRBK1 b - - 0 19",san:"hxg3",moveNum:19,color:"w",label:"19. hxg3"},
+  {fen:"r1N2bk1/pp3p1p/n3r1p1/2p5/2P1P3/2N1BPq1/PP1Q4/3RRBK1 w - - 0 20",san:"Qxg3+",moveNum:19,color:"b",label:"19... Qxg3+"},
+  {fen:"r1N2bk1/pp3p1p/n3r1p1/2p5/2P1P3/2N1BPq1/PP4Q1/3RRBK1 b - - 1 20",san:"Qg2",moveNum:20,color:"w",label:"20. Qg2"},
+  {fen:"r1N2bk1/pp3p1p/n3r1p1/2p1q3/2P1P3/2N1BP2/PP4Q1/3RRBK1 w - - 2 21",san:"Qe5",moveNum:20,color:"b",label:"20... Qe5"},
+  {fen:"r1N2bk1/pp3p1p/n3r1p1/2p1q1Q1/2P1P3/2N1BP2/PP6/3RRBK1 b - - 3 21",san:"Qg5",moveNum:21,color:"w",label:"21. Qg5"},
+  {fen:"r1N2bk1/pp3p1p/n3r1p1/2p3Q1/2P1P3/2q1BP2/PP6/3RRBK1 w - - 0 22",san:"Qxc3",moveNum:21,color:"b",label:"21... Qxc3"},
+  {fen:"r1N2bk1/pp3p1p/n3r1p1/2p3Q1/2P1P3/2P1BP2/P7/3RRBK1 b - - 0 22",san:"bxc3",moveNum:22,color:"w",label:"22. bxc3"},
+  {fen:"r1N2bk1/pp3p1p/4r1p1/2p3Q1/1nP1P3/2P1BP2/P7/3RRBK1 w - - 1 23",san:"Nb4",moveNum:22,color:"b",label:"22... Nb4"},
+  {fen:"r1NQ1bk1/pp3p1p/4r1p1/2p5/1nP1P3/2P1BP2/P7/3RRBK1 b - - 2 23",san:"Qd8",moveNum:23,color:"w",label:"23. Qd8"},
+  {fen:"r1NQ1bk1/pp3p1p/4r1p1/2p5/2P1P3/2P1BP2/n7/3RRBK1 w - - 0 24",san:"Nxa2",moveNum:23,color:"b",label:"23... Nxa2"},
+  {fen:"r2Q1bk1/pp2Np1p/4r1p1/2p5/2P1P3/2P1BP2/n7/3RRBK1 b - - 1 24",san:"Ne7+",moveNum:24,color:"w",label:"24. Ne7+"},
+  {fen:"r2Q1b2/pp2Npkp/4r1p1/2p5/2P1P3/2P1BP2/n7/3RRBK1 w - - 2 25",san:"Kg7",moveNum:24,color:"b",label:"24... Kg7"},
+  {fen:"Q4b2/pp2Npkp/4r1p1/2p5/2P1P3/2P1BP2/n7/3RRBK1 b - - 0 25",san:"Qxa8",moveNum:25,color:"w",label:"25. Qxa8"},
+  {fen:"Q4b2/pp2rpkp/6p1/2p5/2P1P3/2P1BP2/n7/3RRBK1 w - - 0 26",san:"Rxe7",moveNum:25,color:"b",label:"25... Rxe7"},
+  {fen:"Q4b2/pp2rpkp/6p1/2B5/2P1P3/2P2P2/n7/3RRBK1 b - - 0 26",san:"Bxc5",moveNum:26,color:"w",label:"26. Bxc5"},
+  {fen:"Q4b2/pp2rpk1/6p1/2B4p/2P1P3/2P2P2/n7/3RRBK1 w - - 0 27",san:"h5",moveNum:26,color:"b",label:"26... h5"},
+  {fen:"Q4b2/pp2Bpk1/6p1/7p/2P1P3/2P2P2/n7/3RRBK1 b - - 0 27",san:"Bxe7",moveNum:27,color:"w",label:"27. Bxe7"},
+  {fen:"Q7/pp2bpk1/6p1/7p/2P1P3/2P2P2/n7/3RRBK1 w - - 0 28",san:"Bxe7",moveNum:27,color:"b",label:"27... Bxe7"},
+  {fen:"8/pQ2bpk1/6p1/7p/2P1P3/2P2P2/n7/3RRBK1 b - - 0 28",san:"Qxb7",moveNum:28,color:"w",label:"28. Qxb7"},
+  {fen:"8/pQ3pk1/6p1/2b4p/2P1P3/2P2P2/n7/3RRBK1 w - - 1 29",san:"Bc5+",moveNum:28,color:"b",label:"28... Bc5+"},
+  {fen:"8/pQ3pk1/6p1/2b4p/2P1P3/2P2P2/n6K/3RRB2 b - - 2 29",san:"Kh2",moveNum:29,color:"w",label:"29. Kh2"},
+  {fen:"8/pQ3pk1/3b2p1/7p/2P1P3/2P2P2/n6K/3RRB2 w - - 3 30",san:"Bd6+",moveNum:29,color:"b",label:"29... Bd6+"},
+  {fen:"8/pQ3pk1/3R2p1/7p/2P1P3/2P2P2/n6K/4RB2 b - - 0 30",san:"Rxd6",moveNum:30,color:"w",label:"30. Rxd6"},
+  {fen:"6k1/pQ3p2/3R2p1/7p/2P1P3/2P2P2/n6K/4RB2 w - - 1 31",san:"Kg8",moveNum:30,color:"b",label:"30... Kg8"},
+  {fen:"3R2k1/pQ3p2/6p1/7p/2P1P3/2P2P2/n6K/4RB2 b - - 2 31",san:"Rd8+",moveNum:31,color:"w",label:"31. Rd8+"},
+  {fen:"3R4/pQ3pk1/6p1/7p/2P1P3/2P2P2/n6K/4RB2 w - - 3 32",san:"Kg7",moveNum:31,color:"b",label:"31... Kg7"},
+  {fen:"3R4/Q4pk1/6p1/7p/2P1P3/2P2P2/n6K/4RB2 b - - 0 32",san:"Qxa7",moveNum:32,color:"w",label:"32. Qxa7"},
+  {fen:"3R4/Q4pk1/6p1/7p/1nP1P3/2P2P2/7K/4RB2 w - - 1 33",san:"Nb4",moveNum:32,color:"b",label:"32... Nb4"},
+  {fen:"3R4/5pk1/6p1/7p/1nPQP3/2P2P2/7K/4RB2 b - - 2 33",san:"Qd4+",moveNum:33,color:"w",label:"33. Qd4+"},
+  {fen:"3R4/6k1/5pp1/7p/1nPQP3/2P2P2/7K/4RB2 w - - 0 34",san:"f6",moveNum:33,color:"b",label:"33... f6"},
+  {fen:"3R4/6k1/5pp1/7p/1PPQP3/5P2/7K/4RB2 b - - 0 34",san:"cxb4",moveNum:34,color:"w",label:"34. cxb4"},
+  {fen:"3R4/5k2/5pp1/7p/1PPQP3/5P2/7K/4RB2 w - - 1 35",san:"Kf7",moveNum:34,color:"b",label:"34... Kf7"},
+  {fen:"3R4/3Q1k2/5pp1/7p/1PP1P3/5P2/7K/4RB2 b - - 2 35",san:"Qd7#",moveNum:35,color:"w",label:"35. Qd7#"},
+];
+
+const gpt54KeyMoments = [
+  { posIndex: 0, tag: "Opening", desc: "King's Indian Classical. White has big center (c4/d4/e4), Black challenges with e5.", color: "bg-green-500/15 text-green-600 dark:text-green-400 border-green-500/20" },
+  { posIndex: 1, tag: "7. O-O", desc: "Sensible consolidation. King safety first, then squeeze. Matches engine recommendation.", evalCp: "+0.62", color: "bg-green-500/15 text-green-600 dark:text-green-400 border-green-500/20" },
+  { posIndex: 9, tag: "11. f3", desc: "Three jobs at once: blocks Bg4 diagonal, reinforces e4, questions Black's bishop.", evalCp: "+0.90", color: "bg-blue-500/15 text-blue-600 dark:text-blue-400 border-blue-500/20" },
+  { posIndex: 15, tag: "14. Ndb5", desc: "Knight jumps to b5, increasing pressure on d6 weakness. Exploits Black's loosened dark squares after ...c5.", evalCp: "+2.53", color: "bg-amber-500/15 text-amber-600 dark:text-amber-400 border-amber-500/20" },
+  { posIndex: 19, tag: "16. Nxd6 -- Knockout", desc: "Genuine knockout blow. Knight plants on d6 with tempo against Re8 and Bc8. Multiple problems at once.", evalCp: "+4.08", color: "bg-copper/15 text-copper border-copper/20" },
+  { posIndex: 21, tag: "17. Nxc8", desc: "Cashes in the invading knight for Black's bishop. Clean conversion -- no sentiment about the outpost.", evalCp: "+5.00", color: "bg-green-500/15 text-green-600 dark:text-green-400 border-green-500/20" },
+  { posIndex: 33, tag: "23. Qd8", desc: "Classy back-rank invasion. Pins Bf8 to the king, turns Nc8 into part of a mating net.", evalCp: "+8.06", color: "bg-purple-500/15 text-purple-600 dark:text-purple-400 border-purple-500/20" },
+  { posIndex: 35, tag: "24. Ne7+ -- Mating Net", desc: "The knockout: knight checks from c8 to e7, tying queen on d8 and rook on e1 into a mating net on the e-file. Eval jumps to forced mate.", evalCp: "Forced mate", color: "bg-red-500/15 text-red-600 dark:text-red-400 border-red-500/20" },
+  { posIndex: 53, tag: "33. Qd4+", desc: "Centralizes queen with check. f7-pawn is pinned. Black's king has no escape squares.", evalCp: "M-in-3", color: "bg-red-500/15 text-red-600 dark:text-red-400 border-red-500/20" },
+  { posIndex: 57, tag: "35. Qd7# -- Checkmate", desc: "Queen to d7 covers e6, e8, e7, g7. Rook on d8 covers f8, g8. Every square sealed. Clean mate.", color: "bg-stone-800/15 text-stone-800 dark:text-stone-200 border-stone-500/20" },
+];
 ---
 
 <BaseLayout title={title} description={description}>
@@ -478,6 +552,12 @@ const chessKeyMoments = [
         <p class="leading-relaxed">
           The same day Nemotron was checkmated by 1400 Stockfish, GPT-5.4 (medium reasoning) played a King's Indian Classical against Stockfish at 1320 ELO. The contrast is stark.
         </p>
+      </div>
+
+      <!-- GPT-5.4 Game Replay -->
+      <div class="mb-8">
+        <p class="text-stone-500 dark:text-stone-400 text-sm mb-4">Step through GPT-5.4's game. Click key moments to see the critical positions.</p>
+        <ChessReplay positions={gpt54Positions} keyMoments={gpt54KeyMoments} />
       </div>
 
       <!-- GPT-5.4 Game Stats -->
