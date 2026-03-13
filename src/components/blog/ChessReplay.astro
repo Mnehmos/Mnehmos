@@ -1,28 +1,29 @@
 ---
 /**
- * ChessReplay.astro — Interactive chess game replay with key moment annotations
- * Built for Oracle Trust Calibration Framework blog posts
+ * ChessReplay.astro — Instance-scoped interactive chess replay
+ * Supports multiple instances per page via unique id prop
  */
 interface KeyMoment {
   posIndex: number;
   tag: string;
   desc: string;
   evalCp?: string;
-  color: string; // tailwind color class
+  color: string;
 }
 interface Props {
+  id: string;
   positions: { fen: string; san: string | null; moveNum: number; color: string | null; label: string }[];
   keyMoments: KeyMoment[];
 }
-const { positions, keyMoments } = Astro.props;
+const { id, positions, keyMoments } = Astro.props;
+const uid = `cr-${id}`;
 ---
 
-<div class="chess-replay-container" id="chess-replay">
-  <!-- Key Moment Jump Buttons -->
+<div class="chess-replay-container" id={uid}>
   <div class="flex flex-wrap gap-2 mb-4">
-    {keyMoments.map((km, i) => (
+    {keyMoments.map((km) => (
       <button
-        class={`chess-key-btn text-xs font-mono font-bold px-3 py-1.5 rounded-full border transition-all cursor-pointer hover:scale-105 ${km.color}`}
+        class={`cr-key-btn text-xs font-mono font-bold px-3 py-1.5 rounded-full border transition-all cursor-pointer hover:scale-105 ${km.color}`}
         data-pos={km.posIndex}
         title={km.desc}
       >
@@ -32,201 +33,172 @@ const { positions, keyMoments } = Astro.props;
   </div>
 
   <div class="flex flex-col md:flex-row gap-6">
-    <!-- Board -->
     <div class="flex-shrink-0">
-      <div id="chess-board" class="chess-board grid grid-cols-8 border border-stone-300 dark:border-stone-600 rounded-lg overflow-hidden" style="width: 320px; height: 320px;">
+      <div class="cr-board grid grid-cols-8 border border-stone-300 dark:border-stone-600 rounded-lg overflow-hidden" style="width: 320px; height: 320px;">
         {Array.from({length: 64}).map((_, i) => {
           const row = Math.floor(i / 8);
           const col = i % 8;
           const isLight = (row + col) % 2 === 0;
           return (
             <div
-              class={`chess-sq flex items-center justify-center text-2xl select-none ${isLight ? 'bg-amber-100 dark:bg-amber-200/20' : 'bg-amber-800/60 dark:bg-amber-700/40'}`}
+              class={`cr-sq flex items-center justify-center text-2xl select-none ${isLight ? 'bg-amber-100 dark:bg-amber-200/20' : 'bg-amber-800/60 dark:bg-amber-700/40'}`}
               data-sq={i}
               style="width:40px;height:40px;"
             />
           );
         })}
       </div>
-      <!-- Coordinates -->
       <div class="flex justify-between px-1 mt-1">
         {['a','b','c','d','e','f','g','h'].map(f => (
           <span class="text-xs text-stone-400 dark:text-stone-500 font-mono w-[40px] text-center">{f}</span>
         ))}
       </div>
-      <!-- Controls -->
       <div class="flex items-center justify-center gap-2 mt-3">
-        <button id="btn-first" class="chess-nav-btn" title="First position">⏮</button>
-        <button id="btn-prev" class="chess-nav-btn" title="Previous move">◀</button>
-        <span id="move-counter" class="text-xs font-mono text-stone-500 dark:text-stone-400 min-w-[60px] text-center">0 / {positions.length - 1}</span>
-        <button id="btn-next" class="chess-nav-btn" title="Next move">▶</button>
-        <button id="btn-last" class="chess-nav-btn" title="Last position">⏭</button>
-        <button id="btn-play" class="chess-nav-btn ml-2" title="Auto-play">▶▶</button>
+        <button class="cr-nav cr-first" title="First">⏮</button>
+        <button class="cr-nav cr-prev" title="Previous">◀</button>
+        <span class="cr-counter text-xs font-mono text-stone-500 dark:text-stone-400 min-w-[60px] text-center">0 / {positions.length - 1}</span>
+        <button class="cr-nav cr-next" title="Next">▶</button>
+        <button class="cr-nav cr-last" title="Last">⏭</button>
+        <button class="cr-nav cr-play ml-2" title="Auto-play">▶▶</button>
       </div>
     </div>
 
-    <!-- Move List + Annotation -->
     <div class="flex-1 min-w-0">
-      <div id="annotation-box" class="mb-4 p-4 rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800/50 min-h-[60px]">
-        <div id="annotation-tag" class="text-xs font-mono font-bold text-copper uppercase tracking-wider mb-1"></div>
-        <div id="annotation-text" class="text-sm text-stone-600 dark:text-stone-300"></div>
+      <div class="cr-annotation mb-4 p-4 rounded-xl border border-stone-200 dark:border-stone-700 bg-stone-50 dark:bg-stone-800/50 min-h-[60px]">
+        <div class="cr-tag text-xs font-mono font-bold text-copper uppercase tracking-wider mb-1"></div>
+        <div class="cr-desc text-sm text-stone-600 dark:text-stone-300"></div>
       </div>
-      <div id="move-list" class="font-mono text-sm leading-relaxed max-h-[200px] overflow-y-auto pr-2 text-stone-600 dark:text-stone-400">
-      </div>
+      <div class="cr-moves font-mono text-sm leading-relaxed max-h-[200px] overflow-y-auto pr-2 text-stone-600 dark:text-stone-400"></div>
     </div>
   </div>
 </div>
 
 <style>
-  .chess-nav-btn {
-    width: 36px;
-    height: 36px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 8px;
-    border: 0.5px solid rgba(0,0,0,0.15);
-    background: transparent;
-    cursor: pointer;
-    font-size: 14px;
-    transition: all 0.15s;
-    color: inherit;
+  .cr-nav {
+    width: 36px; height: 36px;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 8px; border: 0.5px solid rgba(0,0,0,0.15);
+    background: transparent; cursor: pointer; font-size: 14px;
+    transition: all 0.15s; color: inherit;
   }
-  .chess-nav-btn:hover { background: rgba(0,0,0,0.05); }
-  .chess-nav-btn:active { transform: scale(0.95); }
-  :global(.dark) .chess-nav-btn { border-color: rgba(255,255,255,0.15); }
-  :global(.dark) .chess-nav-btn:hover { background: rgba(255,255,255,0.05); }
-
-  .chess-sq { transition: background-color 0.15s; }
-  .chess-sq.highlight { box-shadow: inset 0 0 0 2px rgba(212, 134, 65, 0.7); }
-  .chess-sq.last-from { background-color: rgba(212, 175, 55, 0.35) !important; }
-  .chess-sq.last-to { background-color: rgba(212, 175, 55, 0.5) !important; }
-
-  .move-entry { cursor: pointer; padding: 1px 4px; border-radius: 4px; display: inline; }
-  .move-entry:hover { background: rgba(0,0,0,0.06); }
-  .move-entry.active { background: rgba(212, 134, 65, 0.25); font-weight: 600; color: var(--copper, #b87333); }
-
-  .chess-key-btn { opacity: 0.7; }
-  .chess-key-btn:hover, .chess-key-btn.active { opacity: 1; }
-  .chess-key-btn.active { transform: scale(1.05); box-shadow: 0 0 0 2px currentColor; }
+  .cr-nav:hover { background: rgba(0,0,0,0.05); }
+  .cr-nav:active { transform: scale(0.95); }
+  :global(.dark) .cr-nav { border-color: rgba(255,255,255,0.15); }
+  :global(.dark) .cr-nav:hover { background: rgba(255,255,255,0.05); }
+  .cr-sq { transition: background-color 0.15s; }
+  .cr-move-entry { cursor: pointer; padding: 1px 4px; border-radius: 4px; display: inline; }
+  .cr-move-entry:hover { background: rgba(0,0,0,0.06); }
+  .cr-move-entry.active { background: rgba(212,134,65,0.25); font-weight: 600; color: var(--copper, #b87333); }
+  .cr-key-btn { opacity: 0.7; }
+  .cr-key-btn:hover, .cr-key-btn.active { opacity: 1; }
+  .cr-key-btn.active { transform: scale(1.05); box-shadow: 0 0 0 2px currentColor; }
 </style>
 
-<script define:vars={{ positions, keyMoments }}>
-  const PIECES = { K:'♔', Q:'♕', R:'♖', B:'♗', N:'♘', P:'♙', k:'♚', q:'♛', r:'♜', b:'♝', n:'♞', p:'♟' };
-  let currentPos = 0;
-  let autoPlayTimer = null;
+<script define:vars={{ uid, positions, keyMoments }}>
+  const PIECES = { K:'\u2654',Q:'\u2655',R:'\u2656',B:'\u2657',N:'\u2658',P:'\u2659',k:'\u265A',q:'\u265B',r:'\u265C',b:'\u265D',n:'\u265E',p:'\u265F' };
 
-  function fenToBoard(fen) {
-    const rows = fen.split(' ')[0].split('/');
-    const board = [];
-    for (const row of rows) {
-      const boardRow = [];
-      for (const ch of row) {
-        if (/\d/.test(ch)) { for (let i = 0; i < parseInt(ch); i++) boardRow.push(null); }
-        else boardRow.push(ch);
+  function initReplay() {
+    const root = document.getElementById(uid);
+    if (!root) return;
+
+    const squares = root.querySelectorAll('.cr-sq');
+    const counter = root.querySelector('.cr-counter');
+    const tagEl = root.querySelector('.cr-tag');
+    const descEl = root.querySelector('.cr-desc');
+    const moveList = root.querySelector('.cr-moves');
+    let cur = 0;
+    let timer = null;
+
+    function fenToBoard(fen) {
+      const rows = fen.split(' ')[0].split('/');
+      const board = [];
+      for (const row of rows) {
+        const r = [];
+        for (const ch of row) {
+          if (/\d/.test(ch)) { for (let i = 0; i < parseInt(ch); i++) r.push(null); }
+          else r.push(ch);
+        }
+        board.push(r);
       }
-      board.push(boardRow);
+      return board;
     }
-    return board;
-  }
 
-  function renderBoard(posIdx) {
-    const pos = positions[posIdx];
-    const board = fenToBoard(pos.fen);
-    const squares = document.querySelectorAll('.chess-sq');
-    squares.forEach((sq, i) => {
-      const row = Math.floor(i / 8);
-      const col = i % 8;
-      const piece = board[row]?.[col];
-      sq.textContent = piece ? PIECES[piece] : '';
-      sq.classList.remove('last-from', 'last-to', 'highlight');
-    });
-    document.getElementById('move-counter').textContent = `${posIdx} / ${positions.length - 1}`;
-    // Highlight key moment buttons
-    document.querySelectorAll('.chess-key-btn').forEach(btn => {
-      btn.classList.toggle('active', parseInt(btn.dataset.pos) === posIdx);
-    });
-    // Annotation
-    const km = keyMoments.find(k => k.posIndex === posIdx);
-    const tagEl = document.getElementById('annotation-tag');
-    const textEl = document.getElementById('annotation-text');
-    if (km) {
-      tagEl.textContent = km.tag;
-      textEl.textContent = km.desc + (km.evalCp ? ` (${km.evalCp})` : '');
-    } else {
-      tagEl.textContent = pos.label || '';
-      textEl.textContent = '';
+    function render(idx) {
+      const pos = positions[idx];
+      const board = fenToBoard(pos.fen);
+      squares.forEach((sq, i) => {
+        const row = Math.floor(i / 8);
+        const col = i % 8;
+        const piece = board[row] && board[row][col];
+        sq.textContent = piece ? PIECES[piece] : '';
+      });
+      counter.textContent = idx + ' / ' + (positions.length - 1);
+      root.querySelectorAll('.cr-key-btn').forEach(btn => {
+        btn.classList.toggle('active', parseInt(btn.dataset.pos) === idx);
+      });
+      const km = keyMoments.find(k => k.posIndex === idx);
+      if (km) {
+        tagEl.textContent = km.tag;
+        descEl.textContent = km.desc + (km.evalCp ? ' (' + km.evalCp + ')' : '');
+      } else {
+        tagEl.textContent = pos.label || '';
+        descEl.textContent = '';
+      }
+      root.querySelectorAll('.cr-move-entry').forEach(el => {
+        el.classList.toggle('active', parseInt(el.dataset.pos) === idx);
+      });
+      const active = root.querySelector('.cr-move-entry.active');
+      if (active) active.scrollIntoView({ block: 'nearest' });
     }
-    // Highlight active move in list
-    document.querySelectorAll('.move-entry').forEach(el => {
-      el.classList.toggle('active', parseInt(el.dataset.pos) === posIdx);
-    });
-    // Scroll active move into view
-    const activeMove = document.querySelector('.move-entry.active');
-    if (activeMove) activeMove.scrollIntoView({ block: 'nearest' });
-  }
 
-  function goTo(idx) {
-    currentPos = Math.max(0, Math.min(positions.length - 1, idx));
-    renderBoard(currentPos);
-  }
+    function goTo(idx) {
+      cur = Math.max(0, Math.min(positions.length - 1, idx));
+      render(cur);
+    }
 
-  function buildMoveList() {
-    const container = document.getElementById('move-list');
+    // Build move list
     let html = '';
     for (let i = 1; i < positions.length; i++) {
       const p = positions[i];
-      if (p.color === 'w') html += `<span class="text-stone-400 dark:text-stone-500 mr-1">${p.moveNum}.</span>`;
+      if (p.color === 'w') html += '<span class="text-stone-400 dark:text-stone-500 mr-1">' + p.moveNum + '.</span>';
       const isKey = keyMoments.some(k => k.posIndex === i);
-      html += `<span class="move-entry${isKey ? ' font-bold' : ''}" data-pos="${i}">${p.san}</span> `;
+      html += '<span class="cr-move-entry' + (isKey ? ' font-bold' : '') + '" data-pos="' + i + '">' + p.san + '</span> ';
       if (p.color === 'b') html += ' ';
     }
-    container.innerHTML = html;
-    container.addEventListener('click', e => {
-      const entry = e.target.closest('.move-entry');
+    moveList.innerHTML = html;
+    moveList.addEventListener('click', e => {
+      const entry = e.target.closest('.cr-move-entry');
       if (entry) goTo(parseInt(entry.dataset.pos));
     });
-  }
 
-  function toggleAutoPlay() {
-    const btn = document.getElementById('btn-play');
-    if (autoPlayTimer) {
-      clearInterval(autoPlayTimer);
-      autoPlayTimer = null;
-      btn.textContent = '▶▶';
-    } else {
-      if (currentPos >= positions.length - 1) goTo(0);
-      btn.textContent = '⏸';
-      autoPlayTimer = setInterval(() => {
-        if (currentPos >= positions.length - 1) {
-          clearInterval(autoPlayTimer);
-          autoPlayTimer = null;
-          btn.textContent = '▶▶';
-          return;
-        }
-        goTo(currentPos + 1);
+    // Controls
+    root.querySelector('.cr-first').addEventListener('click', () => goTo(0));
+    root.querySelector('.cr-prev').addEventListener('click', () => goTo(cur - 1));
+    root.querySelector('.cr-next').addEventListener('click', () => goTo(cur + 1));
+    root.querySelector('.cr-last').addEventListener('click', () => goTo(positions.length - 1));
+
+    const playBtn = root.querySelector('.cr-play');
+    playBtn.addEventListener('click', () => {
+      if (timer) { clearInterval(timer); timer = null; playBtn.textContent = '\u25B6\u25B6'; return; }
+      if (cur >= positions.length - 1) goTo(0);
+      playBtn.textContent = '\u23F8';
+      timer = setInterval(() => {
+        if (cur >= positions.length - 1) { clearInterval(timer); timer = null; playBtn.textContent = '\u25B6\u25B6'; return; }
+        goTo(cur + 1);
       }, 1200);
-    }
-  }
+    });
 
-  // Init
-  document.addEventListener('DOMContentLoaded', () => {
-    buildMoveList();
-    renderBoard(0);
-    document.getElementById('btn-first').addEventListener('click', () => goTo(0));
-    document.getElementById('btn-prev').addEventListener('click', () => goTo(currentPos - 1));
-    document.getElementById('btn-next').addEventListener('click', () => goTo(currentPos + 1));
-    document.getElementById('btn-last').addEventListener('click', () => goTo(positions.length - 1));
-    document.getElementById('btn-play').addEventListener('click', toggleAutoPlay);
-    document.querySelectorAll('.chess-key-btn').forEach(btn => {
+    root.querySelectorAll('.cr-key-btn').forEach(btn => {
       btn.addEventListener('click', () => goTo(parseInt(btn.dataset.pos)));
     });
-    // Keyboard navigation
-    document.addEventListener('keydown', e => {
-      if (e.key === 'ArrowLeft') { e.preventDefault(); goTo(currentPos - 1); }
-      if (e.key === 'ArrowRight') { e.preventDefault(); goTo(currentPos + 1); }
-      if (e.key === 'Home') { e.preventDefault(); goTo(0); }
-      if (e.key === 'End') { e.preventDefault(); goTo(positions.length - 1); }
-    });
-  });
+
+    // Initial render
+    render(0);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initReplay);
+  } else {
+    initReplay();
+  }
 </script>
