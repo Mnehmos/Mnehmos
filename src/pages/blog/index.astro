@@ -246,14 +246,14 @@ const posts = [...collectionPosts, ...manualPosts].sort(
               <article class="group relative h-full">
                 <a
                   href={`${base}blog/${post.slug}`}
-                  class="block h-full bg-white rounded-4xl border border-stone-200 overflow-hidden shadow-sm hover:shadow-xl transition-all duration-500 relative"
+                  class="block h-full bg-white dark:bg-stone-900 rounded-4xl border border-stone-200 dark:border-stone-800 overflow-hidden shadow-sm hover:shadow-xl dark:hover:shadow-stone-900/50 transition-all duration-500 relative"
                 >
                   <!-- Content Container -->
-                  <div class="p-8 h-full flex flex-col relative z-10 bg-white transition-transform duration-500 group-hover:-translate-y-2">
+                  <div class="p-8 h-full flex flex-col relative z-10 bg-white dark:bg-stone-900 transition-transform duration-500 group-hover:-translate-y-2">
                     <!-- Tags -->
                     <div class="flex flex-wrap gap-2 mb-6">
                       {post.data.tags.map((tag) => (
-                        <span class="px-3 py-1 bg-stone-100 text-stone-600 text-xs font-medium rounded-full uppercase tracking-wide">
+                        <span class="px-3 py-1 bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-400 text-xs font-medium rounded-full uppercase tracking-wide">
                           {tag}
                         </span>
                       ))}
@@ -261,11 +261,11 @@ const posts = [...collectionPosts, ...manualPosts].sort(
 
                     <!-- Title & Date -->
                     <div class="mb-auto">
-                      <h2 class="font-display text-2xl font-bold text-stone-900 mb-3 group-hover:text-copper transition-colors">
+                      <h2 class="font-display text-2xl font-bold text-stone-900 dark:text-stone-100 mb-3 group-hover:text-copper transition-colors">
                         {post.data.title}
                       </h2>
                       <time
-                        class="text-sm text-stone-400 font-mono block mb-4"
+                        class="text-sm text-stone-400 dark:text-stone-500 font-mono block mb-4"
                         datetime={post.data.pubDate.toISOString()}
                       >
                         {post.data.pubDate.toLocaleDateString("en-US", {
@@ -274,13 +274,13 @@ const posts = [...collectionPosts, ...manualPosts].sort(
                           day: "numeric",
                         })}
                       </time>
-                      <p class="text-stone-600 leading-relaxed">
+                      <p class="text-stone-600 dark:text-stone-400 leading-relaxed">
                         {post.data.description}
                       </p>
                     </div>
 
                     <!-- Read More Indicator (Visible by default) -->
-                    <div class="mt-8 flex items-center gap-2 text-stone-400 text-sm font-bold group-hover:text-copper transition-colors">
+                    <div class="mt-8 flex items-center gap-2 text-stone-400 dark:text-stone-500 text-sm font-bold group-hover:text-copper transition-colors">
                       Read Post
                       <svg
                         class="w-4 h-4 transition-transform group-hover:translate-x-1"
