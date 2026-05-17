@@ -1,0 +1,308 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+const title = "Clio: The Civic Atlas That Compiles — 250,000+ Entities, One Validated Ground Truth";
+const description = "How a civic intelligence system built a 250,000-entity registry spanning power plants, watersheds, dams, airports, Census gazetteer data, and electoral schemas — where the model proposes and validators decide what is true.";
+const pubDate = new Date("2026-05-17");
+const tags = ["AI", "civic-intelligence", "architecture", "state-first", "MCP", "vibe-coding"];
+const lesson = "Narration explains the civic state. It does not create it.";
+const base = import.meta.env.BASE_URL;
+
+const registryTracks = [
+  { track: "A Phase 1", source: "US Census TIGER 2024 — counties + places", entities: "~35,557" },
+  { track: "A Phase 2", source: "OpenFlights airports", entities: "~7,000" },
+  { track: "A Phase 3", source: "WRI Global Power Plant Database (CC-BY-4.0, v1.3)", entities: "~34,936" },
+  { track: "A Phase 4a", source: "USACE National Inventory of Dams", entities: "~92,000" },
+  { track: "A Phase 4c.1", source: "USGS WBD HUC4/6/8/10/12 watersheds", entities: "~125,000" },
+  { track: "A Phase 4c.2", source: "USGS GNIS named rivers + bayous", entities: "~8,408" },
+  { track: "A/B", source: "Natural Earth admin-0/1 (countries + states)", entities: "thousands" },
+  { track: "D Phase 0", source: "Electoral schemas + heads of state", entities: "seeded" },
+  { track: "G", source: "People, corporations, treaties, military, cyber", entities: "hundreds" },
+  { track: "Arizona", source: "ASLD statewide GIS (counties, cities, districts)", entities: "273" },
+];
+
+const trustLayers = [
+  { layer: "Gold Master", scope: "global", access: "read-only" },
+  { layer: "Verified Import", scope: "global", access: "read-only" },
+  { layer: "Project Overlay", scope: "one project", access: "read/write within project" },
+  { layer: "User Assumption", scope: "one project", access: "read/write within project" },
+  { layer: "Session Draft", scope: "one run", access: "temporary" },
+];
+
+const todayChecklist = [
+  "3,223 US counties from 2024_Gaz_counties_national.txt",
+  "32,334 US places from 2024_Gaz_place_national.txt",
+  "15 AZ counties + 91 cities + 9 congressional districts + 158 Safford zoning features",
+  "Seeded heads-of-state registry",
+  "electoral.ts — full Zod schema for electoral entities",
+  "electoralRegistry.ts — 90-line typed registry",
+  "quickWinD0.ts — 431-line electoral seed with heads of state",
+  "5 MCP electoral tools wired into the server",
+  "rag.search extended with a terms channel for electoral queries",
+  "50-state GIS tracking checklist",
+  "77 tests validating the gazetteer ingest",
+  "188 tests covering the electoral schema layer",
+];
+---
+
+<BaseLayout title={title} description={description}>
+  <article class="max-w-4xl mx-auto px-6 py-12 md:py-20 overflow-hidden">
+
+    <!-- Breadcrumb -->
+    <nav class="mb-12 animate-fade-in">
+      <a href={`${base}blog`} class="text-stone-500 dark:text-stone-400 hover:text-copper transition-colors flex items-center gap-2 text-sm font-medium group">
+        <svg class="w-4 h-4 transform group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+        </svg>
+        Back to Blog
+      </a>
+    </nav>
+
+    <!-- Header -->
+    <header class="mb-16">
+      <div class="flex flex-wrap gap-2 mb-6 animate-fade-in">
+        {tags.map((tag) => (
+          <span class="px-3 py-1 bg-copper/10 text-copper text-xs font-bold uppercase tracking-wider rounded-full border border-copper/10">{tag}</span>
+        ))}
+      </div>
+      <h1 class="font-display text-4xl md:text-5xl font-bold text-stone-900 dark:text-stone-100 mb-6 leading-tight animate-slide-up">
+        {title}
+      </h1>
+      <p class="text-xl md:text-2xl text-stone-600 dark:text-stone-300 mb-8 border-l-4 border-copper pl-6 animate-slide-up animation-delay-100">
+        {description}
+      </p>
+      <div class="flex items-center gap-4 text-stone-500 font-medium animate-fade-in animation-delay-200">
+        <div class="w-10 h-10 rounded-full bg-stone-200 dark:bg-stone-700 flex items-center justify-center text-stone-600 dark:text-stone-300 font-bold border-2 border-white dark:border-stone-800 shadow-sm">V</div>
+        <div>
+          <div class="text-stone-900 dark:text-stone-200 leading-none mb-1">
+            Vario <span class="text-stone-500 dark:text-stone-400 font-normal">via</span>
+            <span class="text-copper font-normal">Mnehmos</span>
+          </div>
+          <time datetime={pubDate.toISOString()} class="text-sm">
+            {pubDate.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}
+          </time>
+        </div>
+      </div>
+    </header>
+
+    <!-- Lead stat -->
+    <section class="mb-16 scroll-reveal">
+      <div class="grid grid-cols-3 gap-4">
+        <div class="bg-stone-100 dark:bg-stone-900 rounded-2xl p-6 text-center border border-stone-200 dark:border-stone-800">
+          <div class="text-4xl font-bold text-copper mb-1">250k+</div>
+          <div class="text-sm text-stone-500 dark:text-stone-400 font-medium">Validated Entities</div>
+        </div>
+        <div class="bg-stone-100 dark:bg-stone-900 rounded-2xl p-6 text-center border border-stone-200 dark:border-stone-800">
+          <div class="text-4xl font-bold text-stone-900 dark:text-stone-100 mb-1">12</div>
+          <div class="text-sm text-stone-500 dark:text-stone-400 font-medium">Data Tracks</div>
+        </div>
+        <div class="bg-stone-100 dark:bg-stone-900 rounded-2xl p-6 text-center border border-stone-200 dark:border-stone-800">
+          <div class="text-4xl font-bold text-stone-900 dark:text-stone-100 mb-1">0</div>
+          <div class="text-sm text-stone-500 dark:text-stone-400 font-medium">Hallucinated Sources</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- The Problem -->
+    <section class="prose prose-stone dark:prose-invert prose-lg max-w-none mb-16 scroll-reveal">
+      <h2 class="font-display text-copper text-3xl font-bold mb-4">The Problem Clio Solves</h2>
+      <p>Ask most AI systems a civic question and you get confident prose. The prose sounds authoritative. It cites things. Some of those things exist. Some do not. There is no way to tell which.</p>
+      <p>The failure mode is not hallucination alone. It is hallucination that <em>looks like citation</em>. A model that invents a source card is not making an obvious error. It is making a plausible one. In the civic domain — zoning, elections, policy, public services — plausible falsehoods are expensive.</p>
+      <p>The standard engineering response is to add disclaimers. Clio's response is to enforce provenance mechanically.</p>
+    </section>
+
+    <!-- Architecture -->
+    <section class="mb-16 scroll-reveal">
+      <h2 class="font-display text-3xl font-bold text-stone-900 dark:text-stone-100 mb-6">The Architecture</h2>
+      <div class="bg-stone-950 rounded-2xl p-6 font-mono text-sm text-stone-300 overflow-x-auto border-l-4 border-copper">
+        <pre class="whitespace-pre">{`User request
+  → ProductionOrchestrator
+  → Briefing Planner (IR + section buffers)
+  → Research Agent (resolves entities, creates TypedClaims)
+  → Narrator Agent (packet-only prose)
+  → Stagehand Director (visual staging commands)
+  → Citation Auditor (prose, claims, sources)
+  → Stagehand Runtime (validates effects)
+  → PublicShowEvent stream
+  → UI, replay, export`}</pre>
+      </div>
+      <div class="mt-6 grid md:grid-cols-2 gap-4">
+        <div class="bg-stone-900/50 dark:bg-stone-900 rounded-xl p-5 border border-stone-800">
+          <div class="text-xs font-bold uppercase tracking-widest text-stone-500 mb-2">Private stream</div>
+          <p class="text-stone-400 text-sm leading-relaxed">Agent tokens, tool calls, source fetches, rejected drafts, repair loops, validation reports. Never shown to users.</p>
+        </div>
+        <div class="bg-copper/5 rounded-xl p-5 border border-copper/20">
+          <div class="text-xs font-bold uppercase tracking-widest text-copper mb-2">Public stream</div>
+          <p class="text-stone-600 dark:text-stone-300 text-sm leading-relaxed">Only what has passed validation: narration, source cards, gap cards, Stagehand effects, section events.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Trust Model Table -->
+    <section class="mb-16 scroll-reveal">
+      <h2 class="font-display text-3xl font-bold text-stone-900 dark:text-stone-100 mb-6">Entity Registry Trust Model</h2>
+      <p class="text-stone-600 dark:text-stone-400 mb-6">The global registry is not publicly writable. Five layers, four of which are read-only from the outside.</p>
+      <div class="overflow-x-auto rounded-2xl border border-stone-200 dark:border-stone-800">
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="bg-stone-100 dark:bg-stone-900 text-left">
+              <th class="px-5 py-3 font-bold text-stone-900 dark:text-stone-100">Layer</th>
+              <th class="px-5 py-3 font-bold text-stone-900 dark:text-stone-100">Scope</th>
+              <th class="px-5 py-3 font-bold text-stone-900 dark:text-stone-100">Public access</th>
+            </tr>
+          </thead>
+          <tbody>
+            {trustLayers.map((row, i) => (
+              <tr class={`border-t border-stone-200 dark:border-stone-800 ${i % 2 === 0 ? "bg-white dark:bg-stone-950" : "bg-stone-50 dark:bg-stone-900/50"}`}>
+                <td class="px-5 py-3 font-medium text-copper">{row.layer}</td>
+                <td class="px-5 py-3 text-stone-700 dark:text-stone-300">{row.scope}</td>
+                <td class="px-5 py-3 text-stone-600 dark:text-stone-400">{row.access}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p class="mt-4 text-stone-500 dark:text-stone-500 text-sm">Today's Census TIGER ingest lands at <span class="text-copper font-medium">Verified Import</span>. It will not drift. It will not be overwritten by a session that produces a more confident claim.</p>
+    </section>
+
+    <!-- Registry Table -->
+    <section class="mb-16 scroll-reveal">
+      <div class="bg-stone-100 dark:bg-stone-900 rounded-4xl p-8 md:p-10 border border-stone-200 dark:border-stone-800">
+        <h2 class="font-display text-3xl font-bold text-stone-900 dark:text-stone-100 mb-2">The Registry: 250,000+ Entities Across 12 Data Tracks</h2>
+        <p class="text-stone-600 dark:text-stone-400 mb-8">The registry reached 250k through disciplined Track A build-out — each source validated before admission.</p>
+        <div class="overflow-x-auto rounded-xl border border-stone-200 dark:border-stone-700">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="bg-stone-200 dark:bg-stone-800 text-left">
+                <th class="px-4 py-3 font-bold text-stone-900 dark:text-stone-100">Track</th>
+                <th class="px-4 py-3 font-bold text-stone-900 dark:text-stone-100">Source</th>
+                <th class="px-4 py-3 font-bold text-stone-900 dark:text-stone-100 text-right">Entities</th>
+              </tr>
+            </thead>
+            <tbody>
+              {registryTracks.map((row, i) => (
+                <tr class={`border-t border-stone-200 dark:border-stone-700 ${i % 2 === 0 ? "bg-white dark:bg-stone-900" : "bg-stone-50 dark:bg-stone-800/50"}`}>
+                  <td class="px-4 py-3 font-mono text-xs text-copper font-bold whitespace-nowrap">{row.track}</td>
+                  <td class="px-4 py-3 text-stone-700 dark:text-stone-300">{row.source}</td>
+                  <td class="px-4 py-3 text-stone-900 dark:text-stone-100 font-bold text-right tabular-nums">{row.entities}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- What Shipped Today -->
+    <section class="mb-16 scroll-reveal">
+      <div class="bg-stone-900 rounded-4xl p-8 md:p-10 text-stone-300">
+        <h2 class="font-display text-3xl font-bold text-white mb-2">What Shipped Today</h2>
+        <p class="text-stone-400 mb-8">Track A Phase 1 + Track D Phase D0 merge + Arizona statewide GIS commit.</p>
+        <ul class="space-y-3">
+          {todayChecklist.map((item) => (
+            <li class="flex items-start gap-3">
+              <span class="text-copper mt-0.5 shrink-0">✓</span>
+              <span class="text-stone-300">{item}</span>
+            </li>
+          ))}
+        </ul>
+        <div class="mt-8 pt-6 border-t border-stone-800 text-stone-500 text-sm">
+          The merge required manually combining 14 conflict blocks across the server, registry, and source files. Track B Phase 1 overlay tools and Track D electoral tools coexist without collision.
+        </div>
+      </div>
+    </section>
+
+    <!-- Stagehand -->
+    <section class="prose prose-stone dark:prose-invert prose-lg max-w-none mb-16 scroll-reveal">
+      <h2 class="font-display text-copper text-3xl font-bold mb-4">Stagehand: Inline Visual Commands With Enforcement</h2>
+      <p>Clio's narration and visual staging share one ordered stream through the Stagehand protocol.</p>
+    </section>
+    <section class="mb-16 scroll-reveal">
+      <div class="bg-stone-950 rounded-2xl p-6 font-mono text-sm text-stone-300 overflow-x-auto border-l-4 border-copper mb-4">
+        <pre class="whitespace-pre">{`The Strait of Hormuz is the chokepoint for roughly 20% of global oil.
+[map.highlight entity="strait:hormuz" color="#ef4444" pulse=true]
+
+Three counties in this district flipped in 2024.
+[map.overlay entity="county:maricopa-az" style="electoral-swing"]`}</pre>
+      </div>
+      <p class="text-stone-600 dark:text-stone-400 text-sm">The bracketed command is not trusted until the runtime validates action schema, argument types, entity references, source references, and visual treatment rules. A command referencing an entity not in the registry does not render — it fails as a gap card.</p>
+    </section>
+
+    <!-- Model can / cannot -->
+    <section class="mb-16 scroll-reveal">
+      <div class="grid md:grid-cols-2 gap-6">
+        <div class="bg-stone-100 dark:bg-stone-900 rounded-2xl p-6 border border-stone-200 dark:border-stone-800">
+          <h3 class="font-bold text-copper mb-4 flex items-center gap-2">
+            <span class="w-6 h-6 rounded-full bg-copper/10 flex items-center justify-center text-xs">✓</span>
+            What The Model Can Do
+          </h3>
+          <ul class="space-y-2 text-stone-700 dark:text-stone-300 text-sm">
+            <li>Read research obligations</li>
+            <li>Draft narration packets</li>
+            <li>Generate Stagehand command sequences</li>
+            <li>Propose entity updates and TypedClaims</li>
+          </ul>
+        </div>
+        <div class="bg-stone-900/50 dark:bg-stone-900 rounded-2xl p-6 border border-stone-800">
+          <h3 class="font-bold text-stone-400 mb-4 flex items-center gap-2">
+            <span class="w-6 h-6 rounded-full bg-stone-800 flex items-center justify-center text-xs text-stone-500">✗</span>
+            What The Model Cannot Do
+          </h3>
+          <ul class="space-y-2 text-stone-500 text-sm">
+            <li>Write directly to the global registry</li>
+            <li>Bypass the Citation Auditor</li>
+            <li>Produce source cards from prose alone</li>
+            <li>Render visual effects without Stagehand validation</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Lesson -->
+    <section class="mb-16 scroll-reveal">
+      <div class="bg-copper/5 border border-copper/30 rounded-2xl p-8">
+        <div class="text-xs font-bold uppercase tracking-widest text-copper mb-3">The Lesson</div>
+        <p class="text-xl font-semibold text-stone-900 dark:text-stone-100 leading-relaxed">
+          "{lesson}"
+        </p>
+        <p class="mt-4 text-stone-600 dark:text-stone-400">Public explanation should be compiled from validated source and entity state, not trusted as raw narration. The model can narrate 250,000 entities. It cannot invent them.</p>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="pt-8 border-t border-stone-200 dark:border-stone-800 text-center">
+      <a href="https://github.com/Mnehmos/clio" target="_blank" rel="noopener noreferrer"
+        class="inline-flex items-center gap-2 px-6 py-3 bg-stone-900 dark:bg-stone-100 text-white dark:text-stone-900 font-bold rounded-full hover:bg-copper hover:text-white transition-all transform hover:-translate-y-1 shadow-lg">
+        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.111.825-.261.825-.579 0-.285-.011-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.22 0 4.609-2.807 5.627-5.479 5.921.43.372.823 1.102.823 2.222 0 1.606-.015 2.896-.015 3.286 0 .321.222.696.832.57C20.565 21.795 24 17.31 24 12c0-6.63-5.37-12-12-12z"></path></svg>
+        View on GitHub
+      </a>
+      <div class="mt-8">
+        <a href={`${base}blog`} class="inline-flex items-center gap-2 text-copper hover:text-copper-light font-medium transition-colors group">
+          <svg class="w-4 h-4 transform group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16l-4-4m0 0l4-4m-4 4h18"></path>
+          </svg>
+          Back to all posts
+        </a>
+      </div>
+    </footer>
+  </article>
+
+  <style is:global>
+    @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes slide-up { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+    .animate-fade-in { animation: fade-in 1s ease-out forwards; }
+    .animate-slide-up { opacity: 0; animation: slide-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+    .animation-delay-100 { animation-delay: 0.1s; }
+    .animation-delay-200 { animation-delay: 0.2s; }
+    .scroll-reveal { opacity: 0; transform: translateY(40px); transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
+    .scroll-reveal.active { opacity: 1; transform: translateY(0); }
+  </style>
+
+  <script>
+    const observer = new IntersectionObserver(
+      (entries) => { entries.forEach((e) => { if (e.isIntersecting) e.target.classList.add("active"); }); },
+      { threshold: 0.1, rootMargin: "0px 0px -50px 0px" }
+    );
+    document.querySelectorAll(".scroll-reveal").forEach((el) => observer.observe(el));
+  </script>
+</BaseLayout>

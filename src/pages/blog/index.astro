@@ -19,6 +19,28 @@ const collectionPosts = await getCollection("blog", ({ data }) => !data.draft);
 // 5. If converting a Markdown post, DELETE the original .md file to prevent collisions.
 const manualPosts = [
   {
+    slug: "clio-civic-atlas-compiles",
+    data: {
+      title: "Clio: The Civic Atlas That Compiles — 250,000+ Entities, One Validated Ground Truth",
+      description: "How a civic intelligence system built a 250,000-entity registry spanning power plants, watersheds, dams, airports, Census gazetteer data, and electoral schemas — where the model proposes and validators decide what is true.",
+      pubDate: new Date("2026-05-17"),
+      tags: ["AI", "civic-intelligence", "architecture", "state-first", "MCP", "vibe-coding"],
+      draft: false,
+      lesson: "Narration explains the civic state. It does not create it. The model can narrate 250,000 entities. It cannot invent them.",
+    },
+  },
+  {
+    slug: "semantic-video-studio-state-first",
+    data: {
+      title: "Semantic Video Studio: State Is the Product, Pixels Are Just Output",
+      description: "A control-first video pipeline where four JSON planes compile to a deterministic Blender render, every frame is provenance-stamped, and 'edit the video' means 'patch the state.'",
+      pubDate: new Date("2026-05-17"),
+      tags: ["AI", "video", "architecture", "state-first", "blender", "provenance", "vibe-coding"],
+      draft: false,
+      lesson: "A prompt is not a source file. A four-plane JSON pack is. Generated media becomes editable when state is the primary artifact — pixels are output, state is the product.",
+    },
+  },
+  {
     slug: "nemotron-oracle-trust",
     data: {
       title: "Nemotron 3 Super 120B vs Stockfish 1400: Oracle Trust Calibration Report",

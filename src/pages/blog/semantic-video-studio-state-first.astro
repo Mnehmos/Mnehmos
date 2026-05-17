@@ -1,0 +1,291 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+const title = "Semantic Video Studio: State Is the Product, Pixels Are Just Output";
+const description = "A control-first video pipeline where four JSON planes compile to a deterministic Blender render, every frame is provenance-stamped, and 'edit the video' means 'patch the state.'";
+const pubDate = new Date("2026-05-17");
+const tags = ["AI", "video", "architecture", "state-first", "blender", "provenance", "vibe-coding"];
+const lesson = "Generated media becomes editable when state is the primary artifact. Pixels are output. State is the product.";
+const base = import.meta.env.BASE_URL;
+
+const fourPlanes = [
+  { plane: "Scene graph", file: "scene_graph.json", role: "Object IDs, transforms, cameras, lights, environment" },
+  { plane: "Asset manifest", file: "asset_manifest.json", role: "Reusable typed assets with interfaces, capabilities, and anchors" },
+  { plane: "Timeline", file: "timeline.json", role: "Typed beats and actions over object, camera, and light IDs" },
+  { plane: "Render plan", file: "render_plan.json", role: "Engine, resolution, FPS, samples, output path, render settings" },
+];
+
+const basicsGate = [
+  { num: "00", name: "test_00_environment.py", desc: "Python version, Blender available, ffmpeg available" },
+  { num: "01", name: "test_01_state_render.py", desc: "A valid state pack renders to a non-empty MP4" },
+  { num: "02", name: "test_02_plane_regen.py", desc: "Modifying one plane re-renders only affected frames" },
+  { num: "03", name: "test_03_mcp_roundtrip.py", desc: "MCP tool calls produce valid state mutations" },
+  { num: "04", name: "test_04_semantic_patch.py", desc: "NL edit → patch → apply produces valid output state" },
+  { num: "05", name: "test_05_prompt_to_state.py", desc: "NL prompt → ProductionBrief → state pack is schema-valid" },
+  { num: "06", name: "test_06_negative_fixtures.py", desc: "Invalid state packs are rejected before render" },
+];
+
+const importGate = [
+  { step: "1", tool: "import_external_asset.py", label: "Import", desc: "Fetch and verify" },
+  { step: "2", tool: "normalize_imported_asset.py", label: "Normalize", desc: "Blender headless: center, scale, clean" },
+  { step: "3", tool: "validate_imported_asset.py", label: "Validate", desc: "Schema check against asset_record.schema.json" },
+  { step: "4", tool: "preview_imported_asset.py", label: "Preview", desc: "Headless render preview" },
+];
+---
+
+<BaseLayout title={title} description={description}>
+  <article class="max-w-4xl mx-auto px-6 py-12 md:py-20 overflow-hidden">
+
+    <!-- Breadcrumb -->
+    <nav class="mb-12 animate-fade-in">
+      <a href={`${base}blog`} class="text-stone-500 dark:text-stone-400 hover:text-copper transition-colors flex items-center gap-2 text-sm font-medium group">
+        <svg class="w-4 h-4 transform group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+        </svg>
+        Back to Blog
+      </a>
+    </nav>
+
+    <!-- Header -->
+    <header class="mb-16">
+      <div class="flex flex-wrap gap-2 mb-6 animate-fade-in">
+        {tags.map((tag) => (
+          <span class="px-3 py-1 bg-copper/10 text-copper text-xs font-bold uppercase tracking-wider rounded-full border border-copper/10">{tag}</span>
+        ))}
+      </div>
+      <h1 class="font-display text-4xl md:text-5xl font-bold text-stone-900 dark:text-stone-100 mb-6 leading-tight animate-slide-up">
+        {title}
+      </h1>
+      <p class="text-xl md:text-2xl text-stone-600 dark:text-stone-300 mb-8 border-l-4 border-copper pl-6 animate-slide-up animation-delay-100">
+        {description}
+      </p>
+      <div class="flex items-center gap-4 text-stone-500 font-medium animate-fade-in animation-delay-200">
+        <div class="w-10 h-10 rounded-full bg-stone-200 dark:bg-stone-700 flex items-center justify-center text-stone-600 dark:text-stone-300 font-bold border-2 border-white dark:border-stone-800 shadow-sm">V</div>
+        <div>
+          <div class="text-stone-900 dark:text-stone-200 leading-none mb-1">
+            Vario <span class="text-stone-500 dark:text-stone-400 font-normal">via</span>
+            <span class="text-copper font-normal">Mnehmos</span>
+          </div>
+          <time datetime={pubDate.toISOString()} class="text-sm">
+            {pubDate.toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" })}
+          </time>
+        </div>
+      </div>
+    </header>
+
+    <!-- Thesis -->
+    <section class="mb-16 scroll-reveal">
+      <div class="bg-stone-950 rounded-2xl p-8 border-l-4 border-copper">
+        <div class="text-xs font-bold uppercase tracking-widest text-stone-500 mb-3">The Thesis</div>
+        <p class="text-xl font-semibold text-stone-100 leading-relaxed italic">
+          "Video should be compiled from durable cinematic state, not hallucinated as disposable pixels."
+        </p>
+      </div>
+    </section>
+
+    <!-- Problem -->
+    <section class="prose prose-stone dark:prose-invert prose-lg max-w-none mb-16 scroll-reveal">
+      <h2 class="font-display text-copper text-3xl font-bold mb-4">The Video Is Not the Artifact</h2>
+      <p>Most AI video generation treats the MP4 as the goal. You write a prompt, you get pixels, you are done. If you want a different camera angle, you prompt again. If you want to change the lighting, you prompt again. If you want to reuse an asset from a previous scene, you prompt again and hope.</p>
+      <p>This is not a workflow problem. It is an architecture problem. When the output is the only artifact, there is nothing to edit. There is only regeneration.</p>
+      <p>Semantic Video Studio exists to fix the architecture.</p>
+    </section>
+
+    <!-- Four-Plane State Pack -->
+    <section class="mb-16 scroll-reveal">
+      <div class="bg-stone-100 dark:bg-stone-900 rounded-4xl p-8 md:p-10 border border-stone-200 dark:border-stone-800">
+        <h2 class="font-display text-3xl font-bold text-stone-900 dark:text-stone-100 mb-2">The Four-Plane State Pack</h2>
+        <p class="text-stone-600 dark:text-stone-400 mb-8">Every SVS project is defined by four JSON files, each validated against a JSON Schema before the render begins.</p>
+        <div class="space-y-3">
+          {fourPlanes.map((row, i) => (
+            <div class={`flex gap-4 p-4 rounded-xl border ${i % 2 === 0 ? "bg-white dark:bg-stone-950 border-stone-200 dark:border-stone-800" : "bg-stone-50 dark:bg-stone-800/50 border-stone-100 dark:border-stone-700"}`}>
+              <div class="shrink-0 w-8 h-8 rounded-lg bg-copper/10 flex items-center justify-center text-copper font-bold text-sm">{i + 1}</div>
+              <div class="min-w-0">
+                <div class="flex flex-wrap items-baseline gap-2 mb-1">
+                  <span class="font-bold text-stone-900 dark:text-stone-100">{row.plane}</span>
+                  <code class="text-xs text-copper bg-copper/10 px-2 py-0.5 rounded font-mono">{row.file}</code>
+                </div>
+                <p class="text-stone-600 dark:text-stone-400 text-sm">{row.role}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+        <div class="mt-6 p-4 bg-copper/5 border border-copper/20 rounded-xl text-sm text-stone-700 dark:text-stone-300">
+          A render is a <strong class="text-copper">pure function</strong> of these four planes plus the Blender renderer. Same inputs, same output. Every time.
+        </div>
+      </div>
+    </section>
+
+    <!-- Pipeline -->
+    <section class="mb-16 scroll-reveal">
+      <h2 class="font-display text-3xl font-bold text-stone-900 dark:text-stone-100 mb-6">The Pipeline</h2>
+      <div class="bg-stone-950 rounded-2xl p-6 font-mono text-sm text-stone-300 overflow-x-auto border-l-4 border-copper">
+        <pre class="whitespace-pre">{`Natural-language prompt
+  → prompt_to_brief.py       (NL → typed ProductionBrief)
+  → brief_to_state_pack.py   (Brief → 4-plane JSON)
+  → validate_scene.py        (schemas + cross-refs + writability check)
+  → build_video.py           (validate → render → manifest)
+  → blender/render_scene.py  (bpy: state → scene → keyframes → PNG sequence)
+  → ffmpeg                   (PNG sequence → MP4)
+  → outputs/manifests/       (SHA-256 provenance record)`}</pre>
+      </div>
+      <p class="mt-4 text-stone-600 dark:text-stone-400 text-sm">The validator runs before Blender opens. Every <code class="bg-stone-100 dark:bg-stone-800 px-1.5 py-0.5 rounded text-xs font-mono text-stone-800 dark:text-stone-200">object_id</code> referenced in a timeline action must exist in the scene graph. Every <code class="bg-stone-100 dark:bg-stone-800 px-1.5 py-0.5 rounded text-xs font-mono text-stone-800 dark:text-stone-200">asset_id</code> must exist in the manifest. If any check fails, the render does not start.</p>
+    </section>
+
+    <!-- Basics Gate -->
+    <section class="mb-16 scroll-reveal">
+      <div class="bg-stone-900 rounded-4xl p-8 md:p-10 text-stone-300">
+        <h2 class="font-display text-3xl font-bold text-white mb-2">The Basics Gate</h2>
+        <p class="text-stone-400 mb-8">Seven invariants that the system keeps green forever.</p>
+        <div class="space-y-3">
+          {basicsGate.map((t) => (
+            <div class="flex gap-4 items-start p-4 bg-stone-800/50 rounded-xl border border-stone-800">
+              <span class="font-mono text-xs text-copper bg-copper/10 px-2 py-1 rounded shrink-0 mt-0.5">{t.num}</span>
+              <div>
+                <code class="text-xs text-stone-300 font-mono block mb-1">{t.name}</code>
+                <p class="text-stone-500 text-sm">{t.desc}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+        <p class="mt-6 text-stone-500 text-sm">These are not unit tests for internal functions. They are integration gates for the pipeline's core claims. If <code class="text-stone-400 font-mono">test_01</code> fails, renders are broken. If <code class="text-stone-400 font-mono">test_06</code> fails, the validation layer has regressed.</p>
+      </div>
+    </section>
+
+    <!-- Import Gate -->
+    <section class="mb-16 scroll-reveal">
+      <h2 class="font-display text-3xl font-bold text-stone-900 dark:text-stone-100 mb-6">The Import Gate</h2>
+      <p class="text-stone-600 dark:text-stone-400 mb-8">External 3D assets — from Polyhaven, Sketchfab, or AI generators — pass through four stages before they can appear in a production.</p>
+      <div class="relative">
+        <div class="absolute left-6 top-6 bottom-6 w-0.5 bg-stone-200 dark:bg-stone-800 hidden md:block"></div>
+        <div class="space-y-4">
+          {importGate.map((stage) => (
+            <div class="relative flex gap-6 items-start">
+              <div class="shrink-0 w-12 h-12 rounded-full bg-copper flex items-center justify-center text-white font-bold text-lg z-10 shadow-lg shadow-copper/20">{stage.step}</div>
+              <div class="flex-1 bg-stone-100 dark:bg-stone-900 rounded-xl p-5 border border-stone-200 dark:border-stone-800">
+                <div class="font-bold text-stone-900 dark:text-stone-100 mb-1">{stage.label}</div>
+                <code class="text-xs text-copper font-mono block mb-2">{stage.tool}</code>
+                <p class="text-stone-600 dark:text-stone-400 text-sm">{stage.desc}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+      <p class="mt-6 text-stone-600 dark:text-stone-400 text-sm">An asset that fails normalization does not enter the registry. An asset that fails validation does not enter the registry. An asset that produces a broken preview does not enter the registry.</p>
+    </section>
+
+    <!-- Semantic Patch -->
+    <section class="mb-16 scroll-reveal">
+      <h2 class="font-display text-3xl font-bold text-stone-900 dark:text-stone-100 mb-4">Semantic Editing Without Regeneration</h2>
+      <p class="text-stone-600 dark:text-stone-400 mb-6">Describe the change → typed patch → validate against base hash → apply → re-render only what changed.</p>
+      <div class="bg-stone-950 rounded-2xl p-6 font-mono text-sm text-stone-300 overflow-x-auto border-l-4 border-copper">
+        <div class="text-stone-500 text-xs mb-3">// semantic_edit_to_patch.py output</div>
+        <pre class="whitespace-pre">{`{
+  "patch_id": "edit_001",
+  "base_hash": "a3f8c2...",
+  "target_plane": "timeline",
+  "target_path": "$.beats[2].camera.position",
+  "from_value": [0, 5, 10],
+  "to_value": [0, 8, 12],
+  "rationale": "pull camera back for wider establishing shot"
+}`}</pre>
+      </div>
+      <p class="mt-4 text-stone-600 dark:text-stone-400 text-sm">The base hash check is the key mechanism. If the state has changed since the patch was generated, the patch is rejected. You cannot accidentally apply an edit designed for a different version of the scene.</p>
+    </section>
+
+    <!-- Provenance Manifest -->
+    <section class="mb-16 scroll-reveal">
+      <h2 class="font-display text-3xl font-bold text-stone-900 dark:text-stone-100 mb-4">The Provenance Manifest</h2>
+      <p class="text-stone-600 dark:text-stone-400 mb-6">Every render writes a manifest to <code class="bg-stone-100 dark:bg-stone-800 px-1.5 py-0.5 rounded text-xs font-mono text-copper">outputs/manifests/&lt;render_id&gt;.json</code>.</p>
+      <div class="bg-stone-950 rounded-2xl p-6 font-mono text-sm text-stone-300 overflow-x-auto">
+        <pre class="whitespace-pre">{`{
+  "render_id": "r_20260517_alien_rover",
+  "timestamp": "2026-05-17T14:23:11Z",
+  "inputs": {
+    "scene_graph":    { "path": "...", "sha256": "a3f8c2..." },
+    "asset_manifest": { "path": "...", "sha256": "b7d1e4..." },
+    "timeline":       { "path": "...", "sha256": "c9a2f8..." },
+    "render_plan":    { "path": "...", "sha256": "d5b3e1..." }
+  },
+  "output": {
+    "path": "outputs/alien_rover_r001.mp4",
+    "sha256": "e2c7a9...",
+    "frame_count": 240,
+    "duration_s": 10.0
+  },
+  "renderer": "blender-5.1",
+  "partial_regen": false
+}`}</pre>
+      </div>
+    </section>
+
+    <!-- The Deeper Pattern -->
+    <section class="mb-16 scroll-reveal">
+      <div class="bg-stone-100 dark:bg-stone-900 rounded-4xl p-8 border border-stone-200 dark:border-stone-800">
+        <h2 class="font-display text-3xl font-bold text-stone-900 dark:text-stone-100 mb-6">The Deeper Pattern</h2>
+        <p class="text-stone-600 dark:text-stone-400 mb-6">SVS is a case study in a principle that shows up throughout the Mnehmos ecosystem: <strong class="text-stone-900 dark:text-stone-100">the model describes, the engine validates</strong>.</p>
+        <div class="grid md:grid-cols-2 gap-4">
+          {[
+            { project: "RPG-MCP", what: "model narrates combat", engine: "engine enforces hit points and legal moves" },
+            { project: "Clio", what: "model proposes entity updates", engine: "citation auditor enforces source provenance" },
+            { project: "LLM Chess", what: "model proposes moves", engine: "chess engine enforces legality" },
+            { project: "SVS", what: "model proposes scene state", engine: "validator enforces schema + cross-plane consistency" },
+          ].map((item) => (
+            <div class="p-4 bg-white dark:bg-stone-950 rounded-xl border border-stone-200 dark:border-stone-800">
+              <div class="text-xs font-bold uppercase tracking-widest text-copper mb-2">{item.project}</div>
+              <p class="text-stone-600 dark:text-stone-400 text-sm">Model {item.what}; {item.engine}.</p>
+            </div>
+          ))}
+        </div>
+        <p class="mt-6 text-stone-600 dark:text-stone-400 text-sm">Neither can do the other's job well.</p>
+      </div>
+    </section>
+
+    <!-- Lesson -->
+    <section class="mb-16 scroll-reveal">
+      <div class="bg-copper/5 border border-copper/30 rounded-2xl p-8">
+        <div class="text-xs font-bold uppercase tracking-widest text-copper mb-3">The Lesson</div>
+        <p class="text-xl font-semibold text-stone-900 dark:text-stone-100 leading-relaxed">
+          "{lesson}"
+        </p>
+        <p class="mt-4 text-stone-600 dark:text-stone-400">A prompt is not a source file. A four-plane JSON pack is. The repo is the memory, the state is the source of truth, and the output is a build artifact.</p>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="pt-8 border-t border-stone-200 dark:border-stone-800 text-center">
+      <a href="https://github.com/Mnehmos/semantic-video-studio" target="_blank" rel="noopener noreferrer"
+        class="inline-flex items-center gap-2 px-6 py-3 bg-stone-900 dark:bg-stone-100 text-white dark:text-stone-900 font-bold rounded-full hover:bg-copper hover:text-white transition-all transform hover:-translate-y-1 shadow-lg">
+        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.111.825-.261.825-.579 0-.285-.011-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.22 0 4.609-2.807 5.627-5.479 5.921.43.372.823 1.102.823 2.222 0 1.606-.015 2.896-.015 3.286 0 .321.222.696.832.57C20.565 21.795 24 17.31 24 12c0-6.63-5.37-12-12-12z"></path></svg>
+        View on GitHub
+      </a>
+      <div class="mt-8">
+        <a href={`${base}blog`} class="inline-flex items-center gap-2 text-copper hover:text-copper-light font-medium transition-colors group">
+          <svg class="w-4 h-4 transform group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16l-4-4m0 0l4-4m-4 4h18"></path>
+          </svg>
+          Back to all posts
+        </a>
+      </div>
+    </footer>
+  </article>
+
+  <style is:global>
+    @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes slide-up { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+    .animate-fade-in { animation: fade-in 1s ease-out forwards; }
+    .animate-slide-up { opacity: 0; animation: slide-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+    .animation-delay-100 { animation-delay: 0.1s; }
+    .animation-delay-200 { animation-delay: 0.2s; }
+    .scroll-reveal { opacity: 0; transform: translateY(40px); transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
+    .scroll-reveal.active { opacity: 1; transform: translateY(0); }
+  </style>
+
+  <script>
+    const observer = new IntersectionObserver(
+      (entries) => { entries.forEach((e) => { if (e.isIntersecting) e.target.classList.add("active"); }); },
+      { threshold: 0.1, rootMargin: "0px 0px -50px 0px" }
+    );
+    document.querySelectorAll(".scroll-reveal").forEach((el) => observer.observe(el));
+  </script>
+</BaseLayout>
